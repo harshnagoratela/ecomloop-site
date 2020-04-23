@@ -38,14 +38,17 @@ export const query = graphql`
   query($pathSlug: String!) {
     googleSheetListRow(name: {eq: $pathSlug}) {
       name
+      date
       url
       category
       tags
+      amazonlink
       sociallink
       about
       country
       state
       city
+      like
     }
   }
 `;
