@@ -8,6 +8,15 @@ const headroom = css`
     z-index: 2000;
     top: 0;
   }
+  .css-14za4wp.eqxxxtn1, .css-woc7hc.eqxxxtn0 {
+    display: none;
+}
+
+p.center {
+    text-align: center;
+    margin: 25px;
+}
+
   a{ color: #6f6add;}
   a.button{
     display:inline-block;
