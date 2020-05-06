@@ -8,8 +8,8 @@ import {
 import algoliasearch from "algoliasearch/lite"
 
 import { Root, HitsWrapper, PoweredBy } from "./styles"
-import Input from "./Input"
-import * as hitComps from "./hitComps"
+import Input from "./input"
+import * as hitComps from "./hitcomps"
 
 const Results = connectStateResults(
   ({ searchState: state, searchResults: res, children }) =>
@@ -22,9 +22,10 @@ const Stats = connectStateResults(
 )
 
 const useClickOutside = (ref, handler, events) => {
+  //if(!ref.current) return;
   if (!events) events = [`mousedown`, `touchstart`]
   const detectClickOutside = event =>
-    !ref.current.contains(event.target) && handler()
+    (ref.current && !ref.current.contains(event.target)) && handler()
   useEffect(() => {
     for (const event of events)
       document.addEventListener(event, detectClickOutside)
