@@ -140,11 +140,12 @@ const NavBar = () => {
           </div>
         </div>
         <Link to="/submit_shop">Submit</Link>
-        <Link to="/about">About</Link>
+        <Link to="/about">About </Link> &nbsp;
+        <SearchWrapper>
+          <Search collapse indices={searchIndices} />
+        </SearchWrapper>
       </Nav>
-      <SearchWrapper>
-        <Search collapse indices={searchIndices} />
-      </SearchWrapper>
+
     </Headroom >
   );
 
