@@ -36,7 +36,7 @@ export function useEventListener(eventNames, handler, element) {
   useEffect(() => (savedHandler.current = handler), [handler])
 
   useEffect(() => {
-    if (!element.addEventListener) return // Element doesn't support a listener, abort.
+    if (!element || !element.addEventListener) return // Element doesn't support a listener, abort.
 
     // Create event listener that calls handler function stored in ref
     const listener = event => savedHandler.current(event)
