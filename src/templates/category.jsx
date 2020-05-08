@@ -67,7 +67,6 @@ export const query = graphql`
           country
           state
           city
-          imageurl
           localImageUrl {
             childImageSharp {
               fluid(
@@ -79,6 +78,7 @@ export const query = graphql`
               }
             }
           }
+          imageurl
         }
       }
     }
