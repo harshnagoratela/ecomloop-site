@@ -10,9 +10,7 @@ const Chat = () => (
     <Helmet title={'Chat'} />
     <Header></Header>
     <Container>
-      <br />
-      <br />
-      <br />
+      
       <ChatWidget />
     </Container>
   </Layout>
