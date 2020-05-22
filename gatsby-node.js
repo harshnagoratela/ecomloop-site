@@ -247,8 +247,13 @@ exports.onCreateNode = ({ node, actions }) => {
         res.body.pipe(feedparser);
       }
     }, function (err) {
-      console.log("** Error while reading feed for '"+feedurl+"' : "+err)
+      console.error("** Error while reading feed for '"+feedurl+"' : "+err)
     });
+
+    feedparser.on('error', function (error) {
+      console.error("**** Feed Read Error = "+error);
+    });
+
     feedparser.on('readable', function () {
       var stream = this; // `this` is `feedparser`, which is a stream
       var item;
