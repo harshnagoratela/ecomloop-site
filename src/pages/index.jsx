@@ -76,7 +76,7 @@ const Index = ({ data }) => {
       </div>
 <div class="search_main">
       <Search collapse homepage indices={searchIndices} />
-    
+
       </div>
 
       <ShopSectionHeading></ShopSectionHeading>
@@ -180,7 +180,6 @@ export const query = graphql`
           url
           category
           tags
-          sociallink
           about
           country
           state

@@ -62,7 +62,6 @@ export const query = graphql`
           url
           category
           tags
-          sociallink
           about
           country
           state

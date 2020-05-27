@@ -3,6 +3,28 @@ const _ = require("lodash");
 const fetch = require("node-fetch");
 const FeedParser = require("feedparser");
 
+exports.createSchemaCustomization = ({ actions }) => {
+  const { createTypes } = actions
+  createTypes(`
+    type googleSheetListRow implements Node {
+      localImageUrl: File @link(from: "localImageUrl___NODE")
+      localProfileImage: File @link(from: "localProfileImage___NODE")
+      fields: fields
+      instagramname: String
+    }
+
+    type fields {
+      atomfeed: atomfeed
+    }
+
+    type atomfeed {
+      title: String
+      guid: String
+      link: String
+    }
+  `)
+}
+
 exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions;
 
@@ -27,18 +49,10 @@ exports.createPages = ({ graphql, actions }) => {
                   url
                   category
                   tags
-                  sociallink
                   about
                   country
                   state
                   city
-                  localImageUrl {
-                    childImageSharp {
-                      fluid {
-                        ...GatsbyImageSharpFluid
-                      }
-                    }
-                  }
                   imageurl
                 }
               }
