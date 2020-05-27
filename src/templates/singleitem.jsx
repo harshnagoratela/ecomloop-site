@@ -20,9 +20,20 @@ const PostSuggestion = styled.div`
   margin: 1rem 3rem 0 3rem;
 `;
 
+const Statistics = styled.div`
+  display: flex;
+  border: 1px solid ${props => props.theme.colors.white.grey};
+  margin-bottom: 15px;
+  padding: 5px;
+`;
+
+const StatisticItem = styled.div`
+  margin-right: 40px;
+`;
+
 const SingleItem = ({ data, pageContext }) => {
   const { next, prev } = pageContext;
-  const { name, date, imageurl, url, category, tags, localImageUrl, sociallink, about, country, state, city, like, fields } = data.googleSheetListRow
+  const { name, date, imageurl, url, category, tags, localImageUrl, profileimage, instagramname, instagramposts, instagramfollowers, instagramfollowing, alexalink, alexarank, alexatimeonsite, about, country, state, city, like, fields } = data.googleSheetListRow
 
   //converting comma seperated tags to tags map
   const tagsList = tags ? tags.split(',') : [];
@@ -37,14 +48,31 @@ const SingleItem = ({ data, pageContext }) => {
         banner={image}
         pathname={url}
       />
-      <Header title={name} date={date} cover={image} />
+      <Header title={name} date={date} />
       <Container>
-
-        <h1>{name}</h1>
-        <h5>{city}, {state} {country}</h5>
+        <div style={{ display: "flex" }}>
+          <img src={profileimage} />
+          <div style={{paddingLeft: "15px"}}>
+            <h1>{name}</h1>
+            <h5>{city}, {state} {country}</h5>
+          </div>
+        </div>
         <TagsBlock list={tagsList || []} />
         <Content input={about} /><br />
-        <AtomFeedList list={atomfeed} /><br/>
+
+        <Statistics>
+          <StatisticItem><a href={`https://www.instagram.com/${instagramname}/`}>{instagramname}</a></StatisticItem>
+          <StatisticItem>{instagramfollowers} <br/>followers</StatisticItem>
+          <StatisticItem>{instagramposts} <br/>posts</StatisticItem>
+          <StatisticItem>{instagramfollowing} <br/>following</StatisticItem>
+        </Statistics>
+
+        <Statistics>
+          <StatisticItem>{alexarank} <br/>alex rank</StatisticItem>
+          <StatisticItem>{alexatimeonsite} <br/>time on site</StatisticItem>
+        </Statistics>
+
+        <AtomFeedList list={atomfeed} /><br />
         <a target="_blank" href={url} className="button">Shop {name}</a> <a href="/randomshop" className="button buttonalt">Discover another shop</a>
 
       </Container>
@@ -95,6 +123,14 @@ export const query = graphql`
       category
       tags
       about
+      profileimage
+      instagramname
+      instagramposts
+      instagramfollowers
+      instagramfollowing
+      alexalink
+      alexarank
+      alexatimeonsite
       country
       state
       city

@@ -17,7 +17,7 @@ const AtomFeedList = ({ list }) => (
   <FeedContainer>
     {list && list.length > 0 && <h3>Sample product list:</h3>}
 
-    {list &&
+    {list && list.length > 0 &&
       list.slice(0, 5).map(feed => {
         //const upperTag = tag.charAt(0).toUpperCase() + tag.slice(1);
         return (
