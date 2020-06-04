@@ -2,12 +2,12 @@ const shopQuery = `{
   shops: allGoogleSheetListRow {
     edges {
       node {
-        objectID: id
+        objectID: slug
         title: name
-        slug: name
+        slug
         date
         tags
-        excerpt: about
+        about
       }
     }
   }

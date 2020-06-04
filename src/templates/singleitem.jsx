@@ -59,7 +59,7 @@ const StatisticIcon = styled.img`
 
 const SingleItem = ({ data, pageContext }) => {
   const { next, prev } = pageContext;
-  const { name, date, imageurl, url, category, tags, localImageUrl, profileimage, instagramname, instagramposts, instagramfollowers, instagramfollowing, alexalink, alexarank, alexatimeonsite, about, country, state, city, like, fields } = data.googleSheetListRow
+  const { name, date, slug, imageurl, url, category, tags, localImageUrl, profileimage, instagramname, instagramposts, instagramfollowers, instagramfollowing, alexalink, alexarank, alexatimeonsite, about, country, state, city, like, fields } = data.googleSheetListRow
 
   //converting comma seperated tags to tags map
   const tagsList = tags ? tags.split(',') : [];
@@ -129,7 +129,7 @@ export default SingleItem;
 
 export const query = graphql`
   query($pathSlug: String!) {
-    googleSheetListRow(name: {eq: $pathSlug}) {
+    googleSheetListRow(slug: {eq: $pathSlug}) {
       name
       imageurl
       localImageUrl {
@@ -147,6 +147,7 @@ export const query = graphql`
         }
       }
       url
+      slug
       category
       tags
       about
