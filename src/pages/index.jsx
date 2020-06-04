@@ -87,7 +87,7 @@ const Index = ({ data }) => {
           return (
             <PostList
               key={node.name}
-              cover={node.localImageUrl.childImageSharp.fluid}
+              cover={node.localImageUrl && node.localImageUrl.childImageSharp.fluid}
               path={`/shops/${node.slug}`}
               title={node.name}
               excerpt={node.about && node.about.substring(0,40)+"..."}
@@ -102,7 +102,7 @@ const Index = ({ data }) => {
           return (
             <PostList
               key={node.name}
-              cover={node.localImageUrl.childImageSharp.fluid}
+              cover={node.localImageUrl && node.localImageUrl.childImageSharp.fluid}
               path={`/shops/${node.slug}`}
               title={node.name}
               excerpt={node.about.substring(0,40)+"..."}
