@@ -38,7 +38,6 @@ const Subtitle = styled.h5`
 
 const Statistics = styled.div`
   display: flex;
-  border: 1px solid ${props => props.theme.colors.white.grey};
   margin-bottom: 15px;
   padding: 5px;
 `;
@@ -66,6 +65,8 @@ const SingleItem = ({ data, pageContext }) => {
   const image = localImageUrl ? localImageUrl.childImageSharp.fluid : null;
   const atomfeed = fields && fields.atomfeed ? fields.atomfeed : [];
 
+  const subtitle = city+", "+state+" "+country
+
   return (
     <Layout>
       <SEO
@@ -74,17 +75,15 @@ const SingleItem = ({ data, pageContext }) => {
         banner={image}
         pathname={url}
       />
-      <Header title={name} date={date} />
+      <Header title={name} children={subtitle} date={date} cover={image} />
       <Container>
         <div style={{ display: "flex" }}>
           <img src={profileimage} />
           <div style={{paddingLeft: "15px"}}>
-            <Title>{name}</Title>
-            <Subtitle>{city}, {state} {country}</Subtitle>
+            <Content input={about} />
           </div>
         </div>
         <TagsBlock list={tagsList || []} />
-        <Content input={about} /><br />
 
         <Statistics>
           <StatisticItem><a target="_blank" href={`https://www.instagram.com/${instagramname}/`}><StatisticIcon src="/instagram_icon.png" alt={instagramname} /></a></StatisticItem>
