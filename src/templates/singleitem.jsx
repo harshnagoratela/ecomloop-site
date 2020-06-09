@@ -78,34 +78,35 @@ const SingleItem = ({ data, pageContext }) => {
       <Header title={name} children={subtitle} date={date} cover={image} />
       <Container>
         <div style={{ display: "flex" }}>
-          <img src={profileimage} />
+          <img src={profileimage} alt={name} class="profileimage"/>
           <div style={{paddingLeft: "15px"}}>
-            <Content input={about} />
+          <Statistics>
+            <StatisticItem><a target="_blank" href={`https://www.instagram.com/${instagramname}/`}><StatisticIcon src="/instagram_icon.png" alt={instagramname} /></a></StatisticItem>
+            <StatisticItem>{instagramfollowers} <br/>followers</StatisticItem>
+            <StatisticItem>{instagramposts} <br/>posts</StatisticItem>
+            <StatisticItem>{instagramfollowing} <br/>following</StatisticItem>
+          </Statistics>
+            <TagsBlock list={tagsList || []} />
           </div>
         </div>
-        <TagsBlock list={tagsList || []} />
+        <Content input={about} /><br/>
+        <a target="_blank" href={url} className="button">Shop {name}</a> <a href="/randomshop" className="button buttonalt">Discover another shop</a>
 
-        <Statistics>
-          <StatisticItem><a target="_blank" href={`https://www.instagram.com/${instagramname}/`}><StatisticIcon src="/instagram_icon.png" alt={instagramname} /></a></StatisticItem>
-          <StatisticItem>{instagramfollowers} <br/>followers</StatisticItem>
-          <StatisticItem>{instagramposts} <br/>posts</StatisticItem>
-          <StatisticItem>{instagramfollowing} <br/>following</StatisticItem>
-        </Statistics>
-
+<AtomFeedList list={atomfeed} /><br />
+{/*
         <Statistics>
           <StatisticItem><a target="_blank" href={alexalink}><StatisticIcon src="/alexa_icon.jpg" alt={alexalink} /></a></StatisticItem>
           <StatisticItem>{alexarank} <br/>alexa rank</StatisticItem>
           <StatisticItem>{alexatimeonsite} <br/>avg minutes per visit</StatisticItem>
         </Statistics>
+*/}
 
-        <AtomFeedList list={atomfeed} /><br />
-        <a target="_blank" href={url} className="button">Shop {name}</a> <a href="/randomshop" className="button buttonalt">Discover another shop</a>
 
       </Container>
       <SuggestionBar>
         <PostSuggestion>
           {prev && (
-            <Link to={`/shops/${prev.name}`}>
+            <Link to={`/shops/${prev.slug}`}>
               Previous
               <h3>{prev.name}</h3>
             </Link>
@@ -113,7 +114,7 @@ const SingleItem = ({ data, pageContext }) => {
         </PostSuggestion>
         <PostSuggestion>
           {next && (
-            <Link to={`/shops/${next.name}`}>
+            <Link to={`/shops/${next.slug}`}>
               Next
               <h3>{next.name}</h3>
             </Link>
