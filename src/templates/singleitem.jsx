@@ -78,7 +78,7 @@ const SingleItem = ({ data, pageContext }) => {
       <Header title={name} children={subtitle} date={date} cover={image} />
       <Container>
         <div style={{ display: "flex" }}>
-          <img src={profileimage} alt={name} class="profileimage"/>
+          <img src={profileimage} alt={name} class="profileimage" style={{maxWidth: "33%", height: "100%"}}/>
           <div style={{paddingLeft: "15px"}}>
           <Statistics>
             <StatisticItem><a target="_blank" href={`https://www.instagram.com/${instagramname}/`}><StatisticIcon src="/instagram_icon.png" alt={instagramname} /></a></StatisticItem>
