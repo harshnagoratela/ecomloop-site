@@ -52,7 +52,6 @@ const Tag = ({ pageContext }) => {
       listEdges.push(node);
     }
   })
-    console.log(listEdges)
 
   return (
     <Layout>
