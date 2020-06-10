@@ -44,7 +44,7 @@ const Tag = ({ pageContext }) => {
         title={`${title} | ${config.title}`}
       />
       <Header title={upperTag}>
-        Browse online {upperTag} stores that sell directly to consumers.
+        Browse indepent online {upperTag} stores selling directly to consumers
       </Header>
         <TagWrapper>
           {posts.map((node) => (
