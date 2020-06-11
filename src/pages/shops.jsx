@@ -42,7 +42,7 @@ const Shops = ({ data }) => {
   return (
     <Layout>
       <Helmet title={'all Shops'} />
-      <Header title="discover a great shop"></Header>
+      <Header title="discover a great independent shop"><span class="Header--Subtitle"></span></Header>
 
       <ShopsWrapper>
         {listEdges.map(({ node }) => (

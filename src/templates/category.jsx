@@ -27,7 +27,7 @@ const CategoryWrapper = styled.div`
 
 const Category = ({ data, pageContext }) => {
   const { category } = pageContext;
-  const categoryHeading = "Category: " + category;
+  const categoryHeading = category + " Shops";
   const { edges } = data.allGoogleSheetListRow;
   const listEdges = [];
   const maxItems = 12;
@@ -47,9 +47,9 @@ const Category = ({ data, pageContext }) => {
 
   return (
     <Layout>
-      <Helmet title={'Uncommon Shops : ' + categoryHeading} />
-      <Header title="Uncommon Shops">an ever-growing list of exceptional independent brands & retailers</Header>
-      <CategoryHeading>{categoryHeading}</CategoryHeading>
+      <Helmet title={'Shop Independent ' + categoryHeading + ' | Discover direct-to-consumer' + categoryHeading } />
+      <Header title={categoryHeading}><span class="Header--Subtitle">discover exceptional independent {categoryHeading}</span></Header>
+
       <CategoryWrapper>
         {listEdges.map(({ node }) => (
           <PostList
