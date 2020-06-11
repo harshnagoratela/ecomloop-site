@@ -145,7 +145,7 @@ export const query = graphql`
             quality: 100
             duotone: { highlight: "#386eee", shadow: "#2323be", opacity: 60 }
           ) {
-            ...GatsbyImageSharpFluid_withWebp
+            ...GatsbyImageSharpFluid
           }
           resize(width: 1200, quality: 90) {
             src

@@ -145,7 +145,7 @@ const NavBar = () => {
   return (
     <Headroom calcHeightOnResize disableInlineStyles>
       <StyledLink to="/">
-        <img src={logo} class="logo" title="emprezzo - discover & shop indepdent retailers & brands" alt="emprezzo - discover & shop indepdent retailers & brands" />
+        <img src={logo} className="logo" title="emprezzo - discover & shop indepdent retailers & brands" alt="emprezzo - discover & shop indepdent retailers & brands" />
       </StyledLink>
       <NavWrapper>
         <Nav>

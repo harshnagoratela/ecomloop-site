@@ -1,11 +1,11 @@
 import React from 'react';
-import { graphql } from 'gatsby';
+import { Link, graphql } from 'gatsby';
+import Image from 'gatsby-image';
 import Helmet from 'react-helmet';
 import styled from '@emotion/styled';
 import PropTypes from 'prop-types';
 import { Header, BlogList } from 'components';
 import { Layout } from 'layouts';
-import PostList from '../components/PostList';
 
 const ShopsWrapper = styled.div`
   display: flex;
@@ -21,7 +21,7 @@ const ShopsWrapper = styled.div`
   }
 `;
 
-const Shops = ({ data }) => {
+const Entries = ({ data }) => {
   const { edges } = data.allGoogleSheetListRow;
   const listEdges = [];
   const maxItems = 12;
@@ -29,7 +29,7 @@ const Shops = ({ data }) => {
   const [showMore, setShowMore] = React.useState(true);
 
   const increaseLimit = () => {
-      setLimit(limit + maxItems);
+    setLimit(limit + maxItems);
   }
 
   //filtering items as per limit
@@ -45,20 +45,37 @@ const Shops = ({ data }) => {
       <Header title="discover a great independent shop"><span class="Header--Subtitle"></span></Header>
 
       <ShopsWrapper>
-        {listEdges.map(({ node }) => (
-          <PostList
-              key={node.name}
-              cover={node.localImageUrl && node.localImageUrl.childImageSharp.fluid}
-              path={`/shops/${node.slug}`}
-              title={node.name}
-              excerpt={node.about && node.about.substring(0,40)+"..."}
-            />
-        ))}
+        <table>
+          <thead>
+            <tr>
+              <th>Entry</th>
+              <th>Follower Score</th>
+              <th>Post Score</th>
+              <th>Social Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {listEdges.map(({ node }) => (
+              <tr key={node.name}>
+                <td>
+                  {node.localProfileImage &&
+                    <Link to={`/shops/${node.slug}`}>
+                      <Image fluid={node.localProfileImage.childImageSharp.fluid} class="profileimage" style={{ width: "80px" }} />
+                    </Link>
+                  }
+                </td>
+                <td>{node.followersperfollow}</td>
+                <td>{node.followersperpost}</td>
+                <td>{node.socialscore}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </ShopsWrapper>
       {showMore && listEdges.length > 0 && listEdges.length < edges.length &&
         <div className="center">
-            <a className="button" onClick={increaseLimit} style={{cursor: "pointer"}}>
-                Load More
+          <a className="button" onClick={increaseLimit} style={{ cursor: "pointer" }}>
+            Load More
             </a>
         </div>
       }
@@ -66,7 +83,7 @@ const Shops = ({ data }) => {
   );
 };
 
-export default Shops;
+export default Entries;
 
 export const query = graphql`
   query {
@@ -76,24 +93,16 @@ export const query = graphql`
           name
           url
           slug
-          category
-          tags
-          about
-          country
-          state
-          city
-          localImageUrl {
+          socialscore
+          followersperfollow
+          followersperpost
+          localProfileImage {
             childImageSharp {
-              fluid(
-                maxWidth: 1000
-                quality: 100
-                traceSVG: { color: "#2B2B2F" }
-              ) {
-                ...GatsbyImageSharpFluid_tracedSVG
+              fluid (maxWidth: 50) {
+                ...GatsbyImageSharpFluid
               }
             }
           }
-          imageurl
         }
       }
     }
