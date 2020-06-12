@@ -41,17 +41,19 @@ const Entries = ({ data }) => {
 
   return (
     <Layout>
-      <Helmet title={'all Shops'} />
-      <Header title="discover a great independent shop"><span class="Header--Subtitle"></span></Header>
+      <Helmet title={'Store Rankings | Discover the best ecommerce stores'} />
+      <Header title="🧐 Discover direct-to-consumer stores"><span class="Header--Subtitle"></span></Header>
 
       <ShopsWrapper>
+
         <table>
           <thead>
             <tr>
-              <th>Entry</th>
-              <th>Follower Score</th>
-              <th>Post Score</th>
-              <th>Social Score</th>
+              <th>Store</th>
+              <th></th>
+              <th>IFS</th>
+              <th>IPS</th>
+              <th>ESS</th>
             </tr>
           </thead>
           <tbody>
@@ -60,10 +62,12 @@ const Entries = ({ data }) => {
                 <td>
                   {node.localProfileImage &&
                     <Link to={`/shops/${node.slug}`}>
-                      <Image fluid={node.localProfileImage.childImageSharp.fluid} class="profileimage" style={{ width: "80px" }} />
+                      <Image fluid={node.localProfileImage.childImageSharp.fluid} class="profileimage" style={{ width: "50px" }} title={node.name}/>
+
                     </Link>
                   }
                 </td>
+                  <td><Link to={`/shops/${node.slug}`}>{node.name}</Link></td>
                 <td>{node.followersperfollow}</td>
                 <td>{node.followersperpost}</td>
                 <td>{node.socialscore}</td>

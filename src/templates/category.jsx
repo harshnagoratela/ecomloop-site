@@ -91,10 +91,11 @@ export const query = graphql`
           localImageUrl {
             childImageSharp {
               fluid(
-                maxWidth: 400
+                maxWidth: 1000
                 quality: 100
+                traceSVG: { color: "#2B2B2F" }
               ) {
-                ...GatsbyImageSharpFluid
+                ...GatsbyImageSharpFluid_tracedSVG
               }
             }
           }

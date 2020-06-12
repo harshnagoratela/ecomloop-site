@@ -1,8 +1,20 @@
 # Change Log
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v0.7.5 2020.06.10
+change page 'entries' to 'rankings'
+add 'rankings' to top menu
+
+## v0.7.4 2020.06.10
+add entries page with rankings
+clean up entries with better photos
+
+## v0.7.3 2020.06.10
+[note: preinstall local build 617.248692499 sec,  628.5201625 sec, netlify builds timed out]
+enabled incremental builds to improve build time
+
 ## v0.7.2 2020.06.10
-conigured domain at netlify
+configured domain at netlify
 configured domain at google domains to point to netlify
 change instagram fields to new score fields
 adjust 'tags', 'category' template and '/shops/' page to load 9 listings by default & add 'show more' button to bottom of page

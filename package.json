@@ -2,17 +2,17 @@
   "name": "emprezzo",
   "author": "ecomloop.com",
   "title": "emprezzo",
-  "description": "🧐 Discover innovative stores<br/>🛒 Shop direct-to-consumer independent businesses",
+  "description": "🧐 Discover direct-to-consumer stores<br/>🛒 Shop & support independent businesseses",
   "homepage": "https://emprezzo.com",
   "license": "MIT",
-  "version": "0.7.2",
+  "version": "0.7.5",
   "repository": {
     "type": "git",
     "url": "https://github.com/emprezzo/"
   },
   "scripts": {
     "develop": "gatsby develop",
-    "build": "GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES=true gatsby build --log-pages",
+    "build": "gatsby build",
     "serve": "gatsby serve",
     "clean": "rm -rf public && rm -rf .cache",
     "format-output": "prettier src/**/*.{js,jsx}",

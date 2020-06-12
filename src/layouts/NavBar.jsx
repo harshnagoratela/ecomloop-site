@@ -6,7 +6,7 @@ import logo from '../../static/logo/logo.png';
 import Search from '../components/search'
 
 const searchIndices = [
-  { name: `uncommonry`, title: `Shops`, type: `shopHit` },
+  { name: `emprezzo`, title: `Shops`, type: `shopHit` },
 ]
 
 const StyledLink = styled(Link)`
@@ -145,19 +145,21 @@ const NavBar = () => {
   return (
     <Headroom calcHeightOnResize disableInlineStyles>
       <StyledLink to="/">
-        <img src={logo} className="logo" title="emprezzo - discover & shop indepdent retailers & brands" alt="emprezzo - discover & shop indepdent retailers & brands" />
+        <img src={logo} class="logo" title="emprezzo - discover & shop indepdent retailers & brands" alt="emprezzo - discover & shop indepdent retailers & brands" />
       </StyledLink>
       <NavWrapper>
         <Nav>
           <div className="dropdown">
             <Link to="/shops">Discover </Link>
             <div className="dropdown-content">
+
               {uniqueCategoriesMap.map((item) => (
+
                 <Link key={item.url} to={`/category/${item.url}`} > {item.text}</Link>
               ))}
             </div>
           </div>
-
+  <Link to="/rankings">Rankings </Link>
           <SearchWrapper>
             <Search collapse indices={searchIndices} variation={"light"} />
           </SearchWrapper>
