@@ -93,6 +93,7 @@ export const query = graphql`
               fluid(
                 maxWidth: 400
                 quality: 100
+              
               ) {
                 ...GatsbyImageSharpFluid
               }

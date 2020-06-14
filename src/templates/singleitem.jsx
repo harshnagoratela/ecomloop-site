@@ -142,12 +142,13 @@ export const query = graphql`
       localImageUrl {
         childImageSharp {
           fluid(
-            maxWidth: 1000
+            maxWidth: 1200
             quality: 90
             duotone: { highlight: "#386eee", shadow: "#2323be", opacity: 60 }
           ) {
             ...GatsbyImageSharpFluid
           }
+
         }
       }
       url
