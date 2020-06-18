@@ -9,6 +9,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     type googleSheetListRow implements Node {
       localImageUrl: File @link(from: "localImageUrl___NODE")
       localProfileImage: File @link(from: "localProfileImage___NODE")
+      about: String
       fields: fields
       instagramname: String
       alexarank: String
@@ -232,6 +233,7 @@ exports.onCreateWebpackConfig = ({ actions }) => {
 
 
 exports.onCreateNode = ({ node, actions }) => {
+  /*
   const { createNodeField } = actions
   let entries = [];
   const processedArticleFields = _.union(
@@ -286,4 +288,5 @@ exports.onCreateNode = ({ node, actions }) => {
       });
     });
   }
+  */
 };
