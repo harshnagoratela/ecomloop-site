@@ -44,6 +44,25 @@ module.exports = {
     }
     },
     {
+      resolve: `gatsby-source-mysql`,
+      options: {
+        connectionDetails: {
+          host: '157.245.173.140',
+          user: 'instasql',
+          password: 'insta@sqlr;',
+          database: 'instagram',
+          connectTimeout: 100000
+        },
+        queries: [
+          {
+            statement: 'CALL GetData()',
+            idFieldName: 'RowNum',
+            name: 'ProcedureData'
+          }
+        ]
+      }
+    },
+    {
       resolve: `gatsby-plugin-remote-images`,
       options: {
         nodeType: 'googleSheetListRow',

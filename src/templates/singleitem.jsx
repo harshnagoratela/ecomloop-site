@@ -1,5 +1,5 @@
 import React from 'react';
-import { graphql, Link } from 'gatsby';
+import { graphql, Link, useStaticQuery } from 'gatsby';
 import Image from 'gatsby-image';
 import styled from '@emotion/styled';
 import PropTypes from 'prop-types';
@@ -59,6 +59,16 @@ const StatisticIcon = styled.img`
   margin:5px;
 `;
 
+const PostContainer = styled.div`
+  margin: 1rem 0;
+
+  div {
+    margin: 0 1rem 1rem 0;
+    padding: 0.3rem 0.6rem;
+    border-bottom: 1px solid ${props => props.theme.colors.primary.light};
+  }
+`;
+
 const SingleItem = ({ data, pageContext }) => {
   const { next, prev } = pageContext;
   const { name, date, slug, imageurl, url, category, tags, localImageUrl, profileimage, localProfileImage, instagramname, instagramposts, instagramfollowers, instagramfollowing, alexalink, alexarank, alexatimeonsite, followersperfollow, followersperpost, socialscore, about, country, state, city, like, fields } = data.googleSheetListRow
@@ -69,6 +79,16 @@ const SingleItem = ({ data, pageContext }) => {
   const atomfeed = fields && fields.atomfeed ? fields.atomfeed : [];
 
   const subtitle = city+", "+state+" "+country
+
+  const maxPosts = 3;
+  const listPostEdges = [];
+  const rowEdges = data.allMysqlProcedureData.edges;
+  //filtering top 3 for current instagram id
+  rowEdges.map((edge) => {
+    if (listPostEdges.length<maxPosts && edge.node.UserName==instagramname) {
+      listPostEdges.push(edge);
+    }
+  })
 
   return (
     <Layout>
@@ -99,7 +119,17 @@ const SingleItem = ({ data, pageContext }) => {
         <TagsBlock title="tags" list={tagsList || []} />
         <a target="_blank" href={url} className="button">Shop {name}</a> <a href="/randomshop" className="button buttonalt">Discover another shop</a>
 
-<AtomFeedList list={atomfeed} /><br />
+        <AtomFeedList list={atomfeed} /><br />
+
+        {/* List of Posts from MySQL Procedure */}
+        <PostContainer>
+        {listPostEdges && listPostEdges.length > 0 && <h3>recently added posts</h3>}
+        {listPostEdges.map(({ node }) => {
+          return (
+            <div>{node.Caption}</div>
+          );
+        })}
+        </PostContainer>
 {/*
         <Statistics>
           <StatisticItem><a target="_blank" href={alexalink}><StatisticIcon src="/alexa_icon.jpg" alt={alexalink} /></a></StatisticItem>
@@ -136,6 +166,15 @@ export default SingleItem;
 
 export const query = graphql`
   query($pathSlug: String!) {
+    allMysqlProcedureData(sort: {fields: PostDate, order: DESC}) {
+      edges {
+        node {
+          UserName
+          PostDate
+          Caption
+        }
+      }
+    }
     googleSheetListRow(slug: {eq: $pathSlug}) {
       name
       imageurl
