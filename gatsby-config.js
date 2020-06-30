@@ -55,9 +55,14 @@ module.exports = {
         },
         queries: [
           {
-            statement: 'CALL GetData()',
-            idFieldName: 'RowNum',
-            name: 'ProcedureData'
+            statement: 'SELECT * FROM DataView WHERE UserName IS NOT NULL AND PhotoLink IS NOT NULL',
+            idFieldName: 'PhotoLink',
+            name: 'DataView'
+          },
+          {
+            statement: 'SELECT * FROM ShopifyView WHERE UserName IS NOT NULL',
+            idFieldName: 'ProductURL',
+            name: 'ShopifyView'
           }
         ]
       }

@@ -59,13 +59,18 @@ const StatisticIcon = styled.img`
   margin:5px;
 `;
 
-const PostContainer = styled.div`
+const MySQLViewContainer = styled.div`
   margin: 1rem 0;
 
   div {
     margin: 0 1rem 1rem 0;
     padding: 0.3rem 0.6rem;
     border-bottom: 1px solid ${props => props.theme.colors.primary.light};
+  }
+  img {
+    width: 100px;
+    float: left;
+    margin: 0 10px 5px 0;
   }
 `;
 
@@ -78,15 +83,27 @@ const SingleItem = ({ data, pageContext }) => {
   const image = localImageUrl ? localImageUrl.childImageSharp.fluid : null;
   const atomfeed = fields && fields.atomfeed ? fields.atomfeed : [];
 
-  const subtitle = city+", "+state+" "+country
+  const subtitle = city + ", " + state + " " + country
 
+  //Extracting Posts from MySQL Data
   const maxPosts = 3;
   const listPostEdges = [];
-  const rowEdges = data.allMysqlProcedureData.edges;
+  const rowDataViewEdges = data.allMysqlDataView.edges;
   //filtering top 3 for current instagram id
-  rowEdges.map((edge) => {
-    if (listPostEdges.length<maxPosts && edge.node.UserName==instagramname) {
+  rowDataViewEdges.map((edge) => {
+    if (listPostEdges.length < maxPosts && edge.node.UserName == instagramname) {
       listPostEdges.push(edge);
+    }
+  })
+
+  //Extracting Products from MySQL Data
+  const maxProducts = 5;
+  const listProductEdges = [];
+  const rowShopifyViewEdges = data.allMysqlShopifyView.edges;
+  //filtering top 3 for current instagram id
+  rowShopifyViewEdges.map((edge) => {
+    if (listProductEdges.length < maxProducts && edge.node.UserName == instagramname) {
+      listProductEdges.push(edge);
     }
   })
 
@@ -102,35 +119,53 @@ const SingleItem = ({ data, pageContext }) => {
       <Container>
         <div class="profileimage" style={{ display: "flex" }}>
           {localProfileImage &&
-            <Image fluid={localProfileImage.childImageSharp.fluid} alt={name}  class="profileimage" style={{width: "100px"}} />
+            <Image fluid={localProfileImage.childImageSharp.fluid} alt={name} class="profileimage" style={{ width: "100px" }} />
           }
-          <div style={{paddingLeft: "15px"}}>
-          <Statistics>
-            <StatisticItem><a target="_blank" href={`https://www.instagram.com/${instagramname}/`}><StatisticIcon src="/instagram_icon.png" alt={instagramname} width="15px" height="15px" max-width="25px"  /></a></StatisticItem>
-<StatisticItem>{socialscore} <br/><span class="stat_title" title="Social Score">*ESS*</span></StatisticItem>
-            <StatisticItem>{followersperfollow} <br/><span class="stat_title" title="*Instagram Follow Score">*IFS*</span></StatisticItem>
-            <StatisticItem>{followersperpost} <br/><span class="stat_title" title="Instagram Post Score">*IPS*</span></StatisticItem>
+          <div style={{ paddingLeft: "15px" }}>
+            <Statistics>
+              <StatisticItem><a target="_blank" href={`https://www.instagram.com/${instagramname}/`}><StatisticIcon src="/instagram_icon.png" alt={instagramname} width="15px" height="15px" max-width="25px" /></a></StatisticItem>
+              <StatisticItem>{socialscore} <br /><span class="stat_title" title="Social Score">*ESS*</span></StatisticItem>
+              <StatisticItem>{followersperfollow} <br /><span class="stat_title" title="*Instagram Follow Score">*IFS*</span></StatisticItem>
+              <StatisticItem>{followersperpost} <br /><span class="stat_title" title="Instagram Post Score">*IPS*</span></StatisticItem>
 
-          </Statistics>
+            </Statistics>
 
           </div>
         </div>
-        <Content input={about} /><br/>
+        <Content input={about} /><br />
         <TagsBlock title="tags" list={tagsList || []} />
         <a target="_blank" href={url} className="button">Shop {name}</a> <a href="/randomshop" className="button buttonalt">Discover another shop</a>
 
-        <AtomFeedList list={atomfeed} /><br />
-
-        {/* List of Posts from MySQL Procedure */}
-        <PostContainer>
-        {listPostEdges && listPostEdges.length > 0 && <h3>recently added posts</h3>}
-        {listPostEdges.map(({ node }) => {
-          return (
-            <div>{node.Caption}</div>
-          );
-        })}
-        </PostContainer>
-{/*
+        {/*<AtomFeedList list={atomfeed} /><br />*/}
+        {/* List of Products from MySQL View */}
+        <MySQLViewContainer>
+          {listProductEdges && listProductEdges.length > 0 && <h3>recently added products</h3>}
+          {listProductEdges.map(({ node }) => {
+            return (
+              <div key={node.ProductURL} >
+                <a href={node.ProductURL} target="_blank">
+                  {node.Title}
+                </a>
+              </div>
+            );
+          })}
+        </MySQLViewContainer>
+        <br />
+        {/* List of Posts from MySQL View */}
+        <MySQLViewContainer>
+          {listPostEdges && listPostEdges.length > 0 && <h3>recently added posts</h3>}
+          {listPostEdges.map(({ node }) => {
+            return (
+              <div>
+                <img src={node.PhotoLink} />
+                <span>
+                  {node.Caption}
+                </span>
+              </div>
+            );
+          })}
+        </MySQLViewContainer>
+        {/*
         <Statistics>
           <StatisticItem><a target="_blank" href={alexalink}><StatisticIcon src="/alexa_icon.jpg" alt={alexalink} /></a></StatisticItem>
           <StatisticItem>{alexarank} <br/>alexa rank</StatisticItem>
@@ -166,12 +201,22 @@ export default SingleItem;
 
 export const query = graphql`
   query($pathSlug: String!) {
-    allMysqlProcedureData(sort: {fields: PostDate, order: DESC}) {
+    allMysqlDataView {
       edges {
         node {
           UserName
           PostDate
+          PhotoLink
           Caption
+        }
+      }
+    }
+    allMysqlShopifyView {
+      edges {
+        node {
+          UserName
+          Title
+          ProductURL
         }
       }
     }
