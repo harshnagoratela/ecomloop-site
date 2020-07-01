@@ -55,8 +55,8 @@ module.exports = {
         },
         queries: [
           {
-            statement: 'SELECT * FROM DataView WHERE UserName IS NOT NULL AND PhotoLink IS NOT NULL',
-            idFieldName: 'PhotoLink',
+            statement: 'Select UserID, UserName, FullName, Biography, ProfilePicURL, PostsCount, FollowersCount, FollowingCount, IFNULL(PhotoLink,CONCAT("https://source.unsplash.com/1600x900/?abstract,pattern,macro",UserID)) AS UniquePhotoLink, ShortCode, CONCAT("https://instagram.com/p/",ShortCode) AS ShortCodeURL, LikesCount, CommentsCount, PostDate, Caption, CaptionHashtags, AlexaURL, GlobalRank, Reach, LocalRank, AlexaCountry, TOS FROM DataView WHERE UserName IS NOT NULL',
+            idFieldName: 'UniquePhotoLink',
             name: 'DataView'
           },
           {

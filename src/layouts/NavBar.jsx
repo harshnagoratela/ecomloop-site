@@ -6,7 +6,7 @@ import logo from '../../static/logo/logo.png';
 import Search from '../components/search'
 
 const searchIndices = [
-  { name: `emprezzo`, title: `Shops`, type: `shopHit` },
+  { name: `uncommonry`, title: `Shops`, type: `shopHit` },
 ]
 
 const StyledLink = styled(Link)`
