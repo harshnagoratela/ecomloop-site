@@ -63,16 +63,9 @@ const ViewContainer = styled.section`
   display: flex;
   flex-wrap: wrap;
 `;
-const ShopifyViewCard = styled.div`
-  flex: 1 16%;
-  padding: 2%;
-  @media (max-width: ${props => props.theme.breakpoints.s}) {
-      flex: 1 96%;
-  }
-`;
-const PostViewCard = styled.div`
-  flex: 1 29%;
-  padding: 2%;
+const ViewCard = styled.div`
+  flex: 1 ${props => props.itemWidth?props.itemWidth:'25%'};
+  padding: 5px;
   @media (max-width: ${props => props.theme.breakpoints.s}) {
       flex: 1 96%;
   }
@@ -103,7 +96,7 @@ const SingleItem = ({ data, pageContext }) => {
             listPostEdges.push(edge);
         }
     })
-    const firstRowDataView = rowDataViewEdges && rowDataViewEdges.length ? rowDataViewEdges[0] : null;
+    const firstRowDataView = listPostEdges && listPostEdges.length ? listPostEdges[0] : null;
 
     const subtitle = city + ", " + state + "<br/> " + (firstRowDataView && firstRowDataView.node.AlexaCountry)
 
@@ -158,7 +151,7 @@ const SingleItem = ({ data, pageContext }) => {
                 <ViewContainer>
                     {listProductEdges.map(({ node }) => {
                         return (
-                            <ShopifyViewCard key={node.ProductURL}>
+                            <ViewCard key={node.ProductURL} itemWidth="18%">
                                 <a href={node.ProductURL} target="_blank">
                                     <ViewImage>
                                         <img src={node.ImageURL} />
@@ -170,7 +163,7 @@ const SingleItem = ({ data, pageContext }) => {
                                     </a>
                                     <h6>${node.Price}</h6>
                                 </ViewInfo>
-                            </ShopifyViewCard>
+                            </ViewCard>
                         );
                     })}
                 </ViewContainer>
@@ -180,16 +173,16 @@ const SingleItem = ({ data, pageContext }) => {
                 <ViewContainer>
                     {listPostEdges.map(({ node }) => {
                         return (
-                            <PostViewCard key={node.UniquePhotoLink}>
+                            <ViewCard key={node.UniquePhotoLink} itemWidth="30%">
                                 <a href={node.ShortCodeURL} target="_blank">
                                     <ViewImage>
                                         <img src={node.UniquePhotoLink} />
                                     </ViewImage>
                                 </a>
                                 <ViewInfo className="info">
-                                    ${node.Caption}
+                                    {node.Caption}
                                 </ViewInfo>
-                            </PostViewCard>
+                            </ViewCard>
                         );
                     })}
                 </ViewContainer>
