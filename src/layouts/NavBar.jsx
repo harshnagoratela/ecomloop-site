@@ -149,6 +149,7 @@ const NavBar = () => {
       </StyledLink>
       <NavWrapper>
         <Nav>
+        {/*
           <div className="dropdown">
             <Link to="/shops">Discover </Link>
             <div className="dropdown-content">
@@ -159,6 +160,7 @@ const NavBar = () => {
               ))}
             </div>
           </div>
+          */}
   <Link to="/rankings">Rankings </Link>
           <SearchWrapper>
             <Search collapse indices={searchIndices} variation={"light"} />

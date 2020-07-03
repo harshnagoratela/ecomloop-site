@@ -57,7 +57,6 @@ exports.createPages = ({ graphql, actions }) => {
                   state
                   city
                   imageurl
-                  instagramname
                 }
               }
             }

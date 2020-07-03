@@ -98,7 +98,7 @@ const SingleItem = ({ data, pageContext }) => {
     })
     const firstRowDataView = listPostEdges && listPostEdges.length ? listPostEdges[0] : null;
 
-    const subtitle = city + ", " + state + "<br/> " + (firstRowDataView && firstRowDataView.node.AlexaCountry)
+    const subtitle = city + " " +  state + "<br/> " + (firstRowDataView && firstRowDataView.node.AlexaCountry)
 
     //Extracting Products from MySQL Data
     const maxProducts = 5;
@@ -123,50 +123,59 @@ const SingleItem = ({ data, pageContext }) => {
             <Container>
                 <div className="profileimage" style={{ display: "flex" }}>
                     {firstRowDataView && firstRowDataView.node.ProfilePicURL &&
-                        <img src={firstRowDataView.node.ProfilePicURL} alt={name} className="profileimage" style={{ width: "100px" }} />
+                        <img src={firstRowDataView.node.ProfilePicURL} alt={name} className="profileimage" style={{ width: "100px", height: "100px" }} />
                     }
                     <div style={{ paddingLeft: "15px" }}>
                         <Statistics>
                             <StatisticItem><a target="_blank" href={firstRowDataView && firstRowDataView.node.ShortCodeURL}><StatisticIcon src="/instagram_icon.png" alt={instagramname} width="15px" height="15px" max-width="25px" /></a></StatisticItem>
-                            <StatisticItem>{firstRowDataView && firstRowDataView.node.PostsCount} <br /><span className="stat_title" title="Social Score">*ESS*</span></StatisticItem>
-                            <StatisticItem>{firstRowDataView && firstRowDataView.node.FollowersCount} <br /><span className="stat_title" title="*Instagram Follow Score">*IFS*</span></StatisticItem>
-                            <StatisticItem>{firstRowDataView && firstRowDataView.node.FollowingCount} <br /><span className="stat_title" title="Instagram Post Score">*IPS*</span></StatisticItem>
+                            <StatisticItem>{firstRowDataView && firstRowDataView.node.PostsCount} <br /><span className="stat_title" title="Social Score">Avg Likes</span></StatisticItem>
+                            <StatisticItem>{firstRowDataView && firstRowDataView.node.FollowersCount} <br /><span className="stat_title" title="*Instagram Follow Score">FPF</span></StatisticItem>
+                            <StatisticItem>{firstRowDataView && firstRowDataView.node.FollowingCount} <br /><span className="stat_title" title="Instagram Post Score">FPP</span></StatisticItem>
                         </Statistics>
-                        <Statistics>
+
+
+                          <Statistics>
                             <StatisticItem><StatisticIcon width="15px" height="15px" max-width="25px" /></StatisticItem>
                             <StatisticItem>{firstRowDataView && firstRowDataView.node.GlobalRank} <br /><span className="stat_title" title="Social Score">Global<br />Rank</span></StatisticItem>
-                            <StatisticItem>{firstRowDataView && firstRowDataView.node.LocalRank} <br /><span className="stat_title" title="*Instagram Follow Score">Local<br />Rank</span></StatisticItem>
-                            <StatisticItem>{firstRowDataView && firstRowDataView.node.TOS} <br /><span className="stat_title" title="Instagram Post Score">*TOS*</span></StatisticItem>
+                            <StatisticItem>{firstRowDataView && firstRowDataView.node.LocalRank} <br /><span className="stat_title" title="">Local<br />Rank</span></StatisticItem>
+                            <StatisticItem>{firstRowDataView && firstRowDataView.node.TOS} <br /><span className="stat_title" title="Time on Site">Time on Site</span></StatisticItem>
                         </Statistics>
+
 
                     </div>
                 </div>
                 <Content input={about} /><br />
-                <TagsBlock title="tags" list={tagsList || []} />
-                <a target="_blank" href={url} className="button">Shop {name}</a> <a href="/randomshop" className="button buttonalt">Discover another shop</a>
+
+
 
                 {/*<AtomFeedList list={atomfeed} /><br />*/}
                 {/* List of Products from MySQL View */}
-                {listProductEdges && listProductEdges.length > 0 && <h3>customer favorites</h3>}
+                {listProductEdges && listProductEdges.length > 0 && <h3>shop {name}</h3>}
                 <ViewContainer>
                     {listProductEdges.map(({ node }) => {
                         return (
                             <ViewCard key={node.ProductURL} itemWidth="18%">
                                 <a href={node.ProductURL} target="_blank">
                                     <ViewImage>
-                                        <img src={node.ImageURL} />
+                                        <img src={node.ImageURL} style={{ height: "150px" }}/>
                                     </ViewImage>
                                 </a>
+                                <small>${node.Price}</small>
+
                                 <ViewInfo className="info">
                                     <a href={node.ProductURL} target="_blank">
                                         {node.Title}
                                     </a>
-                                    <h6>${node.Price}</h6>
+
                                 </ViewInfo>
+
                             </ViewCard>
                         );
                     })}
-                </ViewContainer>
+
+
+
+
                 <br />
                 {/* List of Posts from MySQL View */}
                 {listPostEdges && listPostEdges.length > 0 && <h3>instagram posts</h3>}
@@ -186,13 +195,9 @@ const SingleItem = ({ data, pageContext }) => {
                         );
                     })}
                 </ViewContainer>
-                {/*
-        <Statistics>
-          <StatisticItem><a target="_blank" href={alexalink}><StatisticIcon src="/alexa_icon.jpg" alt={alexalink} /></a></StatisticItem>
-          <StatisticItem>{alexarank} <br/>alexa rank</StatisticItem>
-          <StatisticItem>{alexatimeonsite} <br/>avg minutes per visit</StatisticItem>
-        </Statistics>
-*/}
+                </ViewContainer>
+<a href="/randomshop" className="button ">Discover another shop</a>
+
 
 
             </Container>
