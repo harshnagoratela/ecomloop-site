@@ -79,7 +79,7 @@ const ViewInfo = styled.div`
 
 const SingleItem = ({ data, pageContext }) => {
   const { next, prev } = pageContext;
-  const { name, date, slug, imageurl, url, category, tags, localImageUrl, profileimage, localProfileImage, instagramname, instagramposts, instagramfollowers, instagramfollowing, alexalink, alexarank, alexatimeonsite, followersperfollow, followersperpost, socialscore, about, country, state, city, like, fields } = data.googleSheetListRow
+  const { name, date, slug, imageurl, url, category, tags, localImageUrl, profileimage, localProfileImage, instagramname, instagramposts, instagramfollowers, instagramfollowing, alexalink, alexarank, alexatimeonsite, socialscore, about, country, state, city, like, fields } = data.googleSheetListRow
 
   //converting comma seperated tags to tags map
   const tagsList = tags ? tags.split(',') : [];
@@ -130,17 +130,17 @@ const SingleItem = ({ data, pageContext }) => {
           <div style={{ paddingLeft: "15px" }}>
             <Statistics>
               <StatisticItem><a target="_blank" href={firstRowDataView && firstRowDataView.node.ShortCodeURL}><StatisticIcon src="/instagram_icon.png" alt={instagramname} width="15px" height="15px" max-width="25px" /></a></StatisticItem>
-              <StatisticItem>{firstRowDataView && firstRowDataView.node.PostsCount} <br /><span className="stat_title" title="Social Score">Avg Likes</span></StatisticItem>
-              <StatisticItem>{firstRowDataView && firstRowDataView.node.FollowersCount} <br /><span className="stat_title" title="*Instagram Follow Score">FPF</span></StatisticItem>
-              <StatisticItem>{firstRowDataView && firstRowDataView.node.FollowingCount} <br /><span className="stat_title" title="Instagram Post Score">FPP</span></StatisticItem>
+              <StatisticItem>{firstRowDataView && firstRowDataView.node.activity} <br /><span className="stat_title" title="Instagram Activity Score">ACTIVITY</span></StatisticItem>
+              <StatisticItem>{firstRowDataView && firstRowDataView.node.FollowerRate} <br /><span className="stat_title" title="*Instagram Follower Rate">FFR</span></StatisticItem>
+              <StatisticItem>{firstRowDataView && firstRowDataView.node.PostRate} <br /><span className="stat_title" title="Instagram Post Rate">PFR</span></StatisticItem>
             </Statistics>
 
 
             <Statistics>
               <StatisticItem><StatisticIcon width="15px" height="15px" max-width="25px" /></StatisticItem>
-              <StatisticItem>{firstRowDataView && firstRowDataView.node.GlobalRank} <br /><span className="stat_title" title="Social Score">Global<br />Rank</span></StatisticItem>
-              <StatisticItem>{firstRowDataView && firstRowDataView.node.LocalRank} <br /><span className="stat_title" title="">Local<br />Rank</span></StatisticItem>
-              <StatisticItem>{firstRowDataView && firstRowDataView.node.TOS} <br /><span className="stat_title" title="Time on Site">Time on Site</span></StatisticItem>
+              <StatisticItem>{firstRowDataView && firstRowDataView.node.GlobalRank} <br /><span className="stat_title" title="Social Score">GLOBAL RANK</span></StatisticItem>
+              <StatisticItem>{firstRowDataView && firstRowDataView.node.LocalRank} <br /><span className="stat_title" title="">LOCAL RANK</span></StatisticItem>
+              <StatisticItem>{firstRowDataView && firstRowDataView.node.TOS} <br /><span className="stat_title" title="Time on Site">TIME ON SITE</span></StatisticItem>
             </Statistics>
 
 
@@ -159,13 +159,13 @@ const SingleItem = ({ data, pageContext }) => {
               <ViewCard key={node.ProductURL} itemWidth="18%">
                 <a href={node.ProductURL} target="_blank">
                   <ViewImage>
-                    <img src={node.ImageURL} style={{ height: "150px" }} />
+                    <img src={node.ImageURL} style={{ height: "100px" }} />
                   </ViewImage>
                 </a>
                 <small>${node.Price}</small>
                 <ViewInfo className="info">
                   <a href={node.ProductURL} target="_blank">
-                    {node.Title && node.Title.substring(0,50)+"..."}
+                    {node.Title && node.Title.substring(0,50)}
                   </a>
                 </ViewInfo>
               </ViewCard>
@@ -185,13 +185,14 @@ const SingleItem = ({ data, pageContext }) => {
                     </ViewImage>
                   </a>
                   <ViewInfo className="info">
-                    {node.Caption}
+
+                    {node.Caption && node.Caption.substring(0,140)+"..."}
                   </ViewInfo>
                 </ViewCard>
               );
             })}
           </ViewContainer>
-        </ViewContainer>
+        </ViewContainer><br/>
         <a href="/randomshop" className="button ">Discover another shop</a>
 
 
