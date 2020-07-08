@@ -3,7 +3,6 @@ import styled from '@emotion/styled';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 import Img from 'gatsby-image';
-import { TagsBlock } from 'components';
 
 const Wrapper = styled.article`
   margin-bottom: 2rem;
@@ -103,45 +102,51 @@ const Information = styled.div`
   }
 `;
 
-const Date = styled.div`
+const Vendor = styled.h5`
+  margin: 0;
   margin-top: 1rem;
   color: ${props => props.theme.colors.black.lighter};
 `;
 
-const Title = styled.h1`
+const Title = styled.div`
+  color: black;
   margin: 0;
+  margin-top: 1rem;
+`;
+const SubTitle = styled.h5`
+  margin: 0;
+  color: black;
+`;
+const Price = styled.div`
+  font-size: 1rem;
+  margin: 0;
+  margin-top: 1rem;
+  color: ${props => props.theme.colors.black.lighter};
 `;
 
-const ShopList = ({ path, cover, title, date, excerpt, tags }) => (
-    <Wrapper>
-      <Image>
-        <Link to={path} title={title}>
-          {cover && typeof cover === 'object' &&
-            <Img fluid={cover || {} || [] || ''} />
-          }
-          {cover && typeof cover === 'string' &&
-            <img src={cover || {} || [] || ''} style={{height: '100%', objectFit: 'fill'}} />
-          }
-        </Link>
-      </Image>
-      <Information>
-        <Date>{date}</Date>
-        <Link to={path}>
-          <Title>{title}</Title>
-        </Link>
-        <TagsBlock list={tags} />
-        {excerpt}
-      </Information>
-    </Wrapper>
+const ProductList = ({ path, cover, title, vendorname, vendorurl, variant, price }) => (
+  <Wrapper>
+    <Image>
+      <a href={path} title={title} target="_blank">
+        {cover && typeof cover === 'object' &&
+          <Img fluid={cover || {} || [] || ''} />
+        }
+        {cover && typeof cover === 'string' &&
+          <img src={cover || {} || [] || ''} style={{ height: '100%', objectFit: 'fill' }} />
+        }
+      </a>
+    </Image>
+    <Information>
+      <Vendor>
+        <a href={vendorurl} title={vendorname} target="_blank">{vendorname}</a>
+      </Vendor>
+      <a href={path} target="_blank">
+        <Title>{title}</Title>
+        <SubTitle>{variant}</SubTitle>
+      </a>
+      <Price>${price}</Price>
+    </Information>
+  </Wrapper>
 );
 
-export default ShopList;
-
-ShopList.propTypes = {
-  cover: PropTypes.object,
-  path: PropTypes.string.isRequired,
-  excerpt: PropTypes.string,
-  date: PropTypes.string,
-  title: PropTypes.string.isRequired,
-  tags: PropTypes.array,
-};
+export default ProductList;
