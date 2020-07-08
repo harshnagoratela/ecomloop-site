@@ -62,7 +62,7 @@ const Header = ({ children, title, date, cover, socialDetails }) => (
     {cover && typeof cover === 'object' &&
       <Img fluid={cover || {} || [] || ''} />
     }
-    {typeof cover === 'string' &&
+    {cover && typeof cover === 'string' &&
       <img src={cover || {} || [] || ''} style={{ width: '100%', objectFit: 'fill', objectPosition: '50% 50%' }} />
     }
     <Text>

@@ -150,7 +150,7 @@ const SingleItem = ({ data, pageContext }) => {
         banner={image}
         pathname={url}
       />
-      <Header title={name} children={subtitle} date={date} cover={firstRowDataView && firstRowDataView.node.UniquePhotoLink} socialDetails={socialDetails} />
+      <Header title={name} children={subtitle} date={date} socialDetails={socialDetails} />
       <Container>
         <div className="profileimage" style={{ display: "flex" }}>
           {firstRowDataView && firstRowDataView.node.ProfilePicURL &&
