@@ -60,17 +60,14 @@ const Entries = ({ data }) => {
             {listEdges.map(({ node }) => (
               <tr key={node.name}>
                 <td>
-                  {node.localProfileImage &&
+                  {node.imageurl &&
                     <Link to={`/shops/${node.slug}`}>
-                      <Image fluid={node.localProfileImage.childImageSharp.fluid} class="profileimage" style={{ width: "50px" }} title={node.name}/>
+                      <img src={node.imageurl} class="profileimage" style={{ width: "50px" }} title={node.name}/>
 
                     </Link>
                   }
                 </td>
                   <td><Link to={`/shops/${node.slug}`}>{node.name}</Link></td>
-                <td>{node.followersperfollow}</td>
-                <td>{node.followersperpost}</td>
-                <td>{node.socialscore}</td>
               </tr>
             ))}
           </tbody>
@@ -97,16 +94,6 @@ export const query = graphql`
           name
           url
           slug
-          socialscore
-          followersperfollow
-          followersperpost
-          localProfileImage {
-            childImageSharp {
-              fluid {
-                ...GatsbyImageSharpFluid
-              }
-            }
-          }
         }
       }
     }
