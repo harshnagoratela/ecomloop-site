@@ -37,6 +37,7 @@ const Entries = ({ data }) => {
   const rowDataViewEdges = data.allMysqlDataView.edges;
 
   //Creating a new dataset with original nodes and required columns from DataView
+  /*
   edges.map((edge) => {
     const inputInstaID = edge.node.instagramname;
     //filter to show only shops present in ShopifyView
@@ -49,14 +50,16 @@ const Entries = ({ data }) => {
         firstDataRow = resultData[0]
       }
       let newNode = {
-        node : edge,
-        dataNode: firstDataRow
+        name: edge.node.name,
+        slug: edge.node.slug,
+        ...firstDataRow.node
       }
       combinedEdges.push(newNode);
     }
   })
+  */
 
-  //var sortedEdges = _.sortBy(combinedEdges, ({ node }) => return node.activity)
+  //var sortedEdges = _.sortBy(combinedEdges, obj => -obj.activity)
 
   //filtering items as per limit
   combinedEdges.map((edge) => {
@@ -82,30 +85,30 @@ const Entries = ({ data }) => {
             <tr>
               <th>Store</th>
               <th></th>
-
-              <th>IFS</th>
-              <th>IPS</th>
-              <th>ESS</th>
+              <th>GlobalRank</th>
+              <th>TOS</th>
+              <th>FollowerRate</th>
+              <th>PostRate</th>
+              <th>Activity</th>
             </tr>
           </thead>
           <tbody>
-            {listEdges.map(({ node }) => (
-              <tr key={node.name}>
+            {listEdges.map(({ node, index }) => (
+              <tr key={index}>
                 <td>
-                  {node.localProfileImage &&
+                  {/*node.localProfileImage &&
                     <Link to={`/shops/${node.slug}`}>
                       <Image fluid={node.localProfileImage.childImageSharp.fluid} class="profileimage" style={{ width: "50px" }} title={node.name + 'is on Shopify'} alt={node.about && node.about.substring(0, 140)} />
 
                     </Link>
-                  }
-
+                  */}
                 </td>
-
                 <td><Link to={`/shops/${node.slug}`}>{node.name}</Link></td>
-
-                <td>{node.followersperfollow}</td>
-                <td>{node.followersperpost}</td>
-                <td>{node.socialscore}</td>
+                <td>{node.GlobalRank}</td>
+                <td>{node.TOS}</td>
+                <td>{node.FollowerRate}</td>
+                <td>{node.PostRate}</td>
+                <td>{node.Activity}</td>
               </tr>
             ))}
           </tbody>
