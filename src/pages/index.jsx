@@ -49,6 +49,12 @@ const Index = ({ data }) => {
   const foodEdges = [];
   const homeEdges = [];
   const maxItems = 9;
+  const [limit, setLimit] = React.useState(maxItems);
+  const [showMore, setShowMore] = React.useState(true);
+
+  const increaseLimit = () => {
+      setLimit(limit + maxItems);
+  }
 
   const searchIndices = [
     { name: `uncommonry`, title: `Shops`, type: `shopHit` },
@@ -56,10 +62,10 @@ const Index = ({ data }) => {
 
   //filtering home and food items maximum to 6 items
   rowEdges.map((edge) => {
-    if (edge.node.category && edge.node.category != "" && foodEdges.length < maxItems) {
+    if (edge.node.category && edge.node.category != "" && foodEdges.length < limit) {
       foodEdges.push(edge);
     }
-    else if (edge.node.category && edge.node.category == " " && homeEdges.length < maxItems) {
+    else if (edge.node.category && edge.node.category == " " && homeEdges.length < limit) {
       homeEdges.push(edge);
     }
   })
@@ -98,7 +104,13 @@ const Index = ({ data }) => {
           );
         })}
       </ShopWrapper>
-
+      {showMore && foodEdges.length > 0 && foodEdges.length < rowEdges.length &&
+        <div className="center">
+            <a className="button" onClick={increaseLimit} style={{cursor: "pointer"}}>
+                Load More
+            </a>
+        </div>
+      }
 
       <ShopWrapper>
         {homeEdges.map(({ node }) => {

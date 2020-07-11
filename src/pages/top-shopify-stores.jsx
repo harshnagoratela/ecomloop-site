@@ -24,6 +24,7 @@ const ShopsWrapper = styled.div`
 const Entries = ({ data }) => {
   const { edges } = data.allGoogleSheetListRow;
   const listEdges = [];
+  const combinedEdges = [];
   const maxItems = 12;
   const [limit, setLimit] = React.useState(maxItems);
   const [showMore, setShowMore] = React.useState(true);
@@ -32,12 +33,39 @@ const Entries = ({ data }) => {
     setLimit(limit + maxItems);
   }
 
-  //filtering items as per limit
+  const rowShopifyViewEdges = data.allMysqlShopifyView.edges;
+  const rowDataViewEdges = data.allMysqlDataView.edges;
+
+  //Creating a new dataset with original nodes and required columns from DataView
   edges.map((edge) => {
+    const inputInstaID = edge.node.instagramname;
+    //filter to show only shops present in ShopifyView
+    var resultShopify = _.filter(rowShopifyViewEdges, ({ node }) => node.UserName == inputInstaID)
+    if (resultShopify.length > 0) {
+      //now finding corresponding data from DataView
+      var resultData = _.filter(rowDataViewEdges, ({ node }) => node.UserName == inputInstaID)
+      var firstDataRow = null;
+      if (resultData.length > 0) {
+        firstDataRow = resultData[0]
+      }
+      let newNode = {
+        node : edge,
+        dataNode: firstDataRow
+      }
+      combinedEdges.push(newNode);
+    }
+  })
+
+  //var sortedEdges = _.sortBy(combinedEdges, ({ node }) => return node.activity)
+
+  //filtering items as per limit
+  combinedEdges.map((edge) => {
     if (listEdges.length < limit) {
       listEdges.push(edge);
     }
   })
+  console.log("+++++++++++++++++++++++++++++")
+  console.log(listEdges)
 
   return (
     <Layout>
@@ -45,10 +73,10 @@ const Entries = ({ data }) => {
       <Header title="🧐 Discover the top Shopify stores" subtitle=""></Header>
 
       <ShopsWrapper>
-<div class="intro_text">
-<h3>Browse the most popular Shopify stores</h3>
-<p>Discover top Shopify sellers based upon organic search traffic and social media activity.</p>
-</div>
+        <div class="intro_text">
+          <h3>Browse the most popular Shopify stores</h3>
+          <p>Discover top Shopify sellers based upon organic search traffic and social media activity.</p>
+        </div>
         <table>
           <thead>
             <tr>
@@ -66,14 +94,14 @@ const Entries = ({ data }) => {
                 <td>
                   {node.localProfileImage &&
                     <Link to={`/shops/${node.slug}`}>
-                      <Image fluid={node.localProfileImage.childImageSharp.fluid} class="profileimage" style={{ width: "50px" }} title={node.name + 'is on Shopify'} alt={node.about && node.about.substring(0, 140) }/>
+                      <Image fluid={node.localProfileImage.childImageSharp.fluid} class="profileimage" style={{ width: "50px" }} title={node.name + 'is on Shopify'} alt={node.about && node.about.substring(0, 140)} />
 
                     </Link>
                   }
 
                 </td>
 
-                  <td><Link to={`/shops/${node.slug}`}>{node.name}</Link></td>
+                <td><Link to={`/shops/${node.slug}`}>{node.name}</Link></td>
 
                 <td>{node.followersperfollow}</td>
                 <td>{node.followersperpost}</td>
@@ -92,11 +120,11 @@ const Entries = ({ data }) => {
         </div>
       }
       <ShopsWrapper>
-      <div class="intro_text">
-      <h3>Discover top Shopify stores of 2020</h3>
-      <p>Find the top Shopify stores by traffic & social media activity. See some of the best Shopify store examples.</p><p>Search in header for more Shopify stores or <a href="/randomshop">discover a shop</a></p>
-      </div>
-        </ShopsWrapper>
+        <div class="intro_text">
+          <h3>Discover top Shopify stores of 2020</h3>
+          <p>Find the top Shopify stores by traffic & social media activity. See some of the best Shopify store examples.</p><p>Search in header for more Shopify stores or <a href="/randomshop">discover a shop</a></p>
+        </div>
+      </ShopsWrapper>
     </Layout>
   );
 };
@@ -112,7 +140,37 @@ export const query = graphql`
           url
           slug
           about
-
+          instagramname
+        }
+      }
+    }
+    allMysqlDataView {
+      edges {
+        node {
+          UserName
+          PostDate
+          AlexaCountry
+          UniquePhotoLink
+          PostsCount
+          FollowersCount
+          FollowingCount
+          GlobalRank
+          LocalRank
+          TOS
+          ProfilePicURL
+          Caption
+          ShortCodeURL
+        }
+      }
+    }
+    allMysqlShopifyView {
+      edges {
+        node {
+          UserName
+          Title
+          ProductURL
+          ImageURL
+          Price
         }
       }
     }
