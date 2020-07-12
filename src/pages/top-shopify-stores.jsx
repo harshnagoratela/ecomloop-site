@@ -21,10 +21,8 @@ const ShopsWrapper = styled.div`
   }
 `;
 
-const Entries = ({ data }) => {
+const TopShopifyStores = ({ data }) => {
   const { edges } = data.allGoogleSheetListRow;
-  const listEdges = [];
-  const combinedEdges = [];
   const maxItems = 12;
   const [limit, setLimit] = React.useState(maxItems);
   const [showMore, setShowMore] = React.useState(true);
@@ -35,9 +33,9 @@ const Entries = ({ data }) => {
 
   const rowShopifyViewEdges = data.allMysqlShopifyView.edges;
   const rowDataViewEdges = data.allMysqlDataView.edges;
+  const combinedEdges = [];
 
   //Creating a new dataset with original nodes and required columns from DataView
-  /*
   edges.map((edge) => {
     const inputInstaID = edge.node.instagramname;
     //filter to show only shops present in ShopifyView
@@ -57,16 +55,13 @@ const Entries = ({ data }) => {
       combinedEdges.push(newNode);
     }
   })
-  */
 
-  //var sortedEdges = _.sortBy(combinedEdges, obj => -obj.activity)
+  //Now sorting (desc) based on activity
+  var sortedEdges = _.sortBy(combinedEdges, obj => -obj.activity)
 
-  //filtering items as per limit
-  combinedEdges.map((edge) => {
-    if (listEdges.length < limit) {
-      listEdges.push(edge);
-    }
-  })
+  //Now limiting the items as per limit
+  const listEdges = _.slice(sortedEdges,0,limit)
+
   console.log("+++++++++++++++++++++++++++++")
   console.log(listEdges)
 
@@ -93,22 +88,21 @@ const Entries = ({ data }) => {
             </tr>
           </thead>
           <tbody>
-            {listEdges.map(({ node, index }) => (
+            {listEdges.map(( node, index ) => (
               <tr key={index}>
                 <td>
-                  {/*node.localProfileImage &&
+                  {node.ProfilePicURL &&
                     <Link to={`/shops/${node.slug}`}>
-                      <Image fluid={node.localProfileImage.childImageSharp.fluid} class="profileimage" style={{ width: "50px" }} title={node.name + 'is on Shopify'} alt={node.about && node.about.substring(0, 140)} />
-
+                      <img src={node.ProfilePicURL} class="profileimage" style={{ width: "50px", margin: '0px' }} title={node.name + 'is on Shopify'} alt={node.name + 'is on Shopify'} />
                     </Link>
-                  */}
+                  }
                 </td>
                 <td><Link to={`/shops/${node.slug}`}>{node.name}</Link></td>
                 <td>{node.GlobalRank}</td>
                 <td>{node.TOS}</td>
                 <td>{node.FollowerRate}</td>
                 <td>{node.PostRate}</td>
-                <td>{node.Activity}</td>
+                <td>{node.activity}</td>
               </tr>
             ))}
           </tbody>
@@ -132,7 +126,7 @@ const Entries = ({ data }) => {
   );
 };
 
-export default Entries;
+export default TopShopifyStores;
 
 export const query = graphql`
   query {
@@ -163,6 +157,9 @@ export const query = graphql`
           ProfilePicURL
           Caption
           ShortCodeURL
+          FollowerRate
+          PostRate
+          activity
         }
       }
     }
