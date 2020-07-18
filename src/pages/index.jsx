@@ -50,6 +50,14 @@ const Index = ({ data }) => {
   const [limit, setLimit] = React.useState(maxItems);
   const [showMore, setShowMore] = React.useState(true);
 
+  React.useEffect(()=>{
+      if(window && document) {
+        var postPointer = document.getElementById("post-"+(limit-maxItems));
+        if (postPointer) postPointer.scrollIntoView();
+        setTimeout(function(){ if (postPointer) {postPointer.scrollIntoView();} }, 1000);
+      }
+  });
+
   const increaseLimit = () => {
     setLimit(limit + maxItems);
   }
@@ -107,7 +115,8 @@ const Index = ({ data }) => {
       <ShopWrapper>
         {listEdges.map((node, index) => (
             <PostList
-              key={node.index}
+              id={`post-${index}`}
+              key={index}
               path={`/shops/${node.slug}`}
               title={node.name}
               excerpt={node.about && node.about.substring(0, 40) + "..."}
