@@ -52,9 +52,9 @@ const Index = ({ data }) => {
 
   React.useEffect(()=>{
       if(window && document) {
-        var postPointer = document.getElementById("post-"+(limit-maxItems));
-        if (postPointer) postPointer.scrollIntoView();
-        setTimeout(function(){ if (postPointer) {postPointer.scrollIntoView();} }, 1000);
+        //var postPointer = document.getElementById("post-"+(limit-maxItems));
+        var postPointer = document.getElementById("bottomPointer");
+        setTimeout(function(){ if (postPointer) {postPointer.scrollIntoView({behavior: 'smooth'});} }, 500);
       }
   });
 
@@ -127,6 +127,7 @@ const Index = ({ data }) => {
       </ShopWrapper>
       {showMore && listEdges.length > 0 && listEdges.length < edges.length &&
         <div className="center">
+          <div id="bottomPointer"/>
           <a className="button" onClick={increaseLimit} style={{ cursor: "pointer" }}>
             Load More
             </a>
