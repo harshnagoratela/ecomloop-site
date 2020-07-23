@@ -82,7 +82,7 @@ const ViewImage = styled.div`
   max-width: 100%;
 `;
 const ViewInfo = styled.div`
-  
+
 `;
 
 const SingleItem = ({ data, pageContext }) => {
@@ -150,7 +150,7 @@ const SingleItem = ({ data, pageContext }) => {
   return (
     <Layout>
       <SEO
-        title={`Find ${name} & other great ${category||''} stores on emprezzo`}
+        title={`Find ${name} | ${category||''} `}
         description={`Find ${name} and discover great ${category||''} online stores on emprezzo. ${about}`}
         banner={image}
         pathname={url}
@@ -188,7 +188,6 @@ const SingleItem = ({ data, pageContext }) => {
         </div>
         <Content input={about} /><br />
 
-{tagsList}
 
         {/*<AtomFeedList list={atomfeed} /><br />*/}
         {/* List of Products from MySQL View */}
@@ -209,6 +208,7 @@ const SingleItem = ({ data, pageContext }) => {
                   <a href={node.ProductURL} target="_blank">
                     {node.Title && node.Title.substring(0, 50)}
                   </a>
+                  <p>{node.Description && node.Description.substring(0, 150)}</p>
                 </ViewInfo>
               </ViewCard>
             );
@@ -237,14 +237,14 @@ const SingleItem = ({ data, pageContext }) => {
                       </ViewImage>
                     </a>
                     <ViewInfo className="info" >
-                      {node.Caption && node.Caption.substring(0, 140) + "..."}
+                      {node.Caption && node.Caption.substring(0, 200) + "..."}
                     </ViewInfo>
                   </ViewCard>
                 );
               })}
             </Carousel>
           }
-     
+
           {/* Show carousel for mobile version */}
           {!isMobile &&
             <ViewContainer>
@@ -298,7 +298,7 @@ export const query = graphql`
           UserName
           PostDate
           AlexaCountry
-          UniquePhotoLink          
+          UniquePhotoLink
           PostsCount
           FollowersCount
           FollowingCount
@@ -320,6 +320,7 @@ export const query = graphql`
           UserName
           Title
           ProductURL
+          Description
           ImageURL
           Price
         }
