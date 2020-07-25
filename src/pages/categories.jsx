@@ -5,6 +5,7 @@ import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
 import { Header } from 'components';
 import PostList5Col from '../components/PostList5Col';
+import ProductList from '../components/ProductList';
 import { Layout } from 'layouts';
 import _ from 'lodash';
 
@@ -27,58 +28,99 @@ const CategoryWrapper = styled.div`
   }
 `;
 
-const Categories = ({ data, pageContext }) => {
+const Products = ({ data, pageContext }) => {
   const { category } = pageContext;
   const categoryHeading = category + " Shops";
   const categoryGroup = data.allGoogleSheetListRow.group;
   console.log(categoryGroup)  
 
-  const rowDataViewEdges = data.allMysqlDataView.edges;
+  const rowProductsEdges = data.allMysqlProducts.edges;
+  
+  const checkEdgesInProductView = (allEdges) => {
+    const filteredProducts = [];
+    allEdges.map((edge)=>{
+      const inputInstaID = edge.node.instagramname;      
+      let result = _.filter(rowProductsEdges, ({ node }) => node.UserName == inputInstaID)
+      //console.log(result)
+      if(result.length>0) filteredProducts.push(result[0]);
+    });
+    return filteredProducts;
+  }
+  
+  const getProductVariant = (node) => {
+    let productVariant = null;
+    //if(node.VariantTitle && node.VariantTitle!=="Default Title") productVariant = node.VariantTitle;
+    return productVariant;
+  }
+
+  const getProductImage = (node) => {
+    let productImage = node.VariantImageURL;
+    if (!productImage) productImage = node.ImageURL;
+    return productImage;
+  }
+
+  const getPath = (node) => {
+    let path = node.VendorURL; // if there is no shop with instagram id then path will be vendor URL
+    //checking if the shop exists corresponding to this instagram id
+    const inputInstaID = node.UserName;
+    var result = _.filter(rowProductsEdges, ({ node }) => node.instagramname == inputInstaID)
+    if (result.length > 0) path = "/shops/" + result[0].node.slug;
+    return path;
+  }
 
   return (
-    <Layout title={'Shop Independent ' + categoryHeading + ' | Discover direct-to-consumer' + categoryHeading } >
-      <Header title={categoryHeading}><span class="Header--Subtitle">discover exceptional independent {categoryHeading}</span></Header>
-      
+    <Layout title={'Top Shopify Products'} description="A mini shopify marketplace. Discover the best Shopify products from hundreds of stores in one place.">
+      <Header title="Top Shopify Products" />      
         {categoryGroup.map((category, index) => {
-          const listEdges = _.slice(category.edges,0,5)
+          const allEdges = category.edges;
+          console.log(allEdges)
+          console.log("****** filtered")          
+          const filteredProducts = checkEdgesInProductView(allEdges)
+          console.log(filteredProducts)
+          console.log("******* top 5")
+          const listEdges = _.slice(filteredProducts,0,5)
+          console.log(listEdges)
           return (
             <div key={index}>
-              <CategoryHeading>{category.fieldValue}</CategoryHeading> 
+              {listEdges.length>0 &&
+                <CategoryHeading>{category.fieldValue}</CategoryHeading> 
+              }
               <CategoryWrapper>
                 {listEdges.map(({ node }) => (
-                  <PostList5Col
-                      key={node.name}
-                      columns="5"
-                      cover={node.localImageUrl && node.localImageUrl.childImageSharp.fluid}
-                      path={`/shops/${node.slug}`}
-                      title={node.name}
-                      excerpt={node.about && node.about.substring(0,40)+"..."}
-                      mysqldataview={rowDataViewEdges}
-                      instagramname={node.instagramname}
-                    />
+                  <ProductList
+                    key={getProductImage(node)}
+                    cover={getProductImage(node)}
+                    path={getPath(node)}
+                    vendorname={node.VendorName}
+                    title={node.Title}
+                    variant={getProductVariant(node)}
+                    price={node.Price}
+                  />
                 ))}
               </CategoryWrapper>
             </div>
         )})}
-           
-      
       
     </Layout>
   );
 };
 
-export default Categories;
+export default Products;
 
 export const query = graphql`
   query {
-    allMysqlDataView {
+    allMysqlProducts {
       edges {
         node {
           UserName
-          UniquePhotoLink
-          ProfilePicURL
-          Caption
-          ShortCodeURL
+          VendorName
+          VendorURL
+          Title
+          VariantTitle
+          ProductURL
+          ImageURL
+          VariantImageURL
+          Price
         }
       }
     }
