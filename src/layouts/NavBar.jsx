@@ -140,7 +140,7 @@ const NavBar = () => {
     }
     uniqueCategoriesMap.push(item)
   })
-  //console.log(uniqueCategoriesMap);
+  console.log(uniqueCategoriesMap);
 
   return (
     <Headroom calcHeightOnResize disableInlineStyles>
