@@ -42,7 +42,6 @@ const Shops = ({ data }) => {
     //console.log(result)
     if (listEdges.length < limit && result.length>0) {
       listEdges.push(result[0]);
-      console.log("***** "+result[0].UniquePhotoLink)
     }
   })
 
