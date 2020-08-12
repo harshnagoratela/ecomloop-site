@@ -8,6 +8,9 @@ import PostList5Col from '../components/PostList5Col';
 import ProductList from '../components/ProductList';
 import { Layout } from 'layouts';
 import _ from 'lodash';
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
+import { Carousel } from 'react-responsive-carousel'
+import { useMediaQuery } from 'react-responsive'
 
 const CategoryHeading = styled.h1`
   margin-left: 4rem;
@@ -48,6 +51,7 @@ const Products = ({ data, pageContext }) => {
   const maxItems = 9;
   const [limit, setLimit] = React.useState(maxItems);
   const [filter, setFilter] = React.useState([]);
+  const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
   
   const increaseLimit = (allEdges) => {
     setLimit(limit + maxItems);
@@ -102,19 +106,46 @@ const Products = ({ data, pageContext }) => {
                 }}
               />
             </SearchWrapper>
-            <CategoryWrapper>
-              {visibleProducts.map(({ node }, index) => (
-                <ProductList
-                  key={index}
-                  cover={getProductImage(node)}
-                  path={`/shops/${node.UserName}`}
-                  vendorname={node.VendorName}
-                  title={node.Title}
-                  variant={getProductVariant(node)}
-                  price={node.Price}
-                />
-              ))}
-            </CategoryWrapper>
+            {/* Show carousel for mobile version */}
+            {isMobile &&
+              <Carousel
+                showThumbs={false}
+                infiniteLoop
+                showIndicators={false}
+                selectedItem={1}
+                showArrows={true}
+                showStatus={false}
+              >
+                {visibleProducts.map(({ node }, index) => (
+                  <ProductList
+                    key={index}
+                    cover={getProductImage(node)}
+                    path={`/shops/${node.UserName}`}
+                    vendorname={node.VendorName}
+                    title={node.Title}
+                    variant={getProductVariant(node)}
+                    price={node.Price}
+                  />
+                ))}
+              </Carousel>
+            }
+
+            {/* Show normal version */}
+            {!isMobile &&
+              <CategoryWrapper>
+                {visibleProducts.map(({ node }, index) => (
+                  <ProductList
+                    key={index}
+                    cover={getProductImage(node)}
+                    path={`/shops/${node.UserName}`}
+                    vendorname={node.VendorName}
+                    title={node.Title}
+                    variant={getProductVariant(node)}
+                    price={node.Price}
+                  />
+                ))}
+              </CategoryWrapper>
+            }
             {visibleProducts.length > 0 && visibleProducts.length < filteredProducts.length &&
               <div className="center">
                 <button className="button" onClick={increaseLimit}>
