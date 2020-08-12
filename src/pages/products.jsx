@@ -28,19 +28,43 @@ const CategoryWrapper = styled.div`
   }
 `;
 
-const Products = ({ data, pageContext }) => {
-  const { category } = pageContext;
-  const categoryHeading = category + " Shops";
+const SearchWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1rem 4rem 1rem 4rem;
+  @media (max-width: 1000px) {
+    margin: 1rem 2rem 1rem 2rem;
+  }
+  @media (max-width: 700px) {
+    margin: 1rem 1rem 1rem 1rem;
+  }
+`;
 
+const Products = ({ data, pageContext }) => {
   const rowProductsEdges = data.allMysqlProducts.edges;
+  const maxItems = 9;
+  const [limit, setLimit] = React.useState(maxItems);
+  const [filter, setFilter] = React.useState([]);
+  
+  const increaseLimit = (allEdges) => {
+    setLimit(limit + maxItems);
+  }
 
   const checkEdgesInProductView = (allEdges) => {
     let filteredProducts = [];
     allEdges.map((edge) => {
       const inputID = edge.node.UserName;
-      let result = _.filter(rowProductsEdges, ({ node }) => node.UserName == inputID)
-      filteredProducts = _.union(filteredProducts, result)
+      const result = _.filter(rowProductsEdges, ({ node }) => node.UserName == inputID)      
+      const max2Results = _.slice(result,0,2);//max 2 products from a store
+      filteredProducts = _.union(filteredProducts, max2Results) 
     });
+    //apply filtertext if its greater than 3 characters
+    if(filter && filter.length>3){
+      filteredProducts = _.filter(filteredProducts, ({ node }) => node.VendorName.toLowerCase().indexOf(filter.toLowerCase())>=0 || node.Title.toLowerCase().indexOf(filter.toLowerCase())>=0)
+    }
     return filteredProducts;
   }
 
@@ -61,13 +85,25 @@ const Products = ({ data, pageContext }) => {
   const featuredShopEdges = _.filter(mainViewEdges, ({ node }) => node.tags && node.tags.indexOf("featured")>=0)
   const filteredProducts = checkEdgesInProductView(featuredShopEdges)
 
+  //Now limiting the items as per limit
+  const visibleProducts = _.slice(filteredProducts, 0, limit);
+
   return (
     <Layout title={'Shopify Products | Disover great products from Shopify stores'} description="Discover the best Shopify products from hundreds of stores in one place. It's like a mini-Shopify marketplace.">
       <Header title="🧐 Disover great products from Shopify stores" />
           <div>
             <CategoryHeading>Shopify Products</CategoryHeading>
+            <SearchWrapper>
+              Search 
+              <input 
+                placeholder="filter products"  
+                onChange={({ target: { value } }) => {
+                  setFilter(value);
+                }}
+              />
+            </SearchWrapper>
             <CategoryWrapper>
-              {filteredProducts.map(({ node }, index) => (
+              {visibleProducts.map(({ node }, index) => (
                 <ProductList
                   key={index}
                   cover={getProductImage(node)}
@@ -79,6 +115,13 @@ const Products = ({ data, pageContext }) => {
                 />
               ))}
             </CategoryWrapper>
+            {visibleProducts.length > 0 && visibleProducts.length < filteredProducts.length &&
+              <div className="center">
+                <button className="button" onClick={increaseLimit}>
+                  Load More
+                </button>
+              </div>
+            }
           </div>
     </Layout>
   );
