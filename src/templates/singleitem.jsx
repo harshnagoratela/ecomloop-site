@@ -139,7 +139,7 @@ const SingleItem = ({ data, pageContext }) => {
     return (
       <ViewCard key={node.ProductURL} style={{ padding: (ismobile && "15px") }}>
         <h5 style={{textTransform: "capitalize"}}>{node.FreeShipText}</h5>
-        <a href={node.ProductURL} target="_blank">          
+        <a href={node.ProductURL} target="_blank">
           <ViewImage>
             <div style={{ width: '100%', height: '150px' }}>
               <img src={node.ImageURL} style={{ objectFit: 'cover', height: '150px', width: '100%', margin: 'auto' }} alt={node.Title} />
@@ -248,7 +248,7 @@ const SingleItem = ({ data, pageContext }) => {
             </StatisticItem>
           }
           {TTFollowers &&
-            <StatisticItem>              
+            <StatisticItem>
               <h5>{TTFollowers}</h5>
               <h6>followers</h6>
             </StatisticItem>

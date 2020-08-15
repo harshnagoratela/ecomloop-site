@@ -49,7 +49,7 @@ const ShopWrapper = styled.div`
 
 const Index = ({ data }) => {
   const { edges } = data.allMysqlMainView;
-  const maxItems = 9;
+  const maxItems = 15;
   const [limit, setLimit] = React.useState(maxItems);
   const [showMore, setShowMore] = React.useState(true);
 
@@ -177,7 +177,7 @@ const Index = ({ data }) => {
         <h3>What's the benefit of shopping direct-to-consumer brands?</h3>
         <p>Direct to consumers stores connect diretly with their customer, which helps reduce costs paid to large reatilers and makertplaces. Marketplaces typically charge sellers for marketing, fulfillment, commission, and additional fees making it hard for stores to turn a profit without increasing costs.</p>
         <h3>What are the best online shopping sites?</h3>
-        <p>Our lists are comprised of stores based on data from social media data, traffic data, and our own analysis. </p>
+        <p>Our lists are compiled based on thousands of data points from social media platforms, trafic data, API tools, and our own research. We present our findings and listed based upon the data retreived. </p>
       </ShopWrapper>
     </Layout >
   );
