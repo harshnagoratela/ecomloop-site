@@ -1,18 +1,6 @@
 const path = require('path');
 const _ = require("lodash");
 
-/*
-exports.createSchemaCustomization = ({ actions }) => {
-  const { createTypes } = actions
-  createTypes(`
-    type MysqlDataView implements Node {
-      mysqlImage: File
-    }
-  `)
-}
-*/
-
-
 exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions;
 
