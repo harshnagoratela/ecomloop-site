@@ -16,7 +16,7 @@ module.exports = {
         // Exclude specific pages or groups of pages using glob parameters
         // See: https://github.com/isaacs/minimatch
         // The example below will exclude the single `path/to/page` and all routes beginning with `category`
-        exclude: [`/tags/tgd*`],
+        exclude: [`/tags/*`],
       }
     },
     'gatsby-plugin-react-helmet',
@@ -125,7 +125,6 @@ module.exports = {
       },
     },
     'gatsby-plugin-sharp',
-    'gatsby-plugin-sitemap',
     {
       resolve: `gatsby-plugin-algolia`,
       options: {
