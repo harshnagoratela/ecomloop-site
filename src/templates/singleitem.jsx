@@ -9,6 +9,7 @@ import _ from 'lodash';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import { Carousel } from 'react-responsive-carousel'
 import { useMediaQuery } from 'react-responsive'
+import ReactFrappeChart from "react-frappe-charts";
 import { FaInstagram, FaFacebookSquare, FaPinterestSquare, FaTwitterSquare, FaYoutube, FaRegLaugh, FaChartLine } from 'react-icons/fa';
 
 import '../styles/prism';
@@ -133,6 +134,23 @@ const SingleItem = ({ data, pageContext }) => {
   //console.log("*****++listProductEdges+++********")
   //console.log(listProductEdges)
 
+  //Generating the data for chart
+  const rowRankHistoryEdges = data.allMysqlRankHistory.edges;
+  const filteredRankHistoryEdges = _.filter(rowRankHistoryEdges, ({ node }) => node.username == UserName)
+  let chartData = null;
+  if (filteredRankHistoryEdges && filteredRankHistoryEdges.length > 0 && filteredRankHistoryEdges[0].node.GlobalRank_Dates && filteredRankHistoryEdges[0].node.GlobalRank_List) {
+    chartData = {
+      labels: _.split(filteredRankHistoryEdges[0].node.GlobalRank_Dates, ','),
+      datasets: [
+        {
+          name: 'Rank Data',
+          type: 'bar',
+          values: _.split(filteredRankHistoryEdges[0].node.GlobalRank_List, ',')
+        }
+      ]
+    };
+  }
+
   const socialDetails = {
     "InstagramLink": Instagram ? "https://www.instagram.com/" + Instagram : null,
     "FacebookLink": Facebook ? "https://www.facebook.com/" + Facebook : null,
@@ -146,7 +164,7 @@ const SingleItem = ({ data, pageContext }) => {
   let FreeShipText = "";
 
   const get100Words = (text) => {
-    let calculatedText = _.join(_.split(text,' ',100),' ')
+    let calculatedText = _.join(_.split(text, ' ', 100), ' ')
     return calculatedText;
   }
 
@@ -237,6 +255,15 @@ const SingleItem = ({ data, pageContext }) => {
 
         {/* Social Statistics Section */}
         <h3>{name}  stats</h3>
+        {chartData &&
+          <ReactFrappeChart
+            type="bar"
+            colors={["#743ee2"]}
+            height={250}
+            axisOptions={{ xAxisMode: "tick", xIsSeries: 1 }}
+            data={chartData}
+          />
+        }
         <Statistics>
         <StatisticItem>
         <FaChartLine size="32" color="black" title="web traffic"/>
@@ -561,6 +588,17 @@ export const query = graphql`
           activity
           FollowerRate
           PostRate
+        }
+      }
+    }
+    allMysqlRankHistory {
+      edges {
+        node {
+          GlobalRank_Change
+          GlobalRank_Dates
+          GlobalRank_List
+          username
+          url
         }
       }
     }
