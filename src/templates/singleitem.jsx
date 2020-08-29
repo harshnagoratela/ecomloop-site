@@ -144,7 +144,7 @@ const SingleItem = ({ data, pageContext }) => {
       datasets: [
         {
           name: 'Rank Data',
-          type: 'bar',
+          type: 'line',
           values: _.split(filteredRankHistoryEdges[0].node.GlobalRank_List, ',')
         }
       ]
@@ -212,8 +212,8 @@ const SingleItem = ({ data, pageContext }) => {
   return (
     <Layout>
       <SEO
-        title={`Find ${name} | ${category || ''} `}
-        description={`Find ${name} and discover great ${category || ''} online stores on emprezzo. ${about}`}
+        title={`Discover ${name}: products, stats & deals `}
+        description={`Find best sellers and popular products from ${name} on emprezzo. See social media growth, search popularity, and more stats online stores selling ${tagsList}. `}
         pathname={AlexaURL}
       />
       <Header title={name} children={subtitle}  />
@@ -248,46 +248,72 @@ const SingleItem = ({ data, pageContext }) => {
             </Statistics>
           </div>
         </div>
+
       <div style={{ margin: "2rem" }}>
         <a href={AlexaURL} className="button" target="_blank">shop {name}</a> <a href="/randomshop" className="button buttonalt">Discover another shop</a>
     </div>
-        <Content input={about} /><br />
+<Content input={about} /><br />
+    {/* List of Products from MySQL View */}
+    {listProductEdges && listProductEdges.length > 0 && <h3>shop {name}</h3>}
+
+    {promos && promos.toLowerCase() != "n/a" &&
+      <><Content input={promos} /><br /></>
+    }
+
+    {/* Show carousel for mobile version */}
+    {isMobile &&
+      <Carousel
+        showThumbs={false}
+        infiniteLoop
+        showIndicators={false}
+        selectedItem={1}
+        showArrows={true}
+        showStatus={false}
+      >
+        {listProductEdges && listProductEdges.map(({ node }) => {
+          FreeShipText = node.FreeShipText;
+          return renderProduct(node, true);
+        })}
+      </Carousel>
+    }
+
+    {/* Show carousel for mobile version */}
+    {!isMobile &&
+      <ViewContainer>
+        <>
+          <span>&nbsp;</span>
+          {listProductEdges.map(({ node }) => {
+            FreeShipText = node.FreeShipText;
+            return renderProduct(node);
+          })}
+        </>
+      </ViewContainer>
+    }
+    {FreeShipText && FreeShipText.length > 0 && <h3>get free shipping at {name}</h3>}
+    <p>{get100Words(FreeShipText)}</p>
+    <br />
+
 
         {/* Social Statistics Section */}
-        <h3>{name}  stats</h3>
+        <h3>{name} site traffic</h3>
         {chartData &&
           <ReactFrappeChart
-            type="bar"
+            type="axis-mixed"
             colors={["#743ee2"]}
             height={250}
             axisOptions={{ xAxisMode: "tick", xIsSeries: 1 }}
             data={chartData}
           />
         }
-        <Statistics>
-        <StatisticItem>
-        <FaChartLine size="32" color="black" title="web traffic"/>
-        </StatisticItem>
 
-        <StatisticItem>
-          <h5>{GlobalRank.toLocaleString()}</h5>
-          <h6>global rank</h6>
-        </StatisticItem>
+          <h3>{name} social media stats</h3>
+        <Statistics>
 
             {activity &&
             <StatisticItem>
             <FaRegLaugh size="32" color="black" />
             </StatisticItem>
           }
-
-
-
-
-
-
-
-
-
 
           <StatisticItem>
           <h5>{(activity + FollowerRate + PostRate).toFixed(1)} </h5>
@@ -300,13 +326,6 @@ const SingleItem = ({ data, pageContext }) => {
               <h6>social rate</h6>
             </StatisticItem>
           }
-
-
-
-
-
-
-
 
           {FBLikes &&
             <>
@@ -424,45 +443,7 @@ const SingleItem = ({ data, pageContext }) => {
           }
         </Statistics>
 
-        {/* List of Products from MySQL View */}
-        {listProductEdges && listProductEdges.length > 0 && <h3>shop {name}</h3>}
 
-        {promos && promos.toLowerCase() != "n/a" &&
-          <><Content input={promos} /><br /></>
-        }
-
-        {/* Show carousel for mobile version */}
-        {isMobile &&
-          <Carousel
-            showThumbs={false}
-            infiniteLoop
-            showIndicators={false}
-            selectedItem={1}
-            showArrows={true}
-            showStatus={false}
-          >
-            {listProductEdges && listProductEdges.map(({ node }) => {
-              FreeShipText = node.FreeShipText;
-              return renderProduct(node, true);
-            })}
-          </Carousel>
-        }
-
-        {/* Show carousel for mobile version */}
-        {!isMobile &&
-          <ViewContainer>
-            <>
-              <span>&nbsp;</span>
-              {listProductEdges.map(({ node }) => {
-                FreeShipText = node.FreeShipText;
-                return renderProduct(node);
-              })}
-            </>
-          </ViewContainer>
-        }
-        {FreeShipText.length > 0 && <h3>free shipping info</h3>}
-        <h5 style={{ textTransform: "capitalize" }}>{get100Words(FreeShipText)}</h5>
-        <br />
 
         {/* List of Posts from MySQL View */}
         {listInstaPostEdges && listInstaPostEdges.length > 0 && <h3>instagram posts</h3>}
@@ -496,7 +477,7 @@ const SingleItem = ({ data, pageContext }) => {
 
 
         <a href="/randomshop" className="button ">Discover another shop</a><br /><br />
-        See more stores tagged:  <TagsBlock list={tagsList || []} />
+        See more online stores for:  <TagsBlock list={tagsList || []} />
       </Container>
       <SuggestionBar>
         <PostSuggestion>
