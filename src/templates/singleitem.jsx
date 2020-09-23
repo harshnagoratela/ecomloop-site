@@ -157,6 +157,14 @@ const SingleItem = ({ data, pageContext }) => {
   const filteredShopifyNewProducts = _.filter(rowShopifyNewProductsEdges, ({ node }) => node.VendorURL == AlexaURL)
   const listShopifyNewProductsEdges = _.slice(filteredShopifyNewProducts, 0, maxProducts);
 
+  //Generating Social History data for chart
+  const rowSocialHistoryEdges = data.allMysqlSocialHistory.edges;
+  const filteredSocialHistoryEdges = _.filter(rowSocialHistoryEdges, ({ node }) => node.URL == AlexaURL)
+  let chartSocialData = null;
+  if (filteredSocialHistoryEdges && filteredSocialHistoryEdges.length > 0) {
+    
+  }
+
   //Generating the data for chart
   const rowRankHistoryEdges = data.allMysqlRankHistory.edges;
   const filteredRankHistoryEdges = _.filter(rowRankHistoryEdges, ({ node }) => node.UserName == UserName)
@@ -719,6 +727,25 @@ export const query = graphql`
           Title
           VariantImageURL
           VendorURL
+        }
+      }
+    }
+    allMysqlSocialHistory {
+      edges {
+        node {
+          FacebookCreateDates
+          FacebookLikesList
+          InstagramCreateDates
+          InstagramFollowersList
+          PinterestCreateDates
+          PinterestFollowersList
+          TiktokCreateDates
+          TiktokFollowersList
+          TwitterCreateDates
+          TwitterFollowersList
+          URL
+          YoutubeCreateDates
+          YoutubeSubscribersList
         }
       }
     }
