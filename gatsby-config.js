@@ -117,11 +117,6 @@ module.exports = {
             name: 'ShopifyClassicProducts'
           },
           {
-            statement: 'SELECT CONCAT(URL,FLOOR(RAND()*10000)) AS UniqueKey,SocialHistory.* FROM SocialHistory',
-            idFieldName: 'UniqueKey',
-            name: 'SocialHistory'
-          },
-          {
             statement: 'SELECT CONCAT(ProductID,FLOOR(RAND()*10000)) AS UniqueKey,ShopifyNewProducts.* FROM ShopifyNewProducts',
             idFieldName: 'UniqueKey',
             name: 'ShopifyNewProducts'

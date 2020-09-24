@@ -157,14 +157,6 @@ const SingleItem = ({ data, pageContext }) => {
   const filteredShopifyNewProducts = _.filter(rowShopifyNewProductsEdges, ({ node }) => node.VendorURL == AlexaURL)
   const listShopifyNewProductsEdges = _.slice(filteredShopifyNewProducts, 0, maxProducts);
 
-  //Generating Social History data for chart
-  const rowSocialHistoryEdges = data.allMysqlSocialHistory.edges;
-  const filteredSocialHistoryEdges = _.filter(rowSocialHistoryEdges, ({ node }) => node.URL == AlexaURL)
-  let chartSocialData = null;
-  if (filteredSocialHistoryEdges && filteredSocialHistoryEdges.length > 0) {
-    
-  }
-
   //Generating the data for chart
   const rowRankHistoryEdges = data.allMysqlRankHistory.edges;
   const filteredRankHistoryEdges = _.filter(rowRankHistoryEdges, ({ node }) => node.UserName == UserName)
@@ -260,7 +252,7 @@ const SingleItem = ({ data, pageContext }) => {
   return (
     <Layout>
       <SEO
-        title={`Discover ${name}: products, stats & deals `}
+        title={`Discover ${name}: Best Sellers, Coupons, & Stats `}
         description={`Find best sellers and popular products from ${name} on emprezzo. See social media growth, search popularity, and more stats online stores selling ${tagsList}. `}
         pathname={AlexaURL}
       />
@@ -572,19 +564,10 @@ const SingleItem = ({ data, pageContext }) => {
       </Container>
       <SuggestionBar>
         <PostSuggestion>
-          {prev && (
-            <Link to={`/shops/${prev.UserName}`}>
-              <p>&lt; {prev.name}</p>
-            </Link>
-          )}
+
         </PostSuggestion>
         <PostSuggestion>
-          {next && (
-            <Link to={`/shops/${next.UserName}`}>
 
-              <p>{next.name}	&gt;</p>
-            </Link>
-          )}
         </PostSuggestion>
       </SuggestionBar>
     </Layout>
@@ -727,25 +710,6 @@ export const query = graphql`
           Title
           VariantImageURL
           VendorURL
-        }
-      }
-    }
-    allMysqlSocialHistory {
-      edges {
-        node {
-          FacebookCreateDates
-          FacebookLikesList
-          InstagramCreateDates
-          InstagramFollowersList
-          PinterestCreateDates
-          PinterestFollowersList
-          TiktokCreateDates
-          TiktokFollowersList
-          TwitterCreateDates
-          TwitterFollowersList
-          URL
-          YoutubeCreateDates
-          YoutubeSubscribersList
         }
       }
     }
