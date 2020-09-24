@@ -191,6 +191,7 @@ const SingleItem = ({ data, pageContext }) => {
     }
   }
 
+  //Social chart data
   const chartSocialData = {
     labels: [
       "Instagram",
@@ -213,7 +214,6 @@ const SingleItem = ({ data, pageContext }) => {
       }
     ]
   };
-
 
   const socialDetails = {
     "InstagramLink": Instagram ? "https://www.instagram.com/" + Instagram : null,
@@ -433,7 +433,7 @@ const SingleItem = ({ data, pageContext }) => {
               <h6>social rate</h6>
             </StatisticItem>
           }
-
+          {/*
           {FBLikes &&
             <>
               <span className="break" />
@@ -549,6 +549,7 @@ const SingleItem = ({ data, pageContext }) => {
             </StatisticItem>
           }
         </Statistics>
+        */}
         {chartSocialData &&
           <ReactFrappeChart
             type="axis-mixed"
@@ -556,7 +557,7 @@ const SingleItem = ({ data, pageContext }) => {
             height={250}
             axisOptions={{ xAxisMode: "tick", xIsSeries: 1, shortenYAxisNumbers: 1 }}
             barOptions={{ stacked: 1 }}
-            data={chartTOSData}
+            data={chartSocialData}
           />
         }
 
