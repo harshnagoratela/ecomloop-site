@@ -65,12 +65,7 @@ module.exports = {
               statement: 'SELECT * FROM SocialIDView WHERE URL IS NOT NULL',
               idFieldName: 'URL',
               name: 'SocialIDView'
-          },
-          {
-            statement: 'SELECT * FROM ShopifyView WHERE ProductID IS NOT NULL',
-            idFieldName: 'ProductURL',
-            name: 'Products'
-          },
+          },          
           {
             statement: 'SELECT * FROM RankView WHERE AlexaURL IS NOT NULL',
             idFieldName: 'AlexaURL',
@@ -85,12 +80,7 @@ module.exports = {
             statement: 'SELECT * FROM RankView_PayLater WHERE AlexaURL IS NOT NULL',
             idFieldName: 'AlexaURL',
             name: 'RankViewPayLater'
-          },
-          {
-            statement: 'SELECT * FROM RankView_Pages WHERE AlexaURL IS NOT NULL',
-            idFieldName: 'AlexaURL',
-            name: 'RankViewPages'
-          },
+          },          
           {
             statement: 'SELECT * FROM Tags WHERE url IS NOT NULL',
             idFieldName: 'url',
@@ -130,7 +120,7 @@ module.exports = {
             statement: "Select CONCAT(UserName,FLOOR(RAND()*10000)) AS UniqueKey, UserID, UserName, FullName, Biography, ProfilePicURL, AlexaRankOrder, PostsCount, FollowersCount, FollowingCount, PostRate, FollowerRate, Activity, PhotoLink AS UniquePhotoLink, ShortCode, CONCAT('https://instagram.com/p/',ShortCode) AS ShortCodeURL, LikesCount, CommentsCount, PostDate, Caption, CaptionHashtags, AlexaURL, GlobalRank, Reach, LocalRank, AlexaCountry, TOS FROM DataView WHERE UserName IS NOT NULL ORDER BY activity DESC",
             idFieldName: 'UniqueKey',
             name: 'DataView'
-            ,remoteImageFieldNames: ['UniquePhotoLink']
+            //,remoteImageFieldNames: ['UniquePhotoLink']
           }
         ]
       }
