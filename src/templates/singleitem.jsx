@@ -192,7 +192,7 @@ const SingleItem = ({ data, pageContext }) => {
   }
 
   //Social chart data
-  const chartSocialData = {
+  const chartSocialFollowingData = {
     labels: [
       "Instagram",
       "Facebook",
@@ -204,12 +204,23 @@ const SingleItem = ({ data, pageContext }) => {
     datasets: [
       {
         name: "following",
-        chartType: "bar",
         values: [(InstaFollowing || 0), 0, (TwitterFollowing || 0), 0, (PinFollowing || 0), (TTFollowing || 0)]
-      },
+      }
+    ]
+  };
+
+  const chartSocialFollowerData = {
+    labels: [
+      "Instagram",
+      "Facebook",
+      "Twitter",
+      "Youtube",
+      "Pinterest",
+      "TikTok"
+    ],
+    datasets: [      
       {
         name: "followers",
-        chartType: "bar",
         values: [(InstaFollowers || 0), (FBLikes || 0), (TwitterFollowers || 0), (YTSubs || 0), (PinFollowers || 0), (TTFollowers || 0)]
       }
     ]
@@ -414,19 +425,27 @@ const SingleItem = ({ data, pageContext }) => {
         </Tabs>
 
         <h3>{name} social media stats</h3>
-
-        }
-        {chartSocialData &&
+        
+        {chartSocialFollowingData &&
           <ReactFrappeChart
-            type="axis-mixed"
-            colors={["blue", "purple"]}
+            type="pie"
+            title="Followings"
             height={250}
             axisOptions={{ xAxisMode: "tick", xIsSeries: 1, shortenYAxisNumbers: 1 }}
             barOptions={{ stacked: 1 }}
-            data={chartSocialData}
+            data={chartSocialFollowingData}
           />
         }
-
+        {chartSocialFollowerData &&
+          <ReactFrappeChart
+            type="pie"
+            title="Followers"
+            height={250}
+            axisOptions={{ xAxisMode: "tick", xIsSeries: 1, shortenYAxisNumbers: 1 }}
+            barOptions={{ stacked: 1 }}
+            data={chartSocialFollowerData}
+          />
+        }
 
         {/* List of Posts from MySQL View */}
         {listInstaPostEdges && listInstaPostEdges.length > 0 && <h3>instagram posts</h3>}
