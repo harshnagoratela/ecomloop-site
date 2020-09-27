@@ -259,7 +259,7 @@ export const query = graphql`
           UserName
           PostDate
           AlexaCountry
-          UniquePhotoLink
+          PhotoLink
           PostsCount
           FollowersCount
           FollowingCount
