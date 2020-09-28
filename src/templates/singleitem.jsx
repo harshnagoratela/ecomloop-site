@@ -144,19 +144,19 @@ const SingleItem = ({ data, pageContext }) => {
   //filtering top 3 for current AlexaURL
   const filteredShopifyBestSellers = _.filter(rowShopifyBestSellersEdges, ({ node }) => node.VendorURL == AlexaURL)
   const listShopifyBestSellersEdges = _.slice(filteredShopifyBestSellers, 0, maxProducts);
-  
+
   //Extracting classic products
   const rowShopifyClassicProductsEdges = data.allMysqlShopifyClassicProducts.edges;
   //filtering top 3 for current AlexaURL
   const filteredShopifyClassicProducts = _.filter(rowShopifyClassicProductsEdges, ({ node }) => node.VendorURL == AlexaURL)
   const listShopifyClassicProductsEdges = _.slice(filteredShopifyClassicProducts, 0, maxProducts);
-  
+
   //Extracting new products
   const rowShopifyNewProductsEdges = data.allMysqlShopifyNewProducts.edges;
   //filtering top 3 for current AlexaURL
   const filteredShopifyNewProducts = _.filter(rowShopifyNewProductsEdges, ({ node }) => node.VendorURL == AlexaURL)
   const listShopifyNewProductsEdges = _.slice(filteredShopifyNewProducts, 0, maxProducts);
-  
+
   //Generating the data for chart
   let chartRankData = null;
   let chartTOSData = null;
@@ -424,7 +424,7 @@ const SingleItem = ({ data, pageContext }) => {
 
         {chartSocialFollowingData &&
           <ReactFrappeChart
-            type="pie"
+            type="donut"
             title="Followings"
             height={250}
             axisOptions={{ xAxisMode: "tick", xIsSeries: 1, shortenYAxisNumbers: 1 }}
@@ -555,7 +555,7 @@ export const query = graphql`
         }
       }
     }
-    
+
     allMysqlShopifyView (filter: {AlexaURL: {eq: $pathSlug}}) {
       edges {
         node {
@@ -610,6 +610,6 @@ export const query = graphql`
           VendorURL
         }
       }
-    }    
+    }
   }
 `;
