@@ -125,7 +125,7 @@ module.exports = {
             name: 'PayNShip'
           },
           {
-            statement: "SELECT CONCAT(RankView_Pages.AlexaURL,FLOOR(RAND()*10000)) AS UniqueKey,RankView_Pages.*, Tags.*, RankHistory.* FROM RankView_Pages LEFT JOIN Tags ON TRIM(TRAILING '/' FROM RankView_Pages.AlexaURL) = TRIM(TRAILING '/' FROM Tags.url) LEFT JOIN RankHistory ON TRIM(TRAILING '/' FROM RankView_Pages.AlexaURL) = TRIM(TRAILING '/' FROM RankHistory.url) WHERE RankView_Pages.UserName IN ('redbaycoffee','leesasleep')",
+            statement: "SELECT CONCAT(RankView_Pages.AlexaURL,FLOOR(RAND()*10000)) AS UniqueKey,RankView_Pages.*, Tags.*, SocialIDView.*, RankHistory.* FROM RankView_Pages LEFT JOIN Tags ON TRIM(TRAILING '/' FROM RankView_Pages.AlexaURL) = TRIM(TRAILING '/' FROM Tags.url) LEFT JOIN SocialIDView ON TRIM(TRAILING '/' FROM RankView_Pages.AlexaURL) = TRIM(TRAILING '/' FROM SocialIDView.URL) LEFT JOIN RankHistory ON TRIM(TRAILING '/' FROM RankView_Pages.AlexaURL) = TRIM(TRAILING '/' FROM RankHistory.url) WHERE RankView_Pages.UserName IN ('redbaycoffee','leesasleep')",
             idFieldName: 'AlexaURL',
             name: 'MainView'
           },

@@ -108,8 +108,11 @@ const TabStyle = {
 
 const SingleItem = ({ data, pageContext }) => {
   const { next, prev } = pageContext;
-  const { Facebook, Instagram, Pinterest, TikTok, Twitter, URL, YouTube } = data.mysqlSocialIdView
-  const { AlexaURL, FollowerRate, InstaFollowers, InstaFollowing, TotalFollowers, GlobalRank, LocalRank, PostRate, ProfilePicURL, TOS, UserID, UserName, YouTube, activity, category, tags, FBLikes, PinFollowers, PinFollowing, TTFollowers, TTFollowing, TTLikes, TwitterFollowers, TwitterFollowing, YTSubs, name, about, signup_promos } = data.mysqlMainView;
+  const { AlexaURL, FollowerRate, InstaFollowers, InstaFollowing, TotalFollowers, GlobalRank, LocalRank, PostRate, ProfilePicURL, TOS, UserID, UserName, activity, category, tags, FBLikes, PinFollowers, PinFollowing, TTFollowers, TTFollowing, TTLikes, TwitterFollowers, TwitterFollowing, YTSubs, name, about, signup_promos } = data.mysqlMainView;
+
+  const rowSocialIDViewEdges = data.allMysqlSocialIdView.edges;
+  const filteredSocialIDView = _.filter(rowSocialIDViewEdges, ({ node }) => node.Instagram == UserName);
+  const { Facebook, Instagram, Pinterest, TikTok, Twitter, URL, YouTube } = filteredSocialIDView.length>0?filteredSocialIDView[0].node:[];
 
   //Creating Social IDs Data to pass to header for displaying
   let socialDetails = {
@@ -120,9 +123,9 @@ const SingleItem = ({ data, pageContext }) => {
     "TwitterLink": Twitter ? "https://www.twitter.com/" + Twitter : null,
     "YouTubeLink": YouTube ? "https://www.youtube.com/c/" + YouTube : null
   }
-  console.log("+++++++++++++")
-  console.log(socialDetails)
-  console.log("+++++++++++++")
+  //console.log("+++++++++++++")
+  //console.log(socialDetails)
+  //console.log("+++++++++++++")
 
   const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
   //console.log("****** isMobile = " + isMobile)
@@ -234,6 +237,7 @@ const SingleItem = ({ data, pageContext }) => {
     chartSocialLabels.push("TikTok")
     chartSocialValues.push(TTFollowers)
   }
+
   const chartSocialFollowerData = {
     labels: chartSocialLabels,
     datasets: [
@@ -656,36 +660,25 @@ export const query = graphql`
   query($pathSlug: String!) {
     mysqlMainView (AlexaURL: {eq: $pathSlug}) {
       AlexaURL
-      Facebook
       FollowerRate
-      InstaFollowers
-      InstaFollowing
       GlobalRank
-      Instagram
       LocalRank
-      Pinterest
       PostRate
       ProfilePicURL
       TOS
-      TikTok
-      Twitter
       UserID
       UserName
-      YouTube
       activity
       category
       tags
-      FBLikes
-      PinFollowers
-      PinFollowing
-      TTFollowers
-      TTFollowing
-      TTLikes
-      TwitterFollowers
-      TwitterFollowing
       TotalFollowers
       TotalFollowing
+      FBLikes
+      InstaFollowers
+      TwitterFollowers
       YTSubs
+      PinFollowers
+      TTFollowers
       name
       about
       signup_promos
@@ -758,14 +751,18 @@ export const query = graphql`
       }
     }
 
-    mysqlSocialIdView (Instagram: {eq: $pathSlug}) {
-      Instagram
-      Facebook
-      Pinterest
-      TikTok
-      Twitter
-      URL
-      YouTube
+    allMysqlSocialIdView {
+      edges {
+        node {
+          Instagram
+          Facebook
+          Pinterest
+          TikTok
+          Twitter
+          URL
+          YouTube
+        }
+      }
     }
 
   }
