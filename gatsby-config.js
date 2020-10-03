@@ -62,11 +62,11 @@ module.exports = {
       resolve: `gatsby-source-mysql`,
       options: {
         connectionDetails: {
-          host: process.env.MYSQL_HOST,
-          port: process.env.MYSQL_PORT,
-          user:  process.env.MYSQL_USER,
-          password: process.env.MYSQL_PASSWD,
-          database: process.env.MYSQL_DB
+          host: 'db-emp22-do-user-7599813-0.a.db.ondigitalocean.com',
+          port: '25060',
+          user:  'emp22-dbuser',
+          password:  'tdyjlf90jrphnymz',
+          database:  'emp22-db-primary'
         },
         queries: [
           {
@@ -100,32 +100,27 @@ module.exports = {
             name: 'Pages'
           },
           {
-            statement: 'SELECT CONCAT(ProductID,FLOOR(RAND()*10000)) AS UniqueKey,ShopifyBestSellers.* FROM ShopifyBestSellers',
+            statement: 'SELECT CONCAT(VendorURL,FLOOR(RAND()*10000)) AS UniqueKey,ShopifyProductsAll.* FROM ShopifyProductsAll',
             idFieldName: 'UniqueKey',
-            name: 'ShopifyBestSellers'
+            name: 'ShopifyProductsAll'
           },
           {
-            statement: 'SELECT CONCAT(ProductID,FLOOR(RAND()*10000)) AS UniqueKey,ShopifyClassicProducts.* FROM ShopifyClassicProducts',
+            statement: 'SELECT CONCAT(VendorURL,FLOOR(RAND()*10000)) AS UniqueKey,ShopifyProductSummary.* FROM ShopifyProductSummary',
             idFieldName: 'UniqueKey',
-            name: 'ShopifyClassicProducts'
-          },
-          {
-            statement: 'SELECT CONCAT(ProductID,FLOOR(RAND()*10000)) AS UniqueKey,ShopifyNewProducts.* FROM ShopifyNewProducts',
-            idFieldName: 'UniqueKey',
-            name: 'ShopifyNewProducts'
-          },
+            name: 'ShopifyProductSummary'
+          },          
           {
             statement: 'SELECT CONCAT(URL,FLOOR(RAND()*10000)) AS UniqueKey,SocialHistory.* FROM SocialHistory',
             idFieldName: 'UniqueKey',
             name: 'SocialHistory'
           },
           {
-            statement: 'SELECT CONCAT(URL,FLOOR(RAND()*10000)) AS UniqueKey,PayNShip.* FROM PayNShip',
-            idFieldName: 'UniqueKey',
+            statement: "SELECT URL,Shipping,PaypalShopID,PaypalCurrency,IF(PaypalVenmoSupport=1,'true',null) as PaypalVenmoSupport,IF(AfterPay=1,'true',null) as AfterPay,IF(Klarna=1,'true',null) as Klarna,IF(Affirm=1,'true',null) as Affirm,FreeShipText,CreateDate,UpdateDate FROM PayNShip",
+            idFieldName: 'URL',
             name: 'PayNShip'
           },
           {
-            statement: "SELECT CONCAT(RankView_Pages.AlexaURL,FLOOR(RAND()*10000)) AS UniqueKey,RankView_Pages.*, Tags.*, SocialIDView.*, RankHistory.* FROM RankView_Pages LEFT JOIN Tags ON TRIM(TRAILING '/' FROM RankView_Pages.AlexaURL) = TRIM(TRAILING '/' FROM Tags.url) LEFT JOIN SocialIDView ON TRIM(TRAILING '/' FROM RankView_Pages.AlexaURL) = TRIM(TRAILING '/' FROM SocialIDView.URL) LEFT JOIN RankHistory ON TRIM(TRAILING '/' FROM RankView_Pages.AlexaURL) = TRIM(TRAILING '/' FROM RankHistory.url)",
+            statement: "SELECT CONCAT(RankView_Pages.AlexaURL,FLOOR(RAND()*10000)) AS UniqueKey,RankView_Pages.*, Tags.*, SocialIDView.*, RankHistory.* FROM RankView_Pages LEFT JOIN Tags ON TRIM(TRAILING '/' FROM RankView_Pages.AlexaURL) = TRIM(TRAILING '/' FROM Tags.url) LEFT JOIN SocialIDView ON TRIM(TRAILING '/' FROM RankView_Pages.AlexaURL) = TRIM(TRAILING '/' FROM SocialIDView.URL) LEFT JOIN RankHistory ON TRIM(TRAILING '/' FROM RankView_Pages.AlexaURL) = TRIM(TRAILING '/' FROM RankHistory.url) WHERE RankView_Pages.UserName in ('redbaycoffee','leesasleep')",
             idFieldName: 'AlexaURL',
             name: 'MainView'
           },
@@ -138,7 +133,7 @@ module.exports = {
             statement: "Select CONCAT(UserName,FLOOR(RAND()*10000)) AS UniqueKey, DataView.*,CONCAT('https://instagram.com/p/',DataView.ShortCode) AS ShortCodeURL FROM DataView WHERE UserName IS NOT NULL ORDER BY activity DESC",
             idFieldName: 'UniqueKey',
             name: 'DataView'
-            ,remoteImageFieldNames: ['UniquePhotoLink']
+            //,remoteImageFieldNames: ['UniquePhotoLink']
           }
         ]
       }
