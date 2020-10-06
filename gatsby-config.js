@@ -62,11 +62,11 @@ module.exports = {
       resolve: `gatsby-source-mysql`,
       options: {
         connectionDetails: {
-          host: process.env.MYSQL_HOST,
-          port: process.env.MYSQL_PORT,
-          user:  process.env.MYSQL_USER,
-          password: process.env.MYSQL_PASSWD,
-          database: process.env.MYSQL_DB
+          host: 'db-emp22-do-user-7599813-0.a.db.ondigitalocean.com',
+          port: '25060',
+          user:  'emp22-dbuser',
+          password:  'tdyjlf90jrphnymz',
+          database:  'emp22-db-primary'
         },
         queries: [
           {
@@ -133,7 +133,7 @@ module.exports = {
             statement: "Select CONCAT(UserName,FLOOR(RAND()*10000)) AS UniqueKey, DataView.*,CONCAT('https://instagram.com/p/',DataView.ShortCode) AS ShortCodeURL FROM DataView WHERE UserName IS NOT NULL ORDER BY activity DESC",
             idFieldName: 'UniqueKey',
             name: 'DataView'
-            ,remoteImageFieldNames: ['UniquePhotoLink']
+            //,remoteImageFieldNames: ['UniquePhotoLink']
           }
         ]
       }
