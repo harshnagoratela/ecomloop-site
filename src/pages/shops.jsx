@@ -352,8 +352,8 @@ const TopShopifyStores = ({ location, data }) => {
                     <td>{node.TotalFollowers}</td>
                     {!isMobile &&
                       <>
-                        <td>${(node.PriceAvg || 0).toFixed(2)}</td>
-                        <td>${(node.PriceMin || 0).toFixed(2)}{" - "}${(node.PriceMax || 0).toFixed(2)}</td>
+                        <td>${(node.PriceAvg || 0)}</td>
+                        <td>${(node.PriceMin || 0)}{" - "}${(node.PriceMax || 0)}</td>
                         <td>{node.GlobalRank_Change}</td>
                       </>
                     }
@@ -398,7 +398,7 @@ export const query = graphql`
       edges {
         node {
             AlexaURL
-            Facebook            
+            Facebook
             GlobalRank
             GlobalRank_Change
             Instagram
@@ -415,7 +415,7 @@ export const query = graphql`
             FBLikes
             PinFollowers
             TTFollowers
-            TwitterFollowers            
+            TwitterFollowers
             YTSubs
             name
             about
@@ -430,7 +430,7 @@ export const query = graphql`
           FullName
           Biography
           PostDate
-          PhotoLink 
+          PhotoLink
           ProfilePicURL
           mysqlImages {
             childImageSharp {
@@ -444,7 +444,7 @@ export const query = graphql`
           activity
           TotalFollowers
           TotalFollowing
-          AlexaRankOrder          
+          AlexaRankOrder
           Caption
           ShortCodeURL
         }
