@@ -57,7 +57,7 @@ const CarouselWrapper = styled.div`
 
 const Products = ({ data, pageContext }) => {
   const rowallMysqlShopifyProductsAllEdges = data.allMysqlShopifyProductsAll ? data.allMysqlShopifyProductsAll.edges : [];
-  const maxFeaturedItems = 20;
+  const maxFeaturedItems = 10;
   const maxProducts = 25;
   const [limit, setLimit] = React.useState(maxFeaturedItems);
   const [showMore, setShowMore] = React.useState(true);
@@ -164,7 +164,7 @@ const Products = ({ data, pageContext }) => {
   })
 
   //Extracting sale products
-  const filteredShopifySaleProducts = _.sortBy(_.filter(listShopifyProductsAllEdges, ({ node }) => node.DiscountAmt > 0.10 && node.DiscountAmt < 1), ({ node }) => -node.UpdateDate);
+  const filteredShopifySaleProducts = _.sortBy(_.filter(listShopifyProductsAllEdges, ({ node }) => node.DiscountPct > 0.20 && node.DiscountPct < 1), ({ node }) => -node.UpdateDate);
   const listShopifySaleProducts = _.slice(filteredShopifySaleProducts, 0, maxProducts);
 
   //Extracting gift cards
@@ -201,8 +201,8 @@ const Products = ({ data, pageContext }) => {
     <Layout title={'Shopify Products | Disover great products from indepedent online stores'} description="Discover the best products from hundreds of independent online stores in one place. An alternative to Amazon Marketplace online shopping.">
       <Header title="🧐 Disover great products from Shopify stores" />
       <div>
-        <CategoryHeading>Top Products from Featured Brands</CategoryHeading>
-        <LazyLoad>
+        <CategoryHeading>Popular Products from Featured Brands</CategoryHeading>
+
           <CarouselWrapper>
             <Carousel
               swipeable={false}
@@ -225,7 +225,7 @@ const Products = ({ data, pageContext }) => {
               ))}
             </Carousel>
           </CarouselWrapper>
-        </LazyLoad>
+
 
 
         <CategoryHeading>Discover great products</CategoryHeading>
