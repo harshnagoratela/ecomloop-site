@@ -136,7 +136,7 @@ const Products = ({ data, pageContext }) => {
   const filteredFeaturedProducts = (filter && filter.length > 3) ? checkEdgesInProductView(mainViewEdges) : checkEdgesInProductView(featuredShopEdges);
 
   //Now limiting the featured items as per limit
-  const visibleFeaturedProducts = _.slice(filteredFeaturedProducts, 0, maxItems);
+  const visibleFeaturedProducts = _.slice(filteredFeaturedProducts, 0, maxFeaturedItems);
 
   const filteredProducts = checkEdgesInProductView(mainViewEdges);
 
@@ -144,7 +144,7 @@ const Products = ({ data, pageContext }) => {
   const visibleProducts = _.slice(filteredProducts, 0, maxItems);
 
   const increaseLimit = () => {
-    setLimit(limit + maxFeaturedItems);
+    setLimit(limit + maxItems);
   }
 
   let listShopifyProductsAllEdges = [];
