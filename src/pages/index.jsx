@@ -353,7 +353,7 @@ const Index = ({ data }) => {
   })
 
   //Extracting sale products
-  const filteredShopifyBestProducts = _.sortBy(_.filter(listShopifyProductsAllEdges, ({ node }) => node.Position == 1 || node.Position == 2), ({ node }) => -node.UpdateDate);
+  const filteredShopifyBestProducts = _.sortBy(_.filter(listShopifyProductsAllEdges, ({ node }) => node.Position < 3 && node.Price <= '150' && node.Price > '25'), ({ node }) => -node.UpdateDate);
   const listShopifyBestProducts = _.slice(filteredShopifyBestProducts, 0, limit);
   //Now limiting the items as per limit
   const visibleShopifyBestProducts = _.slice(listShopifyBestProducts, 0, visibleItems);

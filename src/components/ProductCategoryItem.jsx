@@ -118,6 +118,38 @@ const Price = styled.div`
   display: none;
 `;
 
+const StyledDialog = styled(Dialog)`
+@media (max-width: 700px) {
+  width: 90vw;
+}
+.dialogTitle {
+  @media (max-width: 700px) {
+    font-size: 1.5rem;
+  }
+}
+
+.dialogImageDescription {
+  display : flex;  
+  img {
+    max-height: 300px;
+    max-width: 50%;
+  }
+  span {
+    padding-left: 2rem;
+  }
+
+  @media (max-width: 700px) {
+    display : block;
+    img {
+      max-width : 100%;
+    }
+    span {
+      padding-left: 0rem;
+    }
+  }
+}
+`;
+
 const ProductCategoryItem = ({ path, cover, title, vendorname, variant, price, node }) => {
   const [showDialog, setShowDialog] = React.useState(false);
 
@@ -161,19 +193,19 @@ const ProductCategoryItem = ({ path, cover, title, vendorname, variant, price, n
           <Price><strike>{displayMaxPrice}</strike> ${price}</Price>
         </Information>
       </StyledLink>
-      <Dialog isOpen={showDialog} onDismiss={closeDialog}>
+      <StyledDialog isOpen={showDialog} onDismiss={closeDialog}>
         <button className="close-button" onClick={closeDialog} style={{ float: "right", cursor: "pointer" }}>
           <span aria-hidden>X</span>
         </button>
 
-        <h1>{node.Title}</h1>
-        <div style={{ display: "flex"}}>
-          <img src={cover} style={{ 'max-height': '300px' , 'max-width' : '60%'}}/>
-          <span style={{ paddingLeft: "2rem" }}>{node.Description.substring(0, 250)}</span>
+        <h1 className="dialogTitle">{node.Title}</h1>
+        <div className="dialogImageDescription">
+          <img src={cover} />
+          <span>{node.Description && node.Description.substring(0, 250)}</span>
         </div>
 
         <br />
-          <div>Price : <strike>{displayMaxPrice}</strike> ${node.Price}</div>
+        <div>Price : <strike>{displayMaxPrice}</strike> ${node.Price}</div>
         {convertToSelectList(node.VariantTitle)}
         <br />
         <div>
@@ -181,7 +213,7 @@ const ProductCategoryItem = ({ path, cover, title, vendorname, variant, price, n
           <a href={node.UserName ? path : node.VendorURL} class="button buttonalt">Get shop info</a>
         </div>
         <br />
-      </Dialog>
+      </StyledDialog>
     </Wrapper>
   );
 }

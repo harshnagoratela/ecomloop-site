@@ -9,6 +9,7 @@ import _ from 'lodash';
 import { getRelatedShops } from '../components/RelatedShops'
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
+import ProductCategoryItem from '../components/ProductCategoryItem';
 import { useMediaQuery } from 'react-responsive';
 import ReactFrappeChart from 'react-frappe-charts';
 import {
@@ -145,6 +146,14 @@ const PostSectionContent = styled.div`
   padding-top: 1rem;
 `;
 
+const CategoryWrapper = styled.div`
+  display: grid;
+  margin: 0 auto;
+  width: 100%;
+  grid-gap: 0.5rem;
+  grid-template-columns: repeat(5, 1fr);
+`;
+
 const SingleItem = ({ data, pageContext }) => {
   const { next, prev } = pageContext;
   const {
@@ -186,9 +195,18 @@ const SingleItem = ({ data, pageContext }) => {
     TwitterLink: Twitter ? 'https://www.twitter.com/' + Twitter : null,
     YouTubeLink: YouTube ? 'https://www.youtube.com/c/' + YouTube : null,
   };
-  //console.log("+++++++++++++")
-  //console.log(socialDetails)
-  //console.log("+++++++++++++")
+
+  const maxVisibleItems = 10;
+  const [visibleItems, setVisibleItems] = React.useState(maxVisibleItems);
+  const [showMore, setShowMore] = React.useState(true);
+  const increaseLimit = () => {
+    setVisibleItems(visibleItems + maxVisibleItems);
+  }
+
+  const [sortBy, setSortBy] = React.useState("UpdateDate");
+  const [sortOrder, setSortOrder] = React.useState("DESC");
+  const changeSortBy = (e) => { setSortBy(e.target.value) }
+  const changeSortOrder = (e) => { setSortOrder(e.target.value) }
 
   const isMobile = useMediaQuery({ query: '(max-width: 600px)' });
   //console.log("****** isMobile = " + isMobile)
@@ -252,8 +270,12 @@ const SingleItem = ({ data, pageContext }) => {
   const listShopifyBestSellersEdges = _.slice(filteredShopifyBestSellers, 0, maxProducts);
 
   //Extracting classic products
-  const filteredShopifyClassicProducts = _.sortBy(_.filter(rowallMysqlShopifyProductsAllEdges, ({ node }) => node.Title.toLowerCase().indexOf("gift card") < 0 && node.Title.toLowerCase().indexOf("shipping") < 0 && node.Title.toLowerCase().indexOf("insurance") < 0), ({ node }) => node.PublishedDate);
-  const listShopifyClassicProductsEdges = _.slice(filteredShopifyClassicProducts, 0, maxProducts);
+  let filteredShopifyClassicProducts = _.sortBy(_.filter(rowallMysqlShopifyProductsAllEdges, ({ node }) => node.Title.toLowerCase().indexOf("gift card") < 0 && node.Title.toLowerCase().indexOf("shipping") < 0 && node.Title.toLowerCase().indexOf("insurance") < 0), ({ node }) => node.PublishedDate);
+  //Now applying sorting
+  filteredShopifyClassicProducts = _.sortBy(filteredShopifyClassicProducts, ({ node }) => sortOrder != "DESC" ? node[sortBy] : -node[sortBy])
+  //Now limiting the items as per limit
+  const visibleShopifyClassicProductsEdges = _.slice(filteredShopifyClassicProducts, 0, visibleItems);
+  if (visibleShopifyClassicProductsEdges.length >= filteredShopifyClassicProducts.length) setShowMore(false);
 
   //Extracting new products
   const filteredShopifyNewProducts = _.sortBy(_.filter(rowallMysqlShopifyProductsAllEdges, ({ node }) => node.Title.toLowerCase().indexOf("gift card") < 0 && node.Title.toLowerCase().indexOf("shipping") < 0 && node.Title.toLowerCase().indexOf("insurance") < 0), ({ node }) => -node.PublishedDate);
@@ -493,39 +515,50 @@ const SingleItem = ({ data, pageContext }) => {
     return calculatedText;
   };
 
-  const renderProduct = (node, ismobile, showDiscountedPrice) => {
-    const displayMaxPrice = (showDiscountedPrice && node.MaxPrice && node.MaxPrice != node.Price ? '$' + node.MaxPrice : '')
+  const renderProduct = (node, key) => {
     return (
-      <ViewCard key={node.ProductURL} style={{ padding: ismobile && '15px' }}>
-        <a href={node.ProductURL} target="_blank">
-          <ViewImage>
-            <div style={{ width: '100%', height: '150px' }}>
-              <img
-                src={node.ImageURL}
-                onError={defaultImageOnError}
-                style={{
-                  objectFit: 'cover',
-                  height: '150px',
-                  width: '100%',
-                  margin: 'auto',
-                }}
-                alt={node.Title }
-              />
-            </div>
-          </ViewImage>
-        </a>
-        <small><strike>{displayMaxPrice}</strike> ${node.Price}</small>
-        <ViewInfo className="info">
-          <a href={node.ProductURL} target="_blank">
-            {node.Title && node.Title.substring(0, 50)}
-          </a>
-          <p style={{ color: ismobile && 'white' }}>
-            {node.Description && node.Description.substring(0, 150)}
-          </p>
-        </ViewInfo>
-      </ViewCard>
+      <ProductCategoryItem
+        key={key}
+        cover={getProductImage(node)}
+        path={`/shops/${node.UserName}/`}
+        vendorname={node.VendorName}
+        title={node.Title}
+        price={node.Price}
+        node={node}
+      />
     );
   };
+
+  const renderProductList = (edges, key) => {
+    const limitedEdges = edges //_.slice(edges, 0, maxProducts)
+    return (
+      <>
+        {/* below renderer for desktop version */}
+        { !isMobile && limitedEdges && limitedEdges.length > 0 && (
+          <CategoryWrapper>
+            {limitedEdges.map(({ node }, index) => {
+              return renderProduct(node, key + "-" + index)
+            })}
+          </CategoryWrapper>
+        )}
+        {/* below renderer for mobile version */}
+        { isMobile && limitedEdges && limitedEdges.length > 0 && (
+          <Carousel
+            showThumbs={false}
+            infiniteLoop
+            showIndicators={false}
+            selectedItem={1}
+            showArrows={true}
+            showStatus={false}
+          >
+            {limitedEdges.map(({ node }, index) => {
+              return renderProduct(node, key + "-" + index);
+            })}
+          </Carousel>
+        )}
+      </>
+    );
+  }
 
   const renderPost = (node, ismobile) => {
     return (
@@ -581,6 +614,12 @@ const SingleItem = ({ data, pageContext }) => {
     }
   }
 
+  const getProductImage = (node) => {
+    let productImage = node.VariantImageURL;
+    if (!productImage) productImage = node.ImageURL;
+    return productImage;
+  }
+
   return (
     <Layout>
       <SEO
@@ -595,7 +634,7 @@ const SingleItem = ({ data, pageContext }) => {
           <div style={{ paddingLeft: '15px' }}>
 
             <Content input={about} />
-<br/>  <span className="stat_title">{tags}</span>
+            <br />  <span className="stat_title">{tags}</span>
             <Statistics>
 
 
@@ -632,8 +671,8 @@ const SingleItem = ({ data, pageContext }) => {
               listShopifyBestSellersEdges.length > 0 && (
                 <Tab style={TabStyle}>Best sellers</Tab>
               )}
-            {listShopifyClassicProductsEdges &&
-              listShopifyClassicProductsEdges.length > 0 && (
+            {visibleShopifyClassicProductsEdges &&
+              visibleShopifyClassicProductsEdges.length > 0 && (
                 <Tab style={TabStyle}>Shop {name}</Tab>
               )}
             {listShopifyNewProductsEdges &&
@@ -646,118 +685,47 @@ const SingleItem = ({ data, pageContext }) => {
               )}
           </TabList>
 
-          {/* Show carousel for mobile version */}
-          {isMobile && listShopifyBestSellersEdges && listShopifyBestSellersEdges.length > 0 && (
+          {listShopifyBestSellersEdges && listShopifyBestSellersEdges.length > 0 && (
             <TabPanel>
-              <Carousel
-                showThumbs={false}
-                infiniteLoop
-                showIndicators={false}
-                selectedItem={1}
-                showArrows={true}
-                showStatus={false}
-              >
-                {listShopifyBestSellersEdges.map(({ node }) => {
-                  return renderProduct(node, true);
-                })}
-              </Carousel>
-            </TabPanel>
-          )}
-          {/* Show normally for non mobile version */}
-          {!isMobile && listShopifyBestSellersEdges && listShopifyBestSellersEdges.length > 0 && (
-            <TabPanel>
-              <ViewContainer>
-                {listShopifyBestSellersEdges.map(({ node }) => {
-                  return renderProduct(node);
-                })}
-              </ViewContainer>
+              {renderProductList(listShopifyBestSellersEdges, 'listShopifyBestSellersEdges')}
             </TabPanel>
           )}
 
-          {/* Show carousel for mobile version */}
-          {isMobile && listShopifyClassicProductsEdges && listShopifyClassicProductsEdges.length > 0 && (
+          {visibleShopifyClassicProductsEdges && visibleShopifyClassicProductsEdges.length > 0 && (
             <TabPanel>
-              <Carousel
-                showThumbs={false}
-                infiniteLoop
-                showIndicators={false}
-                selectedItem={1}
-                showArrows={true}
-                showStatus={false}
-              >
-                {listShopifyClassicProductsEdges.map(({ node }) => {
-                  return renderProduct(node, true);
-                })}
-              </Carousel>
-            </TabPanel>
-          )}
-          {/* Show normally for non mobile version */}
-          {!isMobile && listShopifyClassicProductsEdges && listShopifyClassicProductsEdges.length > 0 && (
-            <TabPanel>
-              <ViewContainer>
-                <>
-                  <span>&nbsp;</span>
-                  {listShopifyClassicProductsEdges.map(({ node }) => {
-                    return renderProduct(node);
-                  })}
-                </>
-              </ViewContainer>
+              <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+                Sort by
+                <select value={sortBy} onChange={changeSortBy}>
+                  <option value="PublishedDate"> Date </option>
+                  <option value="Position"> Position </option>
+                  <option value="Price"> Price </option>
+                  <option value="DiscountPct"> Discount % </option>
+                </select>
+                <select value={sortOrder} onChange={changeSortOrder}>
+                  <option value="DESC"> ▽ </option>
+                  <option value="ASC"> △ </option>
+                </select>
+              </div>
+              {renderProductList(visibleShopifyClassicProductsEdges, 'visibleShopifyClassicProductsEdges')}
+              {showMore && visibleShopifyClassicProductsEdges.length > 0 &&
+                <div className="center">
+                  <button className="button" onClick={increaseLimit} style={{ cursor: "pointer" }}>
+                    Load More
+                  </button>
+                </div>
+              }
             </TabPanel>
           )}
 
-          {/* Show carousel for mobile version */}
-          {isMobile && listShopifyNewProductsEdges && listShopifyNewProductsEdges.length > 0 && (
+          {listShopifyNewProductsEdges && listShopifyNewProductsEdges.length > 0 && (
             <TabPanel>
-              <Carousel
-                showThumbs={false}
-                infiniteLoop
-                showIndicators={false}
-                selectedItem={1}
-                showArrows={true}
-                showStatus={false}
-              >
-                {listShopifyNewProductsEdges.map(({ node }) => {
-                  return renderProduct(node, true);
-                })}
-              </Carousel>
-            </TabPanel>
-          )}
-          {/* Show normally for non mobile version */}
-          {!isMobile && listShopifyNewProductsEdges && listShopifyNewProductsEdges.length > 0 && (
-            <TabPanel>
-              <ViewContainer>
-                {listShopifyNewProductsEdges.map(({ node }) => {
-                  return renderProduct(node);
-                })}
-              </ViewContainer>
+              {renderProductList(listShopifyNewProductsEdges, 'listShopifyNewProductsEdges')}
             </TabPanel>
           )}
 
-          {/* Show carousel for mobile version */}
-          {isMobile && listShopifySaleProducts && listShopifySaleProducts.length > 0 && (
+          {listShopifySaleProducts && listShopifySaleProducts.length > 0 && (
             <TabPanel>
-              <Carousel
-                showThumbs={false}
-                infiniteLoop
-                showIndicators={false}
-                selectedItem={1}
-                showArrows={true}
-                showStatus={false}
-              >
-                {listShopifySaleProducts.map(({ node }) => {
-                  return renderProduct(node, true, true);
-                })}
-              </Carousel>
-            </TabPanel>
-          )}
-          {/* Show normally for non mobile version */}
-          {!isMobile && listShopifySaleProducts && listShopifySaleProducts.length > 0 && (
-            <TabPanel>
-              <ViewContainer>
-                {listShopifySaleProducts.map(({ node }) => {
-                  return renderProduct(node, false, true);
-                })}
-              </ViewContainer>
+              {renderProductList(listShopifySaleProducts, 'listShopifySaleProducts')}
             </TabPanel>
           )}
         </Tabs>
@@ -765,47 +733,14 @@ const SingleItem = ({ data, pageContext }) => {
         {FreeShipText && FreeShipText.length > 0 && (
           <h3>get free shipping at {name}</h3>
         )}
-
-        {listProductEdges &&
-          listProductEdges.map(({ node }) => {
-<h3>Discover great products from {name}</h3>
-  })}
-          {/* Show carousel for mobile version */}
-          {isMobile && listProductEdges && listProductEdges.length > 0 && (
-
-              <Carousel
-                showThumbs={false}
-                infiniteLoop
-                showIndicators={false}
-                selectedItem={1}
-                showArrows={true}
-                showStatus={false}
-              >
-                {listProductEdges.map(({ node }) => {
-                  return renderProduct(node, true);
-                })}
-              </Carousel>
-
-          )}
-          {/* Show normally for non mobile version */}
-          {!isMobile && listProductEdges && listProductEdges.length > 0 && (
-
-              <ViewContainer>
-                {listProductEdges.map(({ node }) => {
-                  return renderProduct(node);
-                })}
-              </ViewContainer>
-
-          )}
-
         <p>{get100Words(FreeShipText)}</p>
         {listShopifyGiftCards &&
           listShopifyGiftCards.length > 0 && (
             <div>
               <h3>Gift cards available</h3>
               <PostSectionGrid>
-                {listShopifyGiftCards.map(({ node }) => {
-                  return renderProduct(node);
+                {listShopifyGiftCards.map(({ node, index }) => {
+                  return renderProduct(node, 'Giftcard-' + index);
                 })}
               </PostSectionGrid>
             </div>
@@ -818,7 +753,7 @@ const SingleItem = ({ data, pageContext }) => {
               {relatedShops && relatedShops.map(({ shop }, index) => (
                 <span key={index}>
                   <PostSectionImage>
-                    <img src={shop.ProfilePicURL} alt={shop.name} style={{ height: 'inherit', 'text-align': 'center', 'border-radius': '100%' }} />
+                    <img src={shop.ProfilePicURL} alt={shop.name} style={{ height: 'inherit', 'textAlign': 'center', 'borderRadius': '100%' }} />
                   </PostSectionImage>
                   <PostSectionContent>
                     <Link key={index} to={`/shops/${shop.UserName}/`}>
@@ -839,33 +774,33 @@ const SingleItem = ({ data, pageContext }) => {
         <br />
         <br />
         See more online stores tagged: <TagsBlock list={tagsList || []} isLinkToShops={true} />
-            <br />
+        <br />
         <h3>Product prices at {name}</h3>
         <Statistics>
-        <StatisticItem>
-        {rowShopifyProductSummary.PriceAvg && (
-          <div>
-         ${rowShopifyProductSummary.PriceAvg}<br/>
-           <span className="stat_title">Avg Price</span>
-          </div>
-        )}
-
-
-
-        </StatisticItem>
           <StatisticItem>
+            {rowShopifyProductSummary.PriceAvg && (
+              <div>
+                ${rowShopifyProductSummary.PriceAvg}<br />
+                <span className="stat_title">Avg Price</span>
+              </div>
+            )}
 
-          {rowShopifyProductSummary.PriceMin &&
-  rowShopifyProductSummary.PriceMax && (
-    <div>
-       ${rowShopifyProductSummary.PriceMin} - ${rowShopifyProductSummary.PriceMax}<br/>
-           <span className="stat_title">Price Range</span>
-    </div>
-  )}
 
 
           </StatisticItem>
-            </Statistics>
+          <StatisticItem>
+
+            {rowShopifyProductSummary.PriceMin &&
+              rowShopifyProductSummary.PriceMax && (
+                <div>
+                  ${rowShopifyProductSummary.PriceMin} - ${rowShopifyProductSummary.PriceMax}<br />
+                  <span className="stat_title">Price Range</span>
+                </div>
+              )}
+
+
+          </StatisticItem>
+        </Statistics>
         {rowShopifyProductSummary && (
           <ReactFrappeChart
             title="Product prices"
@@ -1122,14 +1057,14 @@ const SingleItem = ({ data, pageContext }) => {
 
       </Container>
       <SuggestionBar>
-      <div style={{ margin: '2rem' }}>
-        <a href={AlexaURL} className="button" target="_blank">
-          shop {name}
-        </a>{' '}
-        <a href="/randomshop" className="button buttonalt">
-          Discover another shop
+        <div style={{ margin: '2rem' }}>
+          <a href={AlexaURL} className="button" target="_blank">
+            shop {name}
+          </a>{' '}
+          <a href="/randomshop" className="button buttonalt">
+            Discover another shop
         </a>
-      </div>
+        </div>
       </SuggestionBar>
 
     </Layout>
@@ -1261,6 +1196,7 @@ export const query = graphql`
       edges {
         node {
           DiscountAmt
+          Description
           DiscountPct
           HasVariants
           ImageURL
