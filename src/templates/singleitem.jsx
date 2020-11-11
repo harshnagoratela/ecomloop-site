@@ -206,7 +206,7 @@ const SingleItem = ({ data, pageContext }) => {
   const [sortBy, setSortBy] = React.useState("UpdateDate");
   const [sortOrder, setSortOrder] = React.useState("DESC");
   const changeSortBy = (e) => { setSortBy(e.target.value) }
-  const changeSortOrder = (e) => { setSortOrder(e.target.value) }
+  const changeSortOrder = (e) => { setSortOrder((sortOrder=="DESC")?"ASC":"DESC") }
 
   const isMobile = useMediaQuery({ query: '(max-width: 600px)' });
   //console.log("****** isMobile = " + isMobile)
@@ -275,6 +275,9 @@ const SingleItem = ({ data, pageContext }) => {
   filteredShopifyClassicProducts = _.sortBy(filteredShopifyClassicProducts, ({ node }) => sortOrder != "DESC" ? node[sortBy] : -node[sortBy])
   //Now limiting the items as per limit
   const visibleShopifyClassicProductsEdges = _.slice(filteredShopifyClassicProducts, 0, visibleItems);
+  //Now checking if 'Position' and 'DiscountPct' data is present in the list, if yes then only show 'Position' and 'DiscountPct' in the sorting options
+  const isPositionPresent = _.filter(visibleShopifyClassicProductsEdges, ({ node }) => node.Position != null).length > 0;
+  const isDiscountPctPresent = _.filter(visibleShopifyClassicProductsEdges, ({ node }) => node.DiscountPct != null).length > 0;
 
   //Extracting new products
   const filteredShopifyNewProducts = _.sortBy(_.filter(rowallMysqlShopifyProductsAllEdges, ({ node }) => node.Title.toLowerCase().indexOf("gift card") < 0 && node.Title.toLowerCase().indexOf("shipping") < 0 && node.Title.toLowerCase().indexOf("insurance") < 0), ({ node }) => -node.PublishedDate);
@@ -690,17 +693,18 @@ const SingleItem = ({ data, pageContext }) => {
           {visibleShopifyClassicProductsEdges && visibleShopifyClassicProductsEdges.length > 0 && (
             <TabPanel>
               <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-                Sort by
+                <span>Sort by &nbsp;</span>
                 <select value={sortBy} onChange={changeSortBy}>
                   <option value="PublishedDate"> Date </option>
-                  <option value="Position"> Position </option>
+                  {isPositionPresent &&
+                    <option value="Position"> Position </option>
+                  }
                   <option value="Price"> Price </option>
-                  <option value="DiscountPct"> Discount % </option>
-                </select>
-                <select value={sortOrder} onChange={changeSortOrder}>
-                  <option value="DESC"> ▽ </option>
-                  <option value="ASC"> △ </option>
-                </select>
+                  {isDiscountPctPresent &&
+                    <option value="DiscountPct"> Discount % </option>
+                  }
+                </select>                
+                <button className="button" onClick={changeSortOrder}>{sortOrder}</button>
               </div>
               {renderProductList(visibleShopifyClassicProductsEdges, 'visibleShopifyClassicProductsEdges')}
               {showMore && visibleShopifyClassicProductsEdges.length > 0 &&

@@ -62,11 +62,11 @@ module.exports = {
       resolve: `gatsby-source-mysql`,
       options: {
         connectionDetails: {
-          host: 'db-emp22-do-user-7599813-0.a.db.ondigitalocean.com',
-          port: '25060',
-          user:  'emp22-dbuser',
-          password:  'tdyjlf90jrphnymz',
-          database:  'emp22-db-primary'
+          host: process.env.MYSQL_HOST,
+          port: process.env.MYSQL_PORT,
+          user:  process.env.MYSQL_USER,
+          password: process.env.MYSQL_PASSWD,
+          database: process.env.MYSQL_DB
         },
         queries: [
           {
@@ -116,7 +116,7 @@ module.exports = {
             name: 'PayNShip'
           },
           {
-            statement: "SELECT CONCAT(AlexaRankView.URL,FLOOR(RAND()*10000)) AS UniqueKey,AlexaRankView.URL as AlexaURL, AlexaRankView.*, Tags.*, SocialIDView.*, RankHistory.* FROM AlexaRankView LEFT JOIN Tags ON TRIM(TRAILING '/' FROM AlexaRankView.URL) = TRIM(TRAILING '/' FROM Tags.url) LEFT JOIN SocialIDView ON TRIM(TRAILING '/' FROM AlexaRankView.URL) = TRIM(TRAILING '/' FROM SocialIDView.URL) LEFT JOIN RankHistory ON TRIM(TRAILING '/' FROM AlexaRankView.URL) = TRIM(TRAILING '/' FROM RankHistory.url) LIMIT 100",
+            statement: "SELECT CONCAT(AlexaRankView.URL,FLOOR(RAND()*10000)) AS UniqueKey,AlexaRankView.URL as AlexaURL, AlexaRankView.*, Tags.*, SocialIDView.*, RankHistory.* FROM AlexaRankView LEFT JOIN Tags ON TRIM(TRAILING '/' FROM AlexaRankView.URL) = TRIM(TRAILING '/' FROM Tags.url) LEFT JOIN SocialIDView ON TRIM(TRAILING '/' FROM AlexaRankView.URL) = TRIM(TRAILING '/' FROM SocialIDView.URL) LEFT JOIN RankHistory ON TRIM(TRAILING '/' FROM AlexaRankView.URL) = TRIM(TRAILING '/' FROM RankHistory.url)",
             idFieldName: 'AlexaURL',
             name: 'MainView'
           },
@@ -130,6 +130,11 @@ module.exports = {
             idFieldName: 'UniqueKey',
             name: 'DataView'
             //,remoteImageFieldNames: ['ProfilePicURL']
+          },
+          {
+            statement: "SELECT CrunchBase.*,InstagramHistory.* from CrunchBase LEFT JOIN InstagramHistory ON TRIM(TRAILING '/' FROM CrunchBase.URL) = TRIM(TRAILING '/' FROM InstagramHistory.ExternalURL)",
+            idFieldName: 'URL',
+            name: 'CrunchBaseView' 
           }
         ]
       }
