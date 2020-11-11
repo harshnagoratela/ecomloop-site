@@ -275,7 +275,6 @@ const SingleItem = ({ data, pageContext }) => {
   filteredShopifyClassicProducts = _.sortBy(filteredShopifyClassicProducts, ({ node }) => sortOrder != "DESC" ? node[sortBy] : -node[sortBy])
   //Now limiting the items as per limit
   const visibleShopifyClassicProductsEdges = _.slice(filteredShopifyClassicProducts, 0, visibleItems);
-  if (visibleShopifyClassicProductsEdges.length >= filteredShopifyClassicProducts.length) setShowMore(false);
 
   //Extracting new products
   const filteredShopifyNewProducts = _.sortBy(_.filter(rowallMysqlShopifyProductsAllEdges, ({ node }) => node.Title.toLowerCase().indexOf("gift card") < 0 && node.Title.toLowerCase().indexOf("shipping") < 0 && node.Title.toLowerCase().indexOf("insurance") < 0), ({ node }) => -node.PublishedDate);
@@ -311,7 +310,7 @@ const SingleItem = ({ data, pageContext }) => {
       ],
       yMarkers: [
         {
-          label: '01: Top Rank',
+          label: 'Low rank is better',
           value: '01',
         },
       ],
@@ -381,10 +380,7 @@ const SingleItem = ({ data, pageContext }) => {
         name: 'followers',
         values: chartSocialFollowerValues,
       },
-      {
-        name: 'follows',
-        values: chartSocialFollowingValues,
-      },
+
     ],
   };
 
@@ -746,131 +742,9 @@ const SingleItem = ({ data, pageContext }) => {
             </div>
           )}
         <br />
-        {!!relatedShops.length && (
-          <>
-            <h3>Discover similar shops to {name}</h3>
-            <PostSectionGrid>
-              {relatedShops && relatedShops.map(({ shop }, index) => (
-                <span key={index}>
-                  <PostSectionImage>
-                    <img src={shop.ProfilePicURL} alt={shop.name} style={{ height: 'inherit', 'textAlign': 'center', 'borderRadius': '100%' }} />
-                  </PostSectionImage>
-                  <PostSectionContent>
-                    <Link key={index} to={`/shops/${shop.UserName}/`}>
-                      {shop.name && <h3>{shop.name}</h3>}
-                    </Link>
-                    {shop.about && <div>{_.truncate(shop.about, { length: 200, omission: '...' })}</div>}
-                  </PostSectionContent>
-                </span>
-              ))}
-            </PostSectionGrid>
-          </>
+        {listInstaPostEdges && listInstaPostEdges.length > 0 && (
+          <h3>See posts from @{firstRowDataView.node.UserName}</h3>
         )}
-        <br />
-        <br />
-        <a href="/randomshop" className="button ">
-          Discover a new shop
-        </a>
-        <br />
-        <br />
-        See more online stores tagged: <TagsBlock list={tagsList || []} isLinkToShops={true} />
-        <br />
-        <h3>Product prices at {name}</h3>
-        <Statistics>
-          <StatisticItem>
-            {rowShopifyProductSummary.PriceAvg && (
-              <div>
-                ${rowShopifyProductSummary.PriceAvg}<br />
-                <span className="stat_title">Avg Price</span>
-              </div>
-            )}
-
-
-
-          </StatisticItem>
-          <StatisticItem>
-
-            {rowShopifyProductSummary.PriceMin &&
-              rowShopifyProductSummary.PriceMax && (
-                <div>
-                  ${rowShopifyProductSummary.PriceMin} - ${rowShopifyProductSummary.PriceMax}<br />
-                  <span className="stat_title">Price Range</span>
-                </div>
-              )}
-
-
-          </StatisticItem>
-        </Statistics>
-        {rowShopifyProductSummary && (
-          <ReactFrappeChart
-            title="Product prices"
-            type="axis-mixed"
-            colors={['#743ee2']}
-            height={250}
-            axisOptions={{ xAxisMode: 'tick', xIsSeries: 1 }}
-            lineOptions={{ hideLine: 1 }}
-            tooltipOptions={{
-              formatTooltipX: d => d,
-              formatTooltipY: d => '$ ' + parseFloat(d || 0).toFixed(2),
-            }}
-            data={{
-              labels: _.split(productSummary_Dates_NoTime, ','),
-              datasets: [
-                {
-                  name: 'Product prices',
-                  type: 'line',
-                  values: _.split(
-                    rowShopifyProductSummary.PriceListActive,
-                    ','
-                  ),
-                },
-              ],
-              yMarkers: [
-                {
-                  label: 'Avg Price',
-                  value: rowShopifyProductSummary.PriceAvg,
-                },
-              ],
-            }}
-          />
-        )}
-        {/* Social Statistics Section */}
-        <h3>Site Stats for {name}</h3>
-        <Tabs>
-          <TabList>
-            <Tab style={TabStyle}>Traffic rank</Tab>
-            <Tab style={TabStyle}>Time on site</Tab>
-          </TabList>
-          <TabPanel>
-            {chartRankData && (
-              <ReactFrappeChart
-                type="axis-mixed"
-                colors={['#743ee2']}
-                height={250}
-                axisOptions={{ xAxisMode: 'tick', xIsSeries: 1 }}
-                lineOptions={{ spline: 1 }}
-                data={chartRankData}
-              />
-            )}
-          </TabPanel>
-          <TabPanel>
-            {chartTOSData && (
-              <ReactFrappeChart
-                type="axis-mixed"
-                colors={['#743ee2']}
-                height={250}
-                axisOptions={{ xAxisMode: 'tick', xIsSeries: 1 }}
-                lineOptions={{ spline: 1 }}
-                data={chartTOSData}
-                tooltipOptions={{
-                  formatTooltipX: d => d,
-                  formatTooltipY: d => d + " seconds",
-                }}
-              />
-            )}
-          </TabPanel>
-        </Tabs>
-        <h3>Social media stats</h3>
         {socialDetails && (
           <SocialIcons>
             {socialDetails.InstagramLink && (
@@ -900,129 +774,6 @@ const SingleItem = ({ data, pageContext }) => {
             )}
           </SocialIcons>
         )}
-        {chartSocialData && chartSocialData.labels && chartSocialData.labels.length > 0 && (
-          <ReactFrappeChart
-            type="bar"
-            title="Followers"
-            height={250}
-            axisOptions={{
-              xAxisMode: 'tick',
-              xIsSeries: 1,
-              shortenYAxisNumbers: 1,
-            }}
-            barOptions={{ stacked: 0 }}
-            data={chartSocialData}
-          />
-        )}
-        <Tabs>
-          <TabList>
-            {facebookChartData && <Tab style={TabStyle}>Facebook</Tab>}
-            {instagramChartData && <Tab style={TabStyle}>Instagram</Tab>}
-            {pinterestChartData && <Tab style={TabStyle}>Pinterest</Tab>}
-            {tiktokChartData && <Tab style={TabStyle}>TikTok</Tab>}
-            {twitterChartData && <Tab style={TabStyle}>Twitter</Tab>}
-            {youtubeChartData && <Tab style={TabStyle}>Youtube</Tab>}
-          </TabList>
-          {facebookChartData && (
-            <TabPanel>
-              <ReactFrappeChart
-                type="axis-mixed"
-                title="Facebook"
-                height={250}
-                axisOptions={{
-                  xAxisMode: 'tick',
-                  xIsSeries: 1,
-                  shortenYAxisNumbers: 1,
-                }}
-                data={facebookChartData}
-              />
-            </TabPanel>
-          )}
-          {instagramChartData && (
-            <TabPanel>
-              <ReactFrappeChart
-                type="axis-mixed"
-                title="Instagram"
-                height={250}
-                axisOptions={{
-                  xAxisMode: 'tick',
-                  xIsSeries: 1,
-                  shortenYAxisNumbers: 1,
-                }}
-                lineOptions={{ spline: 1 }}
-                data={instagramChartData}
-              />
-            </TabPanel>
-          )}
-          {pinterestChartData && (
-            <TabPanel>
-              <ReactFrappeChart
-                type="axis-mixed"
-                title="Pinterest"
-                height={250}
-                axisOptions={{
-                  xAxisMode: 'tick',
-                  xIsSeries: 1,
-                  shortenYAxisNumbers: 1,
-                }}
-                lineOptions={{ spline: 1 }}
-                data={pinterestChartData}
-              />
-            </TabPanel>
-          )}
-          {tiktokChartData && (
-            <TabPanel>
-              <ReactFrappeChart
-                type="axis-mixed"
-                title="Tiktok"
-                height={250}
-                axisOptions={{
-                  xAxisMode: 'tick',
-                  xIsSeries: 1,
-                  shortenYAxisNumbers: 1,
-                }}
-                lineOptions={{ spline: 1 }}
-                data={tiktokChartData}
-              />
-            </TabPanel>
-          )}
-          {twitterChartData && (
-            <TabPanel>
-              <ReactFrappeChart
-                type="axis-mixed"
-                title="Twitter"
-                height={250}
-                axisOptions={{
-                  xAxisMode: 'tick',
-                  xIsSeries: 1,
-                  shortenYAxisNumbers: 1,
-                }}
-                lineOptions={{ spline: 1 }}
-                data={twitterChartData}
-              />
-            </TabPanel>
-          )}
-          {youtubeChartData && (
-            <TabPanel>
-              <ReactFrappeChart
-                type="axis-mixed"
-                title="Youtube"
-                height={250}
-                axisOptions={{
-                  xAxisMode: 'tick',
-                  xIsSeries: 1,
-                  shortenYAxisNumbers: 1,
-                }}
-                lineOptions={{ spline: 1 }}
-                data={youtubeChartData}
-              />
-            </TabPanel>
-          )}
-        </Tabs>
-        {/* List of Posts from MySQL View */}
-        {listInstaPostEdges && listInstaPostEdges.length > 0 && (
-          <h3>instagram posts</h3>
-        )}
         <Content input={firstRowDataView && firstRowDataView.node.Biography} />
         <br />
         {/* Show carousel for mobile version */}
@@ -1050,6 +801,268 @@ const SingleItem = ({ data, pageContext }) => {
               })}
           </ViewContainer>
         )}
+        <br />
+        {!!relatedShops.length && (
+          <>
+            <h3>Discover similar shops to {name}</h3>
+            <PostSectionGrid>
+              {relatedShops && relatedShops.map(({ shop }, index) => (
+                <span key={index}>
+                  <PostSectionImage>
+                    <img src={shop.ProfilePicURL} alt={shop.name} style={{ height: 'inherit', 'textAlign': 'center', 'borderRadius': '100%' }} />
+                  </PostSectionImage>
+                  <PostSectionContent>
+                    <Link key={index} to={`/shops/${shop.UserName}/`}>
+                      {shop.name && <h3>{shop.name}</h3>}
+                    </Link>
+                    {shop.about && <div>{_.truncate(shop.about, { length: 200, omission: '...' })}</div>}
+                  </PostSectionContent>
+                </span>
+              ))}
+            </PostSectionGrid>
+          </>
+        )}
+        <br />
+        <br />
+        <a href="/randomshop" className="button ">
+          Discover a new shop
+        </a>
+        <br />
+        <br />
+        See more online stores tagged: <TagsBlock list={tagsList || []} isLinkToShops={true} />
+        <br />
+
+
+
+
+
+        {/* Social Statistics Section */}
+        <h3>{name} data and charts</h3>
+        <Tabs>
+          <TabList>
+            <Tab style={TabStyle}>Product Prices</Tab>
+            <Tab style={TabStyle}>Traffic rank</Tab>
+            <Tab style={TabStyle}>Time on site</Tab>
+          </TabList>
+          <TabPanel>
+            <Statistics>
+              <StatisticItem>
+                {rowShopifyProductSummary.PriceAvg && (
+                  <div>
+                    ${rowShopifyProductSummary.PriceAvg}<br />
+                    <span className="stat_title">Avg Price</span>
+                  </div>
+                )}
+
+
+
+              </StatisticItem>
+              <StatisticItem>
+
+                {rowShopifyProductSummary.PriceMin &&
+                  rowShopifyProductSummary.PriceMax && (
+                    <div>
+                      ${rowShopifyProductSummary.PriceMin} - ${rowShopifyProductSummary.PriceMax}<br />
+                      <span className="stat_title">Price Range</span>
+                    </div>
+                  )}
+
+
+              </StatisticItem>
+            </Statistics>
+            {rowShopifyProductSummary && (
+              <ReactFrappeChart
+                title="Product prices"
+                type="axis-mixed"
+                colors={['#743ee2']}
+                height={250}
+                axisOptions={{ xAxisMode: 'tick', xIsSeries: 1 }}
+                lineOptions={{ hideLine: 1 }}
+                tooltipOptions={{
+                  formatTooltipX: d => d,
+                  formatTooltipY: d => '$ ' + parseFloat(d || 0).toFixed(2),
+                }}
+                data={{
+                  labels: _.split(productSummary_Dates_NoTime, ','),
+                  datasets: [
+                    {
+                      name: 'Product prices',
+                      type: 'line',
+                      values: _.split(
+                        rowShopifyProductSummary.PriceListActive,
+                        ','
+                      ),
+                    },
+                  ],
+                  yMarkers: [
+                    {
+                      label: 'Avg Price',
+                      value: rowShopifyProductSummary.PriceAvg,
+                    },
+                  ],
+                }}
+              />
+            )}
+          </TabPanel>
+          <TabPanel>
+            {chartRankData && (
+              <ReactFrappeChart
+                type="axis-mixed"
+                colors={['#743ee2']}
+                height={250}
+                axisOptions={{ xAxisMode: 'tick', xIsSeries: 1 }}
+                lineOptions={{ spline: 1 }}
+                data={chartRankData}
+              />
+            )}
+          </TabPanel>
+          <TabPanel>
+            {chartTOSData && (
+              <ReactFrappeChart
+                type="axis-mixed"
+                colors={['#743ee2']}
+                height={250}
+                axisOptions={{ xAxisMode: 'tick', xIsSeries: 1 }}
+                lineOptions={{ spline: 1 }}
+                data={chartTOSData}
+                tooltipOptions={{
+                  formatTooltipX: d => d,
+                  formatTooltipY: d => d + " seconds",
+                }}
+              />
+            )}
+          </TabPanel>
+
+        </Tabs>
+        <h3>Social media stats</h3>
+
+
+        <div style={{ display: 'flex' }}>
+          <div style={{ flex: '30%' }}>
+            {chartSocialData && chartSocialData.labels && chartSocialData.labels.length > 0 && (
+              <ReactFrappeChart
+
+                type="donut"
+                title="Total fans by platform"
+                height={300}
+
+
+                data={chartSocialData}
+
+              />
+            )}
+
+          </div>
+          <div style={{ flex: '60%' }}>
+            <Tabs >
+              <TabList>
+                {facebookChartData && <Tab style={TabStyle}>Facebook</Tab>}
+                {instagramChartData && <Tab style={TabStyle}>Instagram</Tab>}
+                {pinterestChartData && <Tab style={TabStyle}>Pinterest</Tab>}
+                {tiktokChartData && <Tab style={TabStyle}>TikTok</Tab>}
+                {twitterChartData && <Tab style={TabStyle}>Twitter</Tab>}
+                {youtubeChartData && <Tab style={TabStyle}>Youtube</Tab>}
+              </TabList>
+              {facebookChartData && (
+                <TabPanel>
+                  <ReactFrappeChart
+                    type="axis-mixed"
+                    title="Facebook"
+                    height={250}
+                    axisOptions={{
+                      xAxisMode: 'tick',
+                      xIsSeries: 1,
+                      shortenYAxisNumbers: 1,
+                    }}
+                    data={facebookChartData}
+                  />
+                </TabPanel>
+              )}
+              {instagramChartData && (
+                <TabPanel>
+                  <ReactFrappeChart
+                    type="axis-mixed"
+                    title="Instagram"
+                    height={250}
+                    axisOptions={{
+                      xAxisMode: 'tick',
+                      xIsSeries: 1,
+                      shortenYAxisNumbers: 1,
+                    }}
+                    lineOptions={{ spline: 1 }}
+                    data={instagramChartData}
+                  />
+                </TabPanel>
+              )}
+              {pinterestChartData && (
+                <TabPanel>
+                  <ReactFrappeChart
+                    type="axis-mixed"
+                    title="Pinterest"
+                    height={250}
+                    axisOptions={{
+                      xAxisMode: 'tick',
+                      xIsSeries: 1,
+                      shortenYAxisNumbers: 1,
+                    }}
+                    lineOptions={{ spline: 1 }}
+                    data={pinterestChartData}
+                  />
+                </TabPanel>
+              )}
+              {tiktokChartData && (
+                <TabPanel>
+                  <ReactFrappeChart
+                    type="axis-mixed"
+                    title="Tiktok"
+                    height={250}
+                    axisOptions={{
+                      xAxisMode: 'tick',
+                      xIsSeries: 1,
+                      shortenYAxisNumbers: 1,
+                    }}
+                    lineOptions={{ spline: 1 }}
+                    data={tiktokChartData}
+                  />
+                </TabPanel>
+              )}
+              {twitterChartData && (
+                <TabPanel>
+                  <ReactFrappeChart
+                    type="axis-mixed"
+                    title="Twitter"
+                    height={250}
+                    axisOptions={{
+                      xAxisMode: 'tick',
+                      xIsSeries: 1,
+                      shortenYAxisNumbers: 1,
+                    }}
+                    lineOptions={{ spline: 1 }}
+                    data={twitterChartData}
+                  />
+                </TabPanel>
+              )}
+              {youtubeChartData && (
+                <TabPanel>
+                  <ReactFrappeChart
+                    type="axis-mixed"
+                    title="Youtube"
+                    height={250}
+                    axisOptions={{
+                      xAxisMode: 'tick',
+                      xIsSeries: 1,
+                      shortenYAxisNumbers: 1,
+                    }}
+                    lineOptions={{ spline: 1 }}
+                    data={youtubeChartData}
+                  />
+                </TabPanel>
+              )}
+            </Tabs>
+          </div>
+        </div>
+        {/* List of Posts from MySQL View */}
+
         <br />
 
 

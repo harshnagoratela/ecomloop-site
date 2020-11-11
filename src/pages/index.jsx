@@ -82,9 +82,9 @@ const Index = ({ data }) => {
   const { edges } = data.allMysqlMainView;
   const rowProductsEdges = data.allMysqlShopifyView.edges;
   const rowallMysqlShopifyProductsAllEdges = data.allMysqlShopifyProductsAll ? data.allMysqlShopifyProductsAll.edges : [];
-  const limit = 25;
+  const limit = 100;
   const maxProducts = 7;
-  const maxVisibleItems = 8;
+  const maxVisibleItems = 10;
   const [visibleItems, setVisibleItems] = React.useState(maxVisibleItems);
   const [showMore, setShowMore] = React.useState(true);
 
@@ -353,7 +353,7 @@ const Index = ({ data }) => {
   })
 
   //Extracting sale products
-  const filteredShopifyBestProducts = _.sortBy(_.filter(listShopifyProductsAllEdges, ({ node }) => node.Position < 3 && node.Price <= '150' && node.Price > '25'), ({ node }) => -node.UpdateDate);
+  const filteredShopifyBestProducts = _.sortBy(_.filter(listShopifyProductsAllEdges, ({ node }) => node.Position == 1 || node.Position == 2 ), ({ node }) => -node.UpdateDate);
   const listShopifyBestProducts = _.slice(filteredShopifyBestProducts, 0, limit);
   //Now limiting the items as per limit
   const visibleShopifyBestProducts = _.slice(listShopifyBestProducts, 0, visibleItems);
@@ -370,7 +370,7 @@ const Index = ({ data }) => {
   const renderProduct = (node) => {
     return (
       <ViewCard key={node.ProductURL}>
-        <a href={`/shops/${node.slug}/`} target="_blank">
+        <a href={`/shops/${node.slug}/`}>
           <ViewImage>
             <div style={{ 'textAlign': 'center', }}>
               <img
@@ -391,7 +391,7 @@ const Index = ({ data }) => {
         </a>
         <small>{node.category}</small>
         <ViewInfo className="info">
-          <a href={`/shops/${node.slug}/`} target="_blank">
+          <a href={`/shops/${node.slug}/`} >
             {node.name}
           </a>
           <p>
@@ -538,31 +538,7 @@ const Index = ({ data }) => {
       </LazyLoad>
 
 
-      <LazyLoad height={200} once offset={[-200, 0]}>
-        <CarouselWrapper>
-          <h3>New Products</h3>
-          <Carousel
-            swipeable={false}
-            draggable={false}
-            showDots={false}
-            ssr={true}
-            responsive={responsive}
-            keyBoardControl={true}
-          >
-            {visibleNewlyAddedProducts.map(({ node }, index) => (
-              <ProductCategoryItem
-                key={`NewlyAddedProducts-${index}`}
-                cover={getProductImage(node)}
-                path={`/shops/${node.UserName}/`}
-                vendorname={node.VendorName}
-                title={node.Title}
-                price={node.Price}
-                node={node}
-              />
-            ))}
-          </Carousel>
-        </CarouselWrapper>
-      </LazyLoad>
+
 
       <ShopWrapper>
         <h3>Discover the best online shopping sites at Emprezzo</h3>
