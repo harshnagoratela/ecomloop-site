@@ -11,6 +11,23 @@ const shopQuery = `{
     }
   }
 }`
+
+const productQuery = `{
+  products: allMysqlShopifyProductsAll {
+    edges {
+      node {
+        ProductID: ProductID
+        VariantIDs: VariantID
+        VendorName: VendorName
+        Title: Title
+        Description: Description
+        MaxPrice: MaxPrice
+        Price: Price
+        ImageURL: ImageURL
+      }
+    }
+  }
+}`
 const flatten = arr =>
   arr.map(({ node: { frontmatter, ...rest } }) => ({
     ...frontmatter,
@@ -24,5 +41,12 @@ const queries = [
     indexName: `uncommonry`,
     settings,
   },
+  {
+    query: productQuery,
+    transformer: ({ prod }) => flatten(prod.products.edges),
+    indexName: `empProducts`,
+    settings,
+  },
 ]
+
 module.exports = queries
