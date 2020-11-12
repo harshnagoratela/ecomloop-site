@@ -17,10 +17,10 @@ const productQuery = `{
     edges {
       node {
         ProductID: ProductID
-        VariantIDs: VariantID
-        VendorName: VendorName
-        Title: Title
-        Description: Description
+        objectID: VariantID
+        slug: VendorName
+        title: Title
+        about: Description
         MaxPrice: MaxPrice
         Price: Price
         ImageURL: ImageURL
@@ -43,7 +43,7 @@ const queries = [
   },
   {
     query: productQuery,
-    transformer: ({ prod }) => flatten(prod.products.edges),
+    transformer: ({ data }) => flatten(data.products.edges),
     indexName: `empProducts`,
     settings,
   },
