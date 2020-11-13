@@ -13,14 +13,14 @@ const shopQuery = `{
 }`
 
 const productQuery = `{
-  products: allMysqlShopifyProductsAll {
+  products: allMysqlShopifyProductsAll(limit: 1000) {
     edges {
       node {
-        ProductID: ProductID
-        objectID: VariantID
-        slug: VendorName
-        title: Title
-        about: Description
+        id: ProductID
+        VariantIDs: VariantID
+        VendorName: VendorName
+        Title: Title
+        Description: Description
         MaxPrice: MaxPrice
         Price: Price
         ImageURL: ImageURL
