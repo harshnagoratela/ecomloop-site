@@ -1,29 +1,49 @@
 const shopQuery = `{
-  shops: allMysqlMainView {
+  shops: allMysqlMainView(limit:1000) {
     edges {
       node {
-        objectID: UniqueKey
-        title: name
-        slug: UserName
+        id: UserName
+        shopName: name
+        emprezzoID: UserName
+        url: url
         tags: tags
         about: about
+        category: category
+        freeShipMin: FreeShipMin
+        baseShipRate: BaseShipRate
+        returnDays: ReturnDays
+        returnShipFree: ReturnShipFree
+        priceMin: PriceMin
+        image: ProfilePicURL
       }
     }
   }
 }`
 
 const productQuery = `{
-  products: allMysqlShopifyProductsAll(limit: 1000) {
+  products: allMysqlShopifyProductsAll(limit: 10) {
     edges {
       node {
         id: ProductID
-        VariantIDs: VariantID
-        VendorName: VendorName
-        Title: Title
-        Description: Description
-        MaxPrice: MaxPrice
-        Price: Price
-        ImageURL: ImageURL
+        name: Title
+        description: Description
+        maxPrice: MaxPrice
+        price: Price
+        imageURL: ImageURL
+        updateDate: UpdateDate
+        publishedDate: PublishedDate
+        sellingRank: Position
+        productURL: ProductURL
+        shopName: name
+        emprezzoID: UserName
+        shopTags: tags
+        shopCategory: category
+        freeShipMin: FreeShipMin
+        baseShipRate: BaseShipRate
+        returnDays: ReturnDays
+        returnShipFree: ReturnShipFree
+        shopImage: ProfilePicURL
+
       }
     }
   }

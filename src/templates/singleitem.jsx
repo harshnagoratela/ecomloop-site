@@ -1230,6 +1230,17 @@ export const query = graphql`
           tags
           name
           about
+          url
+          Description
+          FreeShipMin
+          BaseShipRate
+          ReturnDays
+          ReturnShipFree
+          PriceMin
+          PriceMax
+          PriceAvg
+          CountProducts
+          ProfilePicURL
         }
       }
     }
@@ -1333,6 +1344,14 @@ export const query = graphql`
           VendorURL
           PublishedDate
           UpdateDate
+          UserName
+          tags
+          category
+          FreeShipMin
+          BaseShipRate
+          ReturnDays
+          ReturnShipFree
+          ProfilePicURL
         }
       }
     }
@@ -1365,7 +1384,7 @@ export const query = graphql`
       edges {
         node {
           URL
-          profile_image_url          
+          profile_image_url
         }
       }
     }
