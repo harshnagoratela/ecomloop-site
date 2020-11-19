@@ -661,8 +661,8 @@ const SingleItem = ({ data, pageContext }) => {
   return (
     <Layout>
       <SEO
-        title={`Discover ${name}: Best Sellers, Coupons, & Stats `}
-        description={`${name} is a  See social media growth, search popularity, and more stats online stores selling ${tagsList}. `}
+        title={`Discover ${name}: Best Sellers, Social Media, & Stats `}
+        description={`${name} is a ${category} brand that sells products related to ${tags} direct to consumers on its website. Prices range from ${rowShopifyProductSummary.PriceMin} - ${rowShopifyProductSummary.PriceMax} with an average price of ${rowShopifyProductSummary.PriceAvg}. See product data about ${name} at emprezzo. `}
         pathname={AlexaURL}
       />
       <Header title={name} children={subtitle} likeEnabled={{ storeName: name, storeURL: AlexaURL, storeProfileImage: (firstRowDataView && firstRowDataView.node.ProfilePicURL) }} />
@@ -1241,6 +1241,7 @@ export const query = graphql`
           PriceAvg
           CountProducts
           ProfilePicURL
+          CreateDate
         }
       }
     }
@@ -1326,6 +1327,7 @@ export const query = graphql`
         node {
           DiscountAmt
           Description
+          productDesc
           DiscountPct
           HasVariants
           ImageURL
@@ -1342,6 +1344,8 @@ export const query = graphql`
           VariantUpdateDate
           VendorName
           VendorURL
+          GlobalRankOrder
+          SocialRankScore
           PublishedDate
           UpdateDate
           UserName

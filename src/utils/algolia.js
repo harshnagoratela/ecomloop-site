@@ -2,9 +2,10 @@ const shopQuery = `{
   shops: allMysqlMainView(limit:1000) {
     edges {
       node {
-        id: UserName
+        id: UniqueID
+        random: UniqueKey
         shopName: name
-        emprezzoID: UserName
+        emprezzoID: UniqueID
         url: url
         tags: tags
         about: about
@@ -15,18 +16,21 @@ const shopQuery = `{
         returnShipFree: ReturnShipFree
         priceMin: PriceMin
         image: ProfilePicURL
+        updateDate: CreateDate
       }
     }
   }
 }`
 
 const productQuery = `{
-  products: allMysqlShopifyProductsAll(limit: 10) {
+  products: allMysqlShopifyProductsAll(limit: 15000) {
     edges {
       node {
-        id: ProductID
+        objectID: UniqueID
+        random: UniqueKey
+        productID: ProductID
         name: Title
-        description: Description
+        description: productDesc
         maxPrice: MaxPrice
         price: Price
         imageURL: ImageURL
@@ -38,12 +42,14 @@ const productQuery = `{
         emprezzoID: UserName
         shopTags: tags
         shopCategory: category
+        shopDescription: Description
         freeShipMin: FreeShipMin
         baseShipRate: BaseShipRate
         returnDays: ReturnDays
         returnShipFree: ReturnShipFree
         shopImage: ProfilePicURL
-
+        trafficRank: GlobalRankOrder
+        socialRankScore: SocialRankScore
       }
     }
   }
