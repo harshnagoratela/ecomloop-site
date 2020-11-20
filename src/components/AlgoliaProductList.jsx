@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import _ from 'lodash';
+import AlgoliaProductItem from './AlgoliaProductItem'
 import algoliasearch from 'algoliasearch/lite';
 import {
   InstantSearch,
@@ -15,8 +16,7 @@ import {
 import 'instantsearch.css/themes/algolia.css';
 
 const SearchWrapper = styled.div`
-  overflow: hidden;
-  margin: 0 auto;
+  width: 100vw;  
 `;
 
 const LeftPanel = styled.div`
@@ -27,16 +27,32 @@ const LeftPanel = styled.div`
     background-color: #C04CFD;
   }
 
+  .ais-RefinementList-item {
+    margin-bottom: 0px;
+  }
+
   .ais-RefinementList-labelText {
     margin-left: 5px;
+    font-size: 0.8rem;
+  }
+
+  .ais-RefinementList-count {
+    font-size: 0.6rem;
   }
 `;
 
 const RightPanel = styled.div`
   margin-left: 260px;
+  @media (max-width: 700px) {
+    margin-left: 0px;
+    display: block;
+  }
 
   .ais-Hits-item, .ais-Results-item {
     width: calc(20% - 1rem);
+    @media (max-width: 700px) {
+      width: calc(50% - 1rem);
+    } 
   }
 
   .ais-Pagination-item--selected .ais-Pagination-link {
@@ -52,52 +68,40 @@ const RightPanel = styled.div`
   ais-Breadcrumb-link, .ais-HierarchicalMenu-link, .ais-Menu-link, .ais-Pagination-link, .ais-RatingMenu-link {
     color:#C04CFD
   }
-  
+`;
+
+const FilterHeading = styled.div `
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin: 8px 0 5px 0
 `;
 
 const AlgoliaProductList = () => {
-  const searchClient1 = algoliasearch(
+  const searchClient = algoliasearch(
     process.env.GATSBY_ALGOLIA_APP_ID,
     process.env.GATSBY_ALGOLIA_SEARCH_KEY
   );
-  const searchClient = algoliasearch(
-    'B1G2GM9NG0',
-    'aadef574be1f9252bb48d4ea09b5cfe5'
-  );
-  const searchIndexName1 = `empProducts`;
-  const searchIndexName = `demo_ecommerce`;
+  const searchIndexName = `empProducts`;
 
   return (
     <SearchWrapper>
       <InstantSearch indexName={searchIndexName} searchClient={searchClient}>
         <LeftPanel>
           <ClearRefinements />
-          <h2>Filters</h2>
-          <RefinementList attribute="brand" />
+          <FilterHeading>Category</FilterHeading>
+          <RefinementList attribute="shopCategory" />
+          <FilterHeading>Brands</FilterHeading>
+          <RefinementList attribute="shopName" />
           <Configure hitsPerPage={10} />
         </LeftPanel>
         <RightPanel>
           <SearchBox />
-          <Hits hitComponent={Hit} />
+          <Hits hitComponent={AlgoliaProductItem} />
           <Pagination />
         </RightPanel>
       </InstantSearch>
     </SearchWrapper>
-  );
-}
-
-function Hit(props) {
-  return (
-    <div>
-      <img src={props.hit.image} align="left" alt={props.hit.name} />
-      <div className="hit-name">
-        <Highlight attribute="name" hit={props.hit} />
-      </div>
-      <div className="hit-description">
-        <Highlight attribute="description" hit={props.hit} />
-      </div>
-      <div className="hit-price">${props.hit.price}</div>
-    </div>
   );
 }
 

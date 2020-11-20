@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import _ from 'lodash';
-import { Link } from 'gatsby';
-import Img from 'gatsby-image';
+import { Highlight } from 'react-instantsearch-dom';
 import theme from '../../config/theme';
 import { Dialog } from "@reach/dialog";
 import "@reach/dialog/styles.css";
@@ -115,7 +114,7 @@ const SubTitle = styled.h5`
   margin-bottom: 0.6rem;
 `;
 const Price = styled.div`
-  font-size: 0.5rem;
+  font-size: 0.8rem;
   margin: 0;
 
 `;
@@ -153,13 +152,12 @@ const StyledDialog = styled(Dialog)`
 }
 `;
 
-const AlgoliaProductItem = ({ path, cover, title, vendorname, variant, price, node }) => {
+const AlgoliaProductItem = (props) => {
   const [showDialog, setShowDialog] = React.useState(false);
-
   const openDialog = () => setShowDialog(true);
   const closeDialog = () => setShowDialog(false);
 
-  const displayMaxPrice = (node.MaxPrice && node.MaxPrice != node.Price ? '$' + node.MaxPrice : '')
+  //console.log("**** props", props)
 
   const convertToSelectList = (variants) => {
     if (variants == null) return;
@@ -178,55 +176,47 @@ const AlgoliaProductItem = ({ path, cover, title, vendorname, variant, price, no
 
   return (
     <Wrapper>
-      <Image>
-        <a href={path} title={title} target="_blank">
-          {cover && typeof cover === 'object' &&
-            <Img fluid={cover || {} || [] || ''} />
-          }
-          {cover && typeof cover === 'string' &&
-            <img src={cover || {} || [] || ''} style={{ objectFit: 'fill' }} />
-          }
-        </a>
-      </Image>
-      <StyledLink href="javascript:void(0)" onClick={() => openDialog()} title={vendorname}>
-        <Information>
-          <Title>{_.truncate(title.toLowerCase(), { length: 22, omission: '' })}</Title>
-          {price &&
-            <Price><strike>{displayMaxPrice}</strike> ${price}</Price>
-          }
-        </Information>
-      </StyledLink>
-      <StyledDialog isOpen={showDialog} onDismiss={closeDialog}>
-        <button className="close-button" onClick={closeDialog} style={{ float: "right", cursor: "pointer" }}>
-          <span aria-hidden>X</span>
-        </button>
-
-
-        <div className="dialogImageDescription">
-          <img src={cover} />
-          <div>  <h3>{node.Title}</h3>
-
-            <p><i>Available at {node.name || vendorname} from  <strike>{displayMaxPrice}</strike> ${node.Price}</i></p>
-
-
-
-            <p>{node.Description && node.Description.substring(0, 220)}</p>
-
-            {convertToSelectList(node.VariantTitle)}
-          </div>
-
-        </div>
-
-
-
-
-        <br />
-        <div>
-          <a href={node.ProductURL} target="_blank" class="button">Buy at {node.name || vendorname}</a>
-          <a href={node.UserName ? path : node.VendorURL} class="button buttonalt">Get shop info</a>
-        </div>
-        <br />
-      </StyledDialog>
+      {props && props.hit &&
+        <>
+          <Image>
+            <a href={`/shops/${props.hit.emprezzoID}/`} title={props.hit.name} target="_blank">
+              {props.hit.imageURL &&
+                <img src={props.hit.imageURL} style={{ objectFit: 'fill' }} />
+              }
+            </a>
+          </Image>
+          <StyledLink href="javascript:void(0)" onClick={() => openDialog()} title={props.hit.shopName}>
+            <Information>
+              <Title><Highlight attribute="name" hit={props.hit} /></Title>
+              {props.hit.price &&
+                <Price>${props.hit.price}</Price>
+              }
+            </Information>
+          </StyledLink>
+          <StyledDialog isOpen={showDialog} onDismiss={closeDialog}>
+            <button className="close-button" onClick={closeDialog} style={{ float: "right", cursor: "pointer" }}>
+              <span aria-hidden>X</span>
+            </button>
+            <div className="dialogImageDescription">
+              {props.hit.imageURL &&
+                <img src={props.hit.imageURL} />
+              }
+              <div>
+                <h3>{props.hit.name}</h3>
+                <p><i>Available at {props.hit.name || props.hit.shopName} from ${props.hit.price}</i></p>
+                <p>{props.hit.description && props.hit.description.substring(0, 220)}</p>
+                {convertToSelectList(props.hit.VariantTitle)}
+              </div>
+            </div>
+            <br />
+            <div>
+              <a href={props.hit.productURL} target="_blank" class="button">Buy at {props.hit.shopName}</a>
+              <a href={props.hit.emprezzoID ? `/shops/${props.hit.emprezzoID}/` : props.hit.VendorURL} class="button buttonalt">Get shop info</a>
+            </div>
+            <br />
+          </StyledDialog>
+        </>
+      }
     </Wrapper>
   );
 }

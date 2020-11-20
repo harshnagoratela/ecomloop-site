@@ -100,8 +100,8 @@ const Index = ({ data }) => {
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
-      items: 4,
-      slidesToSlide: 4 // optional, default to 1.
+      items: 2,
+      slidesToSlide: 3 // optional, default to 1.
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
@@ -433,7 +433,7 @@ const Index = ({ data }) => {
 
 
 
-
+    {/*       
       <LazyLoad height={200} once offset={[-200, 0]}>
         <SectionHeading>Discover best selling products</SectionHeading>
         <CategoryWrapper>
@@ -456,7 +456,7 @@ const Index = ({ data }) => {
             </button>
           </div>
         }
-      </LazyLoad>
+      </LazyLoad> */}
 
       <LazyLoad height={200} once offset={[-200, 0]}>
         <SectionHeading>Discover best selling products</SectionHeading>
