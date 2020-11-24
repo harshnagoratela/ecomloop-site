@@ -766,7 +766,7 @@ const SingleItem = ({ data, pageContext }) => {
               visibleShopifyClassicProductsEdges.length > 0 && (
                 <Tab style={TabStyle}>Shop {name}</Tab>
               )}
-            {listShopifyBestSellersEdges &&
+            {/* {listShopifyBestSellersEdges &&
               listShopifyBestSellersEdges.length > 0 && (
                 <Tab style={TabStyle}>Best sellers</Tab>
               )}
@@ -781,7 +781,7 @@ const SingleItem = ({ data, pageContext }) => {
             {listShopifyGiftCards &&
               listShopifyGiftCards.length > 0 && (
                 <Tab style={TabStyle}>Gift Cards</Tab>
-              )}
+              )} */}
           </TabList>
 
 
@@ -790,13 +790,13 @@ const SingleItem = ({ data, pageContext }) => {
             <TabPanel>
               <AlgoliaProductList
                 defaultFilter={`emprezzoID:"${UserName}"`}
-                facetsToShow={'category'}
+                facetsToShow={'onsale,giftcard'}
                 showSearchBox={true}
                 showClearFilter={true}
               />
             </TabPanel>
           )}
-          {listShopifyBestSellersEdges && listShopifyBestSellersEdges.length > 0 && (
+          {/* {listShopifyBestSellersEdges && listShopifyBestSellersEdges.length > 0 && (
             <TabPanel>
               {renderProductList(listShopifyBestSellersEdges, 'listShopifyBestSellersEdges')}
             </TabPanel>
@@ -822,7 +822,7 @@ const SingleItem = ({ data, pageContext }) => {
                   })}
                 </PostSectionGrid>
               </TabPanel>
-            )}
+            )} */}
         </Tabs>
 
         {FreeShipText && FreeShipText.length > 0 && (
