@@ -711,19 +711,19 @@ const SingleItem = ({ data, pageContext }) => {
             {firstRowDataView &&
               <>
                 <br /><br />
-                {firstRowDataView.node.FreeShipMin && firstRowDataView.node.FreeShipMin != "#" &&
+                {firstRowDataView.node.FreeShipMin && firstRowDataView.node.FreeShipMin != "." &&
                   <div>Free shipping on orders over ${firstRowDataView.node.FreeShipMin}</div>
                 }
-                {firstRowDataView.node.BaseShipRate && firstRowDataView.node.BaseShipRate != "#" &&
+                {firstRowDataView.node.BaseShipRate && firstRowDataView.node.BaseShipRate != "." &&
                   <div>Base shipping rate: ${firstRowDataView.node.BaseShipRate}</div>
                 }
-                {firstRowDataView.node.ReturnDays && firstRowDataView.node.ReturnDays != "#" &&
+                {firstRowDataView.node.ReturnDays && firstRowDataView.node.ReturnDays != "." &&
                   <div>Offers {firstRowDataView.node.ReturnDays} day returns.</div>
                 }
-                {firstRowDataView.node.ReturnShipFree && firstRowDataView.node.ReturnShipFree != "#" &&
+                {firstRowDataView.node.ReturnShipFree && firstRowDataView.node.ReturnShipFree != "." &&
                   <div>Return shipping is : {firstRowDataView.node.ReturnShipFree}</div>
                 }
-                {firstRowDataView.node.ReturnCondition && firstRowDataView.node.ReturnCondition != "#" &&
+                {firstRowDataView.node.ReturnCondition && firstRowDataView.node.ReturnCondition != "." &&
                   <div>Return condition: {firstRowDataView.node.ReturnCondition} {firstRowDataView.node.ReturnNotes}</div>
                 }
               </>
