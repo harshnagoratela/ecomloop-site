@@ -30,6 +30,14 @@ const LeftPanel = styled.div`
     background-color: #C04CFD;
   }
 
+  .ais-SortBy {
+    padding: 0.8rem 0 0.8rem 0;
+  }
+
+  .ais-SortBy-select {
+    font-size: 0.8rem;
+  }
+
   .ais-RefinementList-item {
     margin-bottom: 0px;    
   }
@@ -104,10 +112,21 @@ const AlgoliaProductList = ({ defaultFilter, defaultSearchTerm, showClearFilter,
   return (
     <SearchWrapper>
       <InstantSearch indexName={searchIndexName} searchClient={searchClient}>
-        <LeftPanel>
+        <LeftPanel>          
           {showClearFilter &&
             <ClearRefinements />
           }
+          <SortBy
+            defaultRefinement="empProducts"
+            items={[
+              { value: 'empProducts_UpdatedDate_Desc', label: 'UpdatedDate desc.' },
+              { value: 'empProducts_UpdatedDate_Asc', label: 'UpdatedDate asc.' },
+              { value: 'empProducts_SellingRank_Desc', label: 'SellingRank desc.' },
+              { value: 'empProducts_SellingRank_Asc', label: 'SellingRank asc.' },              
+              { value: 'empProducts_Price_Desc', label: 'Price desc.' },
+              { value: 'empProducts_Price_Asc', label: 'Price asc.' },              
+            ]}
+          />
           {facetsToShow && facetsToShow.indexOf("category") >= 0 &&
             <>
               <FilterHeading>Category</FilterHeading>
@@ -131,7 +150,7 @@ const AlgoliaProductList = ({ defaultFilter, defaultSearchTerm, showClearFilter,
               <RefinementList
                 attribute="onSale"
                 transformItems={items =>
-                  items.filter(item => (item.label != null)).map(item => ({
+                  items.filter(item => (item.label == '1')).map(item => ({
                     ...item,
                     label: "On Sale",
                   }))
