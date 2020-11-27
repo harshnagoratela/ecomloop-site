@@ -1194,6 +1194,7 @@ export const query = graphql`
           ProfilePicURL
           ProfileImage
           CreateDate
+
         }
       }
     }
@@ -1308,6 +1309,7 @@ export const query = graphql`
           ReturnDays
           ReturnShipFree
           ProfilePicURL
+          
         }
       }
     }
