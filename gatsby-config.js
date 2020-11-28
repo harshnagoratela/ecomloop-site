@@ -137,7 +137,7 @@ module.exports = {
             name: 'CrunchBaseView'
           },
           {
-            statement: "SELECT CONCAT(ProductID,FLOOR(RAND()*10000)) AS UniqueKey, CONCAT(SUBSTRING(VendorURL,9,9), ShopifyProducts.ProductID) AS UniqueID, ShopifyProducts.* FROM ShopifyProducts WHERE Available = 0 GROUP BY ProductID",
+            statement: "SELECT CONCAT(ProductID,FLOOR(RAND()*10000)) AS UniqueKey, CONCAT(SUBSTRING(VendorURL,9,9), ShopifyProducts.ProductID) AS UniqueID, ShopifyProducts.* FROM ShopifyProducts WHERE Available = 0 and UpdateDate > CURDATE()-10 GROUP BY ProductID",
             idFieldName: 'UniqueKey',
             name: 'ShopifyProductsAvailableView'
           }
