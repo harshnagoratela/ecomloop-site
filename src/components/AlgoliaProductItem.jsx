@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from '@emotion/styled';
 import _ from 'lodash';
+import { CartContext } from './Cart/CartContext'
 import { Highlight } from 'react-instantsearch-dom';
 import theme from '../../config/theme';
 import { Dialog } from "@reach/dialog";
@@ -160,7 +161,11 @@ const AlgoliaProductItem = (props) => {
   const openDialog = () => setShowDialog(true);
   const closeDialog = () => setShowDialog(false);
 
-  //console.log("**** props", props)
+  console.log("**** props", props)
+  const { addProduct, cartItems, increase } = useContext(CartContext);
+  const isInCart = product => {
+    return !!cartItems.find(item => item.id === product.objectID);
+  }
 
   const convertToSelectList = (variants) => {
     if (variants == null) return;
@@ -211,10 +216,13 @@ const AlgoliaProductItem = (props) => {
                 {convertToSelectList(props.hit.VariantTitle)}
               </div>
             </div>
+            <div className="cart-section">
+              <button onClick={() => increase(props.hit)} style={{ color: "#C04CFD", cursor: "pointer" }}>Add to cart</button>
+            </div>
             <br />
             <div>
-              <a href={props.hit.productURL} target="_blank" class="button">Buy at {props.hit.shopName}</a>
-              <a href={props.hit.emprezzoID ? `/shops/${props.hit.emprezzoID}/` : props.hit.VendorURL} class="button buttonalt">Get shop info</a>
+              <a href={props.hit.productURL} target="_blank" className="button">Buy at {props.hit.shopName}</a>
+              <a href={props.hit.emprezzoID ? `/shops/${props.hit.emprezzoID}/` : props.hit.VendorURL} className="button buttonalt">Get shop info</a>
             </div>
             <br />
           </StyledDialog>

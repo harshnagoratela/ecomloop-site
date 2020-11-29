@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from '@emotion/styled';
+import { css, Global } from '@emotion/core';
 import _ from 'lodash';
+import { CartIcon } from './Cart/icons'
+import { CartContext } from './Cart/CartContext'
 import AlgoliaProductItem from './AlgoliaProductItem'
 import AlgoliaUncommonryItem from './AlgoliaUncommonryItem'
 import AlgoliaRangeSlider from './AlgoliaRangeSlider'
@@ -103,7 +106,7 @@ const FilterHeading = styled.div`
   margin: 8px 0 5px 0
 `;
 
-const AlgoliaProductList = ({ defaultFilter, defaultSearchTerm, showClearFilter, facetsToShow, showSearchBox, searchIndexName }) => {
+const AlgoliaProductList = ({ defaultFilter, defaultSearchTerm, showClearFilter, facetsToShow, showSearchBox, searchIndexName, enableCart }) => {
   const algoliaClient = algoliasearch(
     process.env.GATSBY_ALGOLIA_APP_ID,
     process.env.GATSBY_ALGOLIA_SEARCH_KEY
@@ -115,13 +118,30 @@ const AlgoliaProductList = ({ defaultFilter, defaultSearchTerm, showClearFilter,
     },
   };
   searchIndexName = searchIndexName || `empProducts`;
+  enableCart = enableCart || false;
+  const { itemCount } = useContext(CartContext);
+  console.log("*** CartContext-itemCount", itemCount);
 
   return (
     <SearchWrapper>
+      {!enableCart &&
+        <Global
+          styles={css`
+            .cart-section {
+              display: none;
+            }
+        `}
+        />
+      }
       <InstantSearch indexName={searchIndexName} searchClient={searchClient}>
         <LeftPanel>
           {showClearFilter &&
             <ClearRefinements />
+          }
+          {enableCart &&
+            <>
+              <CartIcon width="18px" /> {` ${itemCount}`}
+            </>
           }
           <SortBy
             defaultRefinement="empProducts"
