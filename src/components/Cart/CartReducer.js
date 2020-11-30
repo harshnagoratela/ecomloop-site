@@ -1,6 +1,6 @@
 
 const Storage = (cartItems) => {
-    localStorage.setItem('cart', JSON.stringify(cartItems.length > 0 ? cartItems: []));
+    localStorage.setItem('cart', JSON.stringify(cartItems.length > 0 ? cartItems : []));
 }
 
 export const sumItems = cartItems => {
@@ -18,7 +18,7 @@ export const CartReducer = (state, action) => {
                     ...action.payload,
                     quantity: 1
                 })
-            } 
+            }
 
             return {
                 ...state,
@@ -52,10 +52,10 @@ export const CartReducer = (state, action) => {
                 ...sumItems([]),
             }
         case "CLEAR":
-                return {
-                    cartItems: [],
-                    ...sumItems([]),
-                }
+            return {
+                cartItems: [],
+                ...sumItems([]),
+            }        
         default:
             return state
 

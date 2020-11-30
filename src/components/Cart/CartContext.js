@@ -9,7 +9,7 @@ const initialState = { cartItems: storage, ...sumItems(storage), checkout: false
 const CartContextProvider = ({children}) => {
 
     const [state, dispatch] = useReducer(CartReducer, initialState)
-
+    
     const increase = payload => {
         dispatch({type: 'INCREASE', payload})
     }

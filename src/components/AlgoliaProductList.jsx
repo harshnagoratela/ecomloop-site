@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import styled from '@emotion/styled';
 import { css, Global } from '@emotion/core';
 import _ from 'lodash';
+import { Link } from 'gatsby'
 import { CartIcon } from './Cart/icons'
 import { CartContext } from './Cart/CartContext'
 import AlgoliaProductItem from './AlgoliaProductItem'
@@ -120,7 +121,6 @@ const AlgoliaProductList = ({ defaultFilter, defaultSearchTerm, showClearFilter,
   searchIndexName = searchIndexName || `empProducts`;
   enableCart = enableCart || false;
   const { itemCount } = useContext(CartContext);
-  console.log("*** CartContext-itemCount", itemCount);
 
   return (
     <SearchWrapper>
@@ -139,9 +139,9 @@ const AlgoliaProductList = ({ defaultFilter, defaultSearchTerm, showClearFilter,
             <ClearRefinements />
           }
           {enableCart &&
-            <>
-              <CartIcon width="18px" /> {` ${itemCount}`}
-            </>
+            <Link to="/cart">
+              <CartIcon width="18px" />Cart({itemCount})
+            </Link>
           }
           <SortBy
             defaultRefinement="empProducts"

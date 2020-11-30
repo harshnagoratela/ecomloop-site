@@ -161,10 +161,20 @@ const AlgoliaProductItem = (props) => {
   const openDialog = () => setShowDialog(true);
   const closeDialog = () => setShowDialog(false);
 
-  console.log("**** props", props)
+  //console.log("**** props", props)
   const { addProduct, cartItems, increase } = useContext(CartContext);
   const isInCart = product => {
-    return !!cartItems.find(item => item.id === product.objectID);
+    return !!cartItems.find(item => item.id === product.id);
+  }
+  const addToCartWrapper = hit => {
+    const hitToProduct = {
+        id: hit.objectID,
+        name: hit.name,
+        price: hit.price,
+        photo: hit.imageURL,
+    }
+    //increase the quantity if already present, if not add product to cart
+    isInCart(hitToProduct) ? increase(hitToProduct) : addProduct(hitToProduct);
   }
 
   const convertToSelectList = (variants) => {
@@ -217,7 +227,7 @@ const AlgoliaProductItem = (props) => {
               </div>
             </div>
             <div className="cart-section">
-              <button onClick={() => increase(props.hit)} style={{ color: "#C04CFD", cursor: "pointer" }}>Add to cart</button>
+              <button onClick={() => addToCartWrapper(props.hit)} style={{ color: "#C04CFD", cursor: "pointer" }}>Add to cart</button>
             </div>
             <br />
             <div>
