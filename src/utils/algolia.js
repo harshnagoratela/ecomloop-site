@@ -26,6 +26,10 @@ const shopQuery = `{
         shopImage2: ProfilePicURL
         trafficRank: GlobalRankOrder
         socialRankScore: SocialRankScore
+        amazonPay: AmazonPay
+        applePay: ApplePay
+        shopifyPay: ShopifyPay
+        shopifyID: ShopifyID
       }
     }
   }
