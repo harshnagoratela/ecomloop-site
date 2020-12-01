@@ -8,7 +8,6 @@ import { SEO } from 'components';
 import { NavBar, Footer } from 'layouts';
 import theme from '../../config/theme';
 import headroom from '../styles/headroom';
-import CartContextProvider from '../components/Cart/CartContext'
 
 const Layout = ({ children, title, description }) => (
   <ThemeProvider theme={theme}>
@@ -60,9 +59,7 @@ const Layout = ({ children, title, description }) => (
       />
       <SEO title={title} description={description} />
       <NavBar />
-      <CartContextProvider>
-        {children}
-      </CartContextProvider>
+      {children}
       <Footer />
     </Fragment>
   </ThemeProvider>

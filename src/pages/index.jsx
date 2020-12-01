@@ -465,7 +465,6 @@ const Index = ({ data }) => {
             facetsToShow={'category,brands,storeoffers'}
             showSearchBox={true}
             showClearFilter={true}
-            enableCart={true}
           />
         </ShopWrapper>
       </LazyLoad>
