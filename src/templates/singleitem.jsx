@@ -22,6 +22,13 @@ import {
   FaRegLaugh,
   FaChartLine,
   FaAt,
+  FaPaypal,
+  FaAmazonPay,
+  FaShopify,
+  FaApplePay,
+  FaTags,
+  FaTruck,
+  FaUndoAlt,
 } from 'react-icons/fa';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
@@ -45,17 +52,21 @@ const PostSuggestion = styled.div`
 `;
 
 const Title = styled.h1`
+  margin-bottom: 5px;
+  font-size: 2rem;
   @media (max-width: ${props => props.theme.breakpoints.s}) {
-    font-size: 1rem;
+    font-size: 1.4rem;
   }
 `;
 
 const Subtitle = styled.h5`
   @media (max-width: ${props => props.theme.breakpoints.s}) {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
   }
   font-family: 'Overpass Mono', 'Consolas', 'Open Sans', -apple-system,
     'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  line-height: 1.5;
+  margin-top: 1rem;
 `;
 
 const Statistics = styled.div`
@@ -70,6 +81,13 @@ const Statistics = styled.div`
     }
   }
 `;
+
+const TabStyle = {
+  marginBottom: '0px',
+
+};
+
+
 
 const StatisticItem = styled.div`
   margin-right: 1rem;
@@ -116,9 +134,7 @@ const ViewImage = styled.div`
 `;
 const ViewInfo = styled.div``;
 
-const TabStyle = {
-  marginBottom: '0px',
-};
+
 
 const SocialIcons = styled.div`
   display: flex;
@@ -166,6 +182,7 @@ const SingleItem = ({ data, pageContext }) => {
     LocalRank,
     TOS,
     ProfileImage,
+    emprezzoID,
     UserName,
     category,
     tags,
@@ -536,7 +553,7 @@ const SingleItem = ({ data, pageContext }) => {
     return datetime && datetime.length > 0 ? datetime[0] : el;
   });
 
-  let subtitle = '<div>' + '</div>';
+  let subtitle = '';
   let FreeShipText = '';
 
   const get100Words = text => {
@@ -666,19 +683,51 @@ const SingleItem = ({ data, pageContext }) => {
         description={`${name} is a ${category} brand that sells products related to ${tags} direct to consumers on its website. Prices range from ${rowShopifyProductSummary.PriceMin} - ${rowShopifyProductSummary.PriceMax} with an average price of ${rowShopifyProductSummary.PriceAvg}. See product data about ${name} at emprezzo. `}
         pathname={AlexaURL}
       />
-      <Header title={name}
+      <Header
         description={`${category}: ${tags}`} children={subtitle} likeEnabled={{ storeName: name, storeURL: AlexaURL, storeProfileImage: (firstRowDataView && firstRowDataView.node.ProfilePicURL) }} />
       <Container>
         <div className="profileimage" style={{ display: 'flex' }}>
-          {firstRowDataView && renderProfilePicURL(firstRowDataView.node, name)}
-          <div style={{ paddingLeft: '15px' }}>
+          {/*firstRowDataView && renderProfilePicURL(firstRowDataView.node, name)*/}
+          <div style={{ paddingLeft: '5px' }}>
+
+            <Title>{name}</Title>
+            <Subtitle><b>{category}</b><br/><i>{tags}</i></Subtitle>
+
+          {firstRowDataView.node.PaypalShopID && firstRowDataView.node.PaypalShopID != '#' && (
+                <FaPaypal size="16" color="#666" />
+            )}
+        
 
 
-            <b>{category}</b><br/><i>{tags}</i><br />
+
+
+
+            {firstRowDataView &&
+              <div>
+
+                {firstRowDataView.node.FreeShipMin != null && firstRowDataView.node.FreeShipMin != 0 &&
+                  <span><FaTruck size="16" color="#666" class="icon"/> Free shipping over ${firstRowDataView.node.FreeShipMin}<br/></span>
+                }
+                {firstRowDataView.node.FreeShipMin == 0 &&
+                  <span><FaTruck size="16" color="#666" class="icon" /> Most orders ship free!<br/></span>
+                }
+                {firstRowDataView.node.BaseShipRate > 1 &&
+                  <span>Standard shipping rates from ${firstRowDataView.node.BaseShipRate}.<br/></span>
+                }
+                {firstRowDataView.node.ReturnDays != null && firstRowDataView.node.ReturnDays != "0" &&
+                  <span><FaUndoAlt size="16" color="#666" /> {firstRowDataView.node.ReturnDays} day returns </span>
+                }
+                {firstRowDataView.node.ReturnShipFree != "." && firstRowDataView.node.ReturnShipFree == "Yes" &&
+                  <span>and returns are free!</span>
+                }
+
+              </div>
+            }
+
             {rowShopifyProductSummary.PriceMin &&
               rowShopifyProductSummary.PriceMax && (
                 <small>
-                  ${rowShopifyProductSummary.PriceMin}-${rowShopifyProductSummary.PriceMax}(${rowShopifyProductSummary.PriceAvg} avg)</small>
+                  ${rowShopifyProductSummary.PriceMin}-${rowShopifyProductSummary.PriceMax} (${rowShopifyProductSummary.PriceAvg} avg)</small>
               )}
 <br/>
 
@@ -719,7 +768,7 @@ const SingleItem = ({ data, pageContext }) => {
 
           <TabPanel>
             <AlgoliaProductList
-              defaultFilter={`emprezzoID:"${UserName}"`}
+              defaultFilter={`emprezzoID:"${emprezzoID}"`}
               facetsToShow={'onsale,giftcard'}
               showSearchBox={true}
               showClearFilter={true}
@@ -758,30 +807,7 @@ const SingleItem = ({ data, pageContext }) => {
             )} */}
         </Tabs>
 
-        <div>
-        {firstRowDataView &&
-          <div>
 
-            {firstRowDataView.node.FreeShipMin != null &&
-              <span>Get free shipping on orders over  ${firstRowDataView.node.FreeShipMin}. </span>
-            }
-            {firstRowDataView.node.BaseShipRate > 1 &&
-              <span>Otherwise, shipping rates from ${firstRowDataView.node.BaseShipRate}</span>
-            }
-            {firstRowDataView.node.ReturnDays != null && firstRowDataView.node.ReturnDays != "0" &&
-              <span>{firstRowDataView.node.ReturnDays} day returns</span>
-            }
-            {firstRowDataView.node.ReturnShipFree != "." && firstRowDataView.node.ReturnShipFree == "Yes" &&
-              <span>and returns are free!</span>
-            }
-
-          </div>
-        }
-
-          {firstRowDataView.node.PaypalShopID && firstRowDataView.node.PaypalShopID != '#' && <div>Accepts paypal</div>}
-          {firstRowDataView.node.PaypalVenmoSupport && firstRowDataView.node.PaypalVenmoSupport != '#' && <div>Accepts venmo</div>}
-
-        </div>
 
         {FreeShipText && FreeShipText.length > 0 && (
           <h3>get free shipping at {name}</h3>
@@ -796,12 +822,12 @@ const SingleItem = ({ data, pageContext }) => {
               {combinedRelatedShops && combinedRelatedShops.map(({ shop }, index) => (
                 <span key={index}>
                   <PostSectionImage>
-                    <Link key={index} to={`/shops/${shop.UserName}/`}>
+                    <Link key={index} to={`/shops/${shop.emprezzoID}/`}>
                       <img src={shop.ProfilePicURL || shop.profile_image_url || "/logo/logo.png"} title={shop.name} alt={shop.name} onError={defaultImageOnError} style={{ height: 'inherit', 'textAlign': 'center', 'borderRadius': '100%' }} />
                     </Link>
                   </PostSectionImage>
                   <PostSectionContent>
-                    <Link key={index} to={`/shops/${shop.UserName}/`}>
+                    <Link key={index} to={`/shops/${shop.emprezzoID}/`}>
                       {shop.name && <b>{shop.name}</b>}
                     </Link>
 
@@ -811,14 +837,14 @@ const SingleItem = ({ data, pageContext }) => {
             </PostSectionGrid>
           </>
         )}
-
+  <br />
         {listInstaPostEdges && listInstaPostEdges.length > 0 && (
           <h3>See recent posts from @{firstRowDataView.node.UserName}</h3>
         )}
 
 
-        <Content input={firstRowDataView && firstRowDataView.node.Biography} />
-        <br />
+
+
         {/* Show carousel for mobile version */}
         {isMobile && (
           <Carousel
@@ -1027,6 +1053,13 @@ const SingleItem = ({ data, pageContext }) => {
                and here on Emprezzo.&nbsp;
             </span>
           )}
+          <br/>
+          <a href={AlexaURL} className="button" target="_blank">
+            shop {name}
+          </a>{' '}
+          <a href="/randomshop" className="button buttonalt">
+            Discover another shop
+      </a>
         </Container>
 
       </Container>
@@ -1038,12 +1071,7 @@ const SingleItem = ({ data, pageContext }) => {
         </div>
 
         <div style={{ float: 'right', margin: '2rem', }}>
-          <a href={AlexaURL} className="button" target="_blank">
-            shop {name}
-          </a>{' '}
-          <a href="/randomshop" className="button buttonalt">
-            Discover another shop
-      </a>
+
         </div>
       </SuggestionBar>
 
@@ -1061,6 +1089,7 @@ export const query = graphql`
       LocalRank
       TOS
       UserName
+      emprezzoID
       ProfileImage
       category
       tags
@@ -1087,6 +1116,9 @@ export const query = graphql`
       edges {
         node {
           id
+          AmazonPay
+          ApplePay
+          ShopifyPay
           AlexaURL
           UserName
           category
@@ -1191,6 +1223,7 @@ export const query = graphql`
       edges {
         node {
           DiscountAmt
+          emprezzoID
           Description
           productDesc
           DiscountPct
