@@ -198,6 +198,10 @@ const SingleItem = ({ data, pageContext }) => {
     name,
     about,
     signup_promos,
+    AmazonPay,
+    ApplePay,
+    ShopifyPay,
+    PaypalShopID,
   } = data.mysqlMainView;
   if (AlexaURL.slice(-1) != '/') AlexaURL += "/";
 
@@ -676,6 +680,8 @@ const SingleItem = ({ data, pageContext }) => {
     return productImage;
   }
 
+  console.log("*** firstRowDataView", firstRowDataView)
+
   return (
     <Layout>
       <SEO
@@ -691,12 +697,21 @@ const SingleItem = ({ data, pageContext }) => {
           <div style={{ paddingLeft: '5px' }}>
 
             <Title>{name}</Title>
-            <Subtitle><b>{category}</b><br/><i>{tags}</i></Subtitle>
+            <Subtitle><b>{category}</b><br /><i>{tags}</i></Subtitle>
 
-          {firstRowDataView.node.PaypalShopID && firstRowDataView.node.PaypalShopID != '#' && (
-                <FaPaypal size="16" color="#666" />
-            )}
-        
+            {PaypalShopID && PaypalShopID != '#' && 
+              <span  style={{paddingRight: "0.25rem"}}><FaPaypal size="16" color="#666" /></span>
+            }
+            {AmazonPay && AmazonPay == '1' && 
+              <span  style={{paddingRight: "0.25rem"}}><FaAmazonPay size="16" color="#666" /></span>
+            }
+            {ShopifyPay && ShopifyPay == '1' && 
+              <span  style={{paddingRight: "0.25rem"}}><FaShopify size="16" color="#666" /></span>
+            }
+            {ApplePay && ApplePay == '1' && 
+              <span  style={{paddingRight: "0.25rem"}}><FaApplePay size="16" color="#666" /></span>
+            }
+
 
 
 
@@ -706,13 +721,13 @@ const SingleItem = ({ data, pageContext }) => {
               <div>
 
                 {firstRowDataView.node.FreeShipMin != null && firstRowDataView.node.FreeShipMin != 0 &&
-                  <span><FaTruck size="16" color="#666" class="icon"/> Free shipping over ${firstRowDataView.node.FreeShipMin}<br/></span>
+                  <span><FaTruck size="16" color="#666" class="icon" /> Free shipping over ${firstRowDataView.node.FreeShipMin}<br /></span>
                 }
                 {firstRowDataView.node.FreeShipMin == 0 &&
-                  <span><FaTruck size="16" color="#666" class="icon" /> Most orders ship free!<br/></span>
+                  <span><FaTruck size="16" color="#666" class="icon" /> Most orders ship free!<br /></span>
                 }
                 {firstRowDataView.node.BaseShipRate > 1 &&
-                  <span>Standard shipping rates from ${firstRowDataView.node.BaseShipRate}.<br/></span>
+                  <span>Standard shipping rates from ${firstRowDataView.node.BaseShipRate}.<br /></span>
                 }
                 {firstRowDataView.node.ReturnDays != null && firstRowDataView.node.ReturnDays != "0" &&
                   <span><FaUndoAlt size="16" color="#666" /> {firstRowDataView.node.ReturnDays} day returns </span>
@@ -729,7 +744,7 @@ const SingleItem = ({ data, pageContext }) => {
                 <small>
                   ${rowShopifyProductSummary.PriceMin}-${rowShopifyProductSummary.PriceMax} (${rowShopifyProductSummary.PriceAvg} avg)</small>
               )}
-<br/>
+            <br />
 
 
 
@@ -769,9 +784,10 @@ const SingleItem = ({ data, pageContext }) => {
           <TabPanel>
             <AlgoliaProductList
               defaultFilter={`emprezzoID:"${emprezzoID}"`}
+              hideLeftPanel={true}
               facetsToShow={'onsale,giftcard'}
               showSearchBox={true}
-              showClearFilter={true}
+              showClearFilter={false}
               enableCart={true}
               currentShop={{ name: name, link: AlexaURL }}
               noResultMessage={`Shop direct at <a href=${AlexaURL} target="_blank">${name}</a>`}
@@ -837,7 +853,7 @@ const SingleItem = ({ data, pageContext }) => {
             </PostSectionGrid>
           </>
         )}
-  <br />
+        <br />
         {listInstaPostEdges && listInstaPostEdges.length > 0 && (
           <h3>See recent posts from @{firstRowDataView.node.UserName}</h3>
         )}
@@ -1053,7 +1069,7 @@ const SingleItem = ({ data, pageContext }) => {
                and here on Emprezzo.&nbsp;
             </span>
           )}
-          <br/>
+          <br />
           <a href={AlexaURL} className="button" target="_blank">
             shop {name}
           </a>{' '}
@@ -1111,6 +1127,11 @@ export const query = graphql`
       GlobalRank_Dates
       GlobalRank_List
       TOS_List
+      AmazonPay
+      ApplePay
+      ShopifyPay
+      PaypalShopID
+      emprezzoID
     }
     allMysqlMainView {
       edges {
@@ -1138,7 +1159,7 @@ export const query = graphql`
           ProfilePicURL
           ProfileImage
           CreateDate
-
+          emprezzoID
         }
       }
     }

@@ -236,13 +236,12 @@ const AlgoliaProductItem = (props) => {
 
   }
 
-  console.log("**** hit",(props && props.hit))
   return (
     <Wrapper>
       {props && props.hit &&
         <>
           <Image>
-            <a href={`/shops/${props.hit.emprezzoID}/`} title={props.hit.name.toLowerCase()} target="_blank">
+            <a href={`/shops/${props.hit.emprezzoID}/`} title={props.hit.name && props.hit.name.toLowerCase()} target="_blank">
               {props.hit.imageURL &&
                 <img src={props.hit.imageURL} />
               }
@@ -255,7 +254,7 @@ const AlgoliaProductItem = (props) => {
                   <strike>${props.hit.maxPrice}</strike>
                 }
                   {` `}${props.hit.price}</ShopName>
-              <Title>{(props.hit.name.toLowerCase() || "").substring(0,24)}</Title>
+              <Title>{props.hit.name && props.hit.name.toLowerCase().substring(0,24)}</Title>
 
               {props.hit.price &&
                 <Price>
