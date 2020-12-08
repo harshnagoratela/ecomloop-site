@@ -1,5 +1,4 @@
 import React from 'react';
-import { graphql } from 'gatsby';
 import styled from '@emotion/styled';
 import { Header } from 'components';
 import AlgoliaProductList from '../components/AlgoliaProductList';
@@ -8,19 +7,6 @@ import _ from 'lodash';
 
 const CategoryHeading = styled.h1`
   margin-left: 4rem;
-`;
-
-const CategoryWrapper = styled.div`
-  display: grid;
-  margin: 0 auto;
-  width: 90vw;
-  grid-gap: 1rem;
-  @media (min-width: 501px) {
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  }
-  @media only screen and (max-width: 600px) {
-    grid-template-columns: 100%;
-  }
 `;
 
 const SearchWrapper = styled.div`
