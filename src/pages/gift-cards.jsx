@@ -38,7 +38,7 @@ const SearchWrapper = styled.div`
   }
 `;
 
-const GiftCard = ({ data, pageContext }) => {
+const GiftCard = () => {
   return (
     <Layout title={'Discover great products from independent brands'} description="Search thousands of products from independent stores and direct-to-consumer brands. Shop the emprezzo marketplace alternative to discover great products support independent businesses.">
       <Header title="emprezzo product marketplace" description="🧐 Discover great products from independent brands" />
