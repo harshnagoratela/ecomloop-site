@@ -20,7 +20,6 @@ import {
   Configure,
 } from 'react-instantsearch-dom';
 import 'instantsearch.css/themes/algolia.css';
-
 const SearchWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -331,11 +330,11 @@ const AlgoliaProductList = ({ defaultFilter, defaultSearchTerm, hideLeftPanel, s
                 />
               </>
             }
-            <Configure hitsPerPage={12} filters={defaultFilter} />
+
           </LeftPanel>
         }
         <RightPanel>
-
+          <Configure hitsPerPage={12} filters={defaultFilter} />
           <div class="searchline">
             <div class="indexSelect">
               {enableShopProductSwitch &&

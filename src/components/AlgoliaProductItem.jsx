@@ -13,7 +13,7 @@ const Wrapper = styled.article`
   border-radius: ${props => props.theme.borderRadius.default};
   {/* box-shadow: ${props => props.theme.shadow.feature.small.default};*/}
   transition: ${props => props.theme.transitions.boom.transition};
-  height: 16rem;
+  height: 14rem;
 
   &:hover {
     box-shadow: ${props => props.theme.shadow.feature.small.hover};
@@ -25,14 +25,14 @@ const Wrapper = styled.article`
   }
 
   @media (max-width: 1000px) {
-    height: 18rem;
+    height: 10rem;
   }
 
   @media (max-width: 600px) {
     flex-basis: 100%;
     max-width: 100%;
     width: 100%;
-    height: 12rem;
+    height: 10rem;
   }
 `;
 
