@@ -797,8 +797,6 @@ const SingleItem = ({ data, pageContext }) => {
     return productImage;
   }
 
-  console.log("*** firstRowDataView", firstRowDataView)
-
   return (
     <Layout>
       <SEO
