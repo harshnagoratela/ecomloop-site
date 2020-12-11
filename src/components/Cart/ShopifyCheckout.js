@@ -50,25 +50,28 @@ const ShopifyCheckout = (props) => {
                                 options: {
                                     "product": {
                                         "styles": {
-                                        "product": {                                            
-                                            "@media (min-width: 601px)": {                                            
+                                        "product": {
+                                            "@media (min-width: 601px)": {
                                             "margin-left": "20px",
                                             "margin-bottom": "50px"
                                             }
                                         },
                                         "button": {
-                                            "font-family": "Quantico, sans-serif",
-                                            "font-size": "13px",
-                                            "padding-top": "14.5px",
+                                            "font-family": "'Overpass Mono','Consolas','Open Sans',-apple-system,'BlinkMacSystemFont','Segoe UI','Roboto','Helvetica','Arial',sans-serif",
+                                            "font-size": "1em",
+
+
+                                            "padding-top": "10.5px",
                                             "padding-bottom": "14.5px",
                                             ":hover": {
                                             "background-color": "#ad44e4"
                                             },
-                                            "background-color": "#c04cfd",
+                                            "background-color": "#C04CFD",
                                             ":focus": {
                                             "background-color": "#ad44e4"
                                             },
-                                            "border-radius": "5px",
+                                              "box-shadow": "inset 0 -0.6em 0 -0.25em rgba(0,0,0,0.17)",
+                                            "border-radius": "0px",
                                             "padding-left": "31px",
                                             "padding-right": "31px"
                                         },
@@ -78,13 +81,13 @@ const ShopifyCheckout = (props) => {
                                             "padding-bottom": "14.5px"
                                         },
                                         "price": {
-                                            "font-family": "Quantico, sans-serif"
+                                          "font-family": "'Overpass Mono','Consolas','Open Sans',-apple-system,'BlinkMacSystemFont','Segoe UI','Roboto','Helvetica','Arial',sans-serif",
                                         },
                                         "compareAt": {
-                                            "font-family": "Quantico, sans-serif"
+                                          "font-family": "'Overpass Mono','Consolas','Open Sans',-apple-system,'BlinkMacSystemFont','Segoe UI','Roboto','Helvetica','Arial',sans-serif",
                                         },
                                         "unitPrice": {
-                                            "font-family": "Quantico, sans-serif"
+                                          "font-family": "'Overpass Mono','Consolas','Open Sans',-apple-system,'BlinkMacSystemFont','Segoe UI','Roboto','Helvetica','Arial',sans-serif",
                                         }
                                         },
                                         "buttonDestination": "modal",
@@ -98,12 +101,12 @@ const ShopifyCheckout = (props) => {
                                             "button": "${buttonText}"
                                         },
                                         "googleFonts": [
-                                            "Quantico"
+                                            "Overpass Mono"
                                         ]
                                     },
                                     "productSet": {
                                         "styles": {
-                                        "products": {                                                                                        
+                                        "products": {
                                             "@media (min-width: 601px)": {
                                             "margin-left": "-20px"
                                             }
@@ -126,7 +129,7 @@ const ShopifyCheckout = (props) => {
                                             }
                                         },
                                         "button": {
-                                            "font-family": "Quantico, sans-serif",
+                                          "font-family": "'Overpass Mono','Consolas','Open Sans',-apple-system,'BlinkMacSystemFont','Segoe UI','Roboto','Helvetica','Arial',sans-serif",
                                             "font-size": "13px",
                                             "padding-top": "14.5px",
                                             "padding-bottom": "14.5px",
@@ -147,22 +150,22 @@ const ShopifyCheckout = (props) => {
                                             "padding-bottom": "14.5px"
                                         },
                                         "title": {
-                                            "font-family": "Montserrat, sans-serif"
+                                            "font-family": "'Jost','Segoe UI','Roboto','Candal',-apple-system,'BlinkMacSystemFont','Segoe UI','Helvetica','Arial',sans-serif"
                                         },
                                         "price": {
-                                            "font-family": "Quantico, sans-serif",
-                                            "color": "#ffffff"
+                                            "font-family": "'Overpass Mono','Consolas','Open Sans',-apple-system,'BlinkMacSystemFont','Segoe UI','Roboto','Helvetica','Arial',sans-serif",
+                                            "color": "#666"
                                         },
                                         "compareAt": {
-                                            "font-family": "Quantico, sans-serif",
-                                            "color": "#ffffff"
+                                          "font-family": "'Overpass Mono','Consolas','Open Sans',-apple-system,'BlinkMacSystemFont','Segoe UI','Roboto','Helvetica','Arial',sans-serif",
+                                            "color": "#666"
                                         },
                                         "unitPrice": {
-                                            "font-family": "Quantico, sans-serif",
-                                            "color": "#ffffff"
+                                          "font-family": "'Overpass Mono','Consolas','Open Sans',-apple-system,'BlinkMacSystemFont','Segoe UI','Roboto','Helvetica','Arial',sans-serif",
+                                            "color": "#666"
                                         },
                                         "description": {
-                                            "font-family": "Montserrat, sans-serif"
+                                            "font-family": "'Jost','Segoe UI','Roboto','Candal',-apple-system,'BlinkMacSystemFont','Segoe UI','Helvetica','Arial',sans-serif"
                                         }
                                         },
                                         "googleFonts": [
@@ -170,16 +173,16 @@ const ShopifyCheckout = (props) => {
                                         "Quantico"
                                         ],
                                         "text": {
-                                        "button": "Add to cart"
+                                        "button": "ADD TO CART"
                                         }
                                     },
                                     "option": {
                                         "styles": {
                                         "label": {
-                                            "font-family": "Quantico, sans-serif"
+                                          "font-family": "'Overpass Mono','Consolas','Open Sans',-apple-system,'BlinkMacSystemFont','Segoe UI','Roboto','Helvetica','Arial',sans-serif",
                                         },
                                         "select": {
-                                            "font-family": "Quantico, sans-serif"
+                                          "font-family": "'Overpass Mono','Consolas','Open Sans',-apple-system,'BlinkMacSystemFont','Segoe UI','Roboto','Helvetica','Arial',sans-serif",
                                         }
                                         },
                                         "googleFonts": [
@@ -189,7 +192,7 @@ const ShopifyCheckout = (props) => {
                                     "cart": {
                                         "styles": {
                                         "button": {
-                                            "font-family": "Quantico, sans-serif",
+                                          "font-family": "'Overpass Mono','Consolas','Open Sans',-apple-system,'BlinkMacSystemFont','Segoe UI','Roboto','Helvetica','Arial',sans-serif",
                                             "font-size": "13px",
                                             "padding-top": "14.5px",
                                             "padding-bottom": "14.5px",
@@ -218,7 +221,7 @@ const ShopifyCheckout = (props) => {
                                     "toggle": {
                                         "styles": {
                                         "toggle": {
-                                            "font-family": "Quantico, sans-serif",
+                                          "font-family": "'Overpass Mono','Consolas','Open Sans',-apple-system,'BlinkMacSystemFont','Segoe UI','Roboto','Helvetica','Arial',sans-serif",
                                             "background-color": "#c04cfd",
                                             ":hover": {
                                             "background-color": "#ad44e4"
@@ -232,7 +235,7 @@ const ShopifyCheckout = (props) => {
                                         }
                                         },
                                         "googleFonts": [
-                                        "Quantico"
+                                        "Overpass Mono"
                                         ]
                                     }
                                 },

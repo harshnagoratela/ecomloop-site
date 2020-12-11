@@ -369,7 +369,7 @@ const Index = ({ data }) => {
         <a href="/randomshop/" className="button ">Discover a new shop</a>
       </div>
       <CheckoutWrapper>
-        <ShopifyCheckout uniqueComponentID="6127692185773" buttonText="BUY GIFT CARD" />
+        <ShopifyCheckout uniqueComponentID="6130779062445" buttonText="BUY GIFT CARD" />
       </CheckoutWrapper>
 
 
