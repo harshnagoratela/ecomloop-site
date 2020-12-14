@@ -19,11 +19,11 @@ const ShopifyCart = (props) => {
 
     return (
         <div className="App">
-                {/* {!globalState.isCartOpen &&
+                {!globalState.isCartOpen &&
                     <div className="App__view-cart-wrapper">
                         <button className="App__view-cart1" onClick={() => globalActions.handleCartOpen()}>Cart</button>
                     </div>
-                } */}
+                }
             {/* <Products
                 products={globalState.products}
                 client={globalState.client}

@@ -291,16 +291,21 @@ const AlgoliaProductItem = (props) => {
               <ShopifyCart
                 variantId={"Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0VmFyaWFudC8zNzcwNTYyMzczMjM5Nw=="}
                 quantity={1}
-                customAttributes={[{ 
-                  key: "productName",
-                  value: props.hit.name,
-                  key: "price",
-                  value:  props.hit.price,
-                  key: "productURL",
-                  value: props.hit.productURL,
-                  key: "productID",
-                  value: props.hit.productID
-                }]}
+                customAttributes={[
+                  {
+                    key: "productName",
+                    value: props.hit.name
+                  }, {
+                    key: "price",
+                    value: "" + props.hit.price
+                  }, {
+                    key: "productURL",
+                    value: props.hit.productURL
+                  }, {
+                    key: "productID",
+                    value: "" + props.hit.productID
+                  }
+                ]}
               />
             </div>
 
