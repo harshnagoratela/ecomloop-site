@@ -292,7 +292,7 @@ const SingleItem = ({ data, pageContext }) => {
   allMysqlMainViewEdges.map((edge) => {
     let newNode = {
       name: edge.node.name,
-      slug: edge.node.UserName,
+      slug: edge.node.emprezzoID,
       ...edge.node
     }
     const inputID = edge.node.AlexaURL;
@@ -687,7 +687,7 @@ const SingleItem = ({ data, pageContext }) => {
       <ProductCategoryItem
         key={key}
         cover={getProductImage(node)}
-        path={`/shops/${node.UserName}/`}
+        path={`/shops/${node.emprezzoID}/`}
         vendorname={node.VendorName}
         title={node.Title}
         price={node.Price}
