@@ -20,21 +20,40 @@ const StyledDialog = styled(Dialog)`
     display: none;
 }
 
+.dialogDescription {
+height: 9rem;
+overflow: auto;
+border-bottom: 1px dotted #ccc;
+margin-top: 0.5rem;
+}
+
+[data-reach-dialog-content] {
+  @media (max-width: 600px) {
+
+  }
+}
+.dialogImage{
+  text-align:center;
+  min-width: 40%;
+}
+
 .dialogImageDescription {
   display : flex;
   img {
-    max-height: 300px;
-    max-width: 50%;
+    max-height : 14rem;
+    max-width: 80%;
     margin-right: 3%;
   }
   span {
-    padding-left: 2rem;
+    padding-left: 0rem;
   }
 
   @media (max-width: 600px) {
     display : block;
     img {
-      max-width : 100%;
+      max-height : 12rem;
+      margin: auto;
+
     }
     span {
       padding-left: 0rem;
@@ -97,7 +116,8 @@ const BuyGiftCard = (props) => {
         <div className="GiftCard--BuyButton">
             {globalState.giftcardProduct &&
                 <>
-                    <button className="Product__buy button" onClick={() => openDialog()}>BUY GIFT CARD</button>
+                    <button className="Product__buy button" onClick={() => openDialog()}>Buy Emprezzo Gift Card</button>
+                    <br/><small>a single card for hundreds of amazing stores </small>
                     <Cart
                         checkout={globalState.checkout}
                         isCartOpen={globalState.isCartOpen}
@@ -110,14 +130,16 @@ const BuyGiftCard = (props) => {
                             <span aria-hidden>X</span>
                         </button>
                         <div className="dialogImageDescription">
+                            <div className="dialogImage">
                             {variantImage &&
                                 <img src={variantImage.src} />
                             }
-                            <div>
+                            </div>
+                            <div className="dialogRight">
                                 <h3>{globalState.giftcardProduct.title}</h3>
                                 <p><i>${selectedVariant && selectedVariant.price}</i></p>
                                 <p>{variantSelectors}</p>
-                                <p>{globalState.giftcardProduct.description && globalState.giftcardProduct.description.substring(0, 220)}</p>
+                                  <div className="dialogDescription">{globalState.giftcardProduct.description && globalState.giftcardProduct.description}</div>
                             </div>
                         </div>
                         <br />
