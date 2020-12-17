@@ -293,7 +293,7 @@ const AlgoliaProductItem = (props) => {
               <a href="javascript:" onClick={() => addToCartWrapper(props.hit)} className="button buttonalt">Save for later</a>
               {(props.hit.name || "").toLowerCase().indexOf("gift card") >= 0 &&
                 <ShopifyCart
-                  quantity={1}
+                  quantity={props.hit.price}
                   customAttributes={[
                     {
                       key: "productName",
