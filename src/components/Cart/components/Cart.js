@@ -6,8 +6,8 @@ import "./Cart.css"
 import styled from '@emotion/styled';
 
 const StickyIcon = styled.div`
-  position: fixed; 
-  top: 50%; 
+  position: fixed;
+  top: 50%;
   left: calc(100vw - 61px);
   @media (max-width: ${props => props.theme.breakpoints.s}) {
     left: calc(100vw - 46px);
@@ -18,7 +18,7 @@ const Cart = (props) => {
   const [globalState, globalActions] = useGlobal();
 
   const openCheckout = () => {
-    window.open(globalState.checkout.webUrl, "_blank", "location=no,status=no");
+    window.open(globalState.checkout.webUrl, "_blank", "location=no,status=no,width=400,height=580,top=200,left=600");
   }
 
   let line_items = globalState.checkout.lineItems.map((line_item) => {
