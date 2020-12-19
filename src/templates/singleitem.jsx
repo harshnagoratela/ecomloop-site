@@ -946,7 +946,7 @@ const SingleItem = ({ data, pageContext }) => {
 
         <Tabs>
           <TabList>
-            <Tab style={TabStyle}>Shop {name}</Tab>
+            <Tab style={TabStyle}>Recent emails</Tab>
             {/* {listShopifyBestSellersEdges &&
               listShopifyBestSellersEdges.length > 0 && (
                 <Tab style={TabStyle}>Best sellers</Tab>
@@ -967,16 +967,19 @@ const SingleItem = ({ data, pageContext }) => {
 
 
 
-        </Tabs>
 
+
+          <TabPanel>
         <AlgoliaProductList
           searchIndexName={"emails"}
           defaultSearchTerm={AlexaURL}
           showSearchBox={true}
           hideLeftPanel={true}
         />
+        </TabPanel>
 
 
+        </Tabs>
         <br />
 
         {listInstaPostEdges && listInstaPostEdges.length > 0 && (
@@ -1084,8 +1087,8 @@ const SingleItem = ({ data, pageContext }) => {
         <h3 style={{ 'top-margin': '1rem' }}>{name} data and charts</h3>
         <Tabs>
           <TabList>
-            <Tab style={TabStyle}>Fan growth</Tab>
-            <Tab style={TabStyle}>Social</Tab>
+            <Tab style={TabStyle}>Fans</Tab>
+            <Tab style={TabStyle}>Breakdown</Tab>
 
             {rowShopifyProductSummary.PriceListActive && (<Tab style={TabStyle}>Prices</Tab>)}
             <Tab style={TabStyle}>Traffic</Tab>
@@ -1093,6 +1096,7 @@ const SingleItem = ({ data, pageContext }) => {
 
 
           </TabList>
+          <TabPanel>
           <div style={{ flex: '60%' }}>
             <Tabs >
               <TabList>
@@ -1201,6 +1205,7 @@ const SingleItem = ({ data, pageContext }) => {
               )}
             </Tabs>
           </div>
+          </TabPanel>
           <TabPanel>
 
             <div style={{ flex: '100%' }}>
@@ -1215,10 +1220,7 @@ const SingleItem = ({ data, pageContext }) => {
               )}
             </div>
           </TabPanel>
-          <TabPanel>
 
-
-          </TabPanel>
           {rowShopifyProductSummary.PriceListActive && (
             <TabPanel>
 
