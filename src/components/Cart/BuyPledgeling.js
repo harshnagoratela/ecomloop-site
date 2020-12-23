@@ -122,9 +122,12 @@ const BuyPledgeling = (props) => {
 
   return (
     <div className="GiftCard--BuyButton">
-      <h3 style={{ marginBottom: "0.75rem", fontSize: "1rem" }}>Donation to Pledgeling Food Fund</h3>
+
       {globalState.pledgelingProduct && !globalState.pledgelingAdded &&
+
         <>
+        <b style={{ marginBottom: "0.75rem", fontSize: "1rem" }}>Help provide meals</b><br/>
+        <small>We're matching donations made through the end of 2020!</small>
           {globalState.pledgelingProduct.options && globalState.pledgelingProduct.options.map((option) => {
             return (
               <div style={{ display: "block" }}>
@@ -140,14 +143,14 @@ const BuyPledgeling = (props) => {
                         checked={selectedRadioOption == item.value}
                         onChange={handleRadioChange}
                       />
-                      <span>{item.value}</span>
+                      <span>{`${item.value}`}</span>
                     </div>
                   )
                 })}
               </div>
             )
           })}
-          <button className="Product__buy button" onClick={() => { globalActions.addPledgelingToCart(selectedVariant.id, variantQuantity); }}>Add Pledgeling</button>
+          <button className="Product__buy button buttonalt" onClick={() => { globalActions.addPledgelingToCart(selectedVariant.id, variantQuantity); }}>Make a donation</button>
           {/* <StyledDialog isOpen={showDialog} onDismiss={closeDialog}>
             <button className="close-button" onClick={closeDialog} style={{ float: "right", cursor: "pointer" }}>
               <span aria-hidden>X</span>
