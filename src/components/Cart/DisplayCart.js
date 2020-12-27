@@ -43,14 +43,7 @@ const CartSummaryElement = styled.div`
 `;
 
 const DisplayCart = () => {
-    const { total, cartItems, itemCount, clearCart, refreshCart, checkout, handleCheckout } = useContext(CartContext);
-    const [loaded, setLoaded] = React.useState(false)
-    React.useEffect(()=>{
-        if(!loaded){
-            setLoaded(true);
-            refreshCart();
-        }
-    },[loaded]);    
+    const { total, cartItems, itemCount, clearCart, checkout, handleCheckout } = useContext(CartContext);
 
     return (
         <Wrapper>

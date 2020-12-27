@@ -9,22 +9,13 @@ import { NavBar, Footer } from 'layouts';
 import theme from '../../config/theme';
 import headroom from '../styles/headroom';
 import CartContextProvider from '../components/Cart/CartContext';
-import { AppConfig } from 'blockstack';
-import ReactBlockstack from 'react-blockstack';
-import { Blockstack } from 'react-blockstack/dist/context';
-import { isBrowser } from '../components/Cart/utils'
 
-if (isBrowser()) {
-  const appConfig = new AppConfig();
-  const blockstack = ReactBlockstack(appConfig);
-}
 const Layout = ({ children, title, description }) => (
-  <Blockstack>
-    <ThemeProvider theme={theme}>
-      <CartContextProvider>
-        <Fragment>
-          <Global
-            styles={css`
+  <ThemeProvider theme={theme}>
+    <CartContextProvider>
+      <Fragment>
+        <Global
+          styles={css`
           *,
           *:before,
           *:after {
@@ -67,15 +58,14 @@ const Layout = ({ children, title, description }) => (
 
           ${headroom}
         `}
-          />
-          <SEO title={title} description={description} />
-          <NavBar />
-          {children}
-          <Footer />
-        </Fragment>
-      </CartContextProvider>
-    </ThemeProvider>
-  </Blockstack>
+        />
+        <SEO title={title} description={description} />
+        <NavBar />
+        {children}
+        <Footer />
+      </Fragment>
+    </CartContextProvider>
+  </ThemeProvider>
 );
 
 export default Layout;

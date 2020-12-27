@@ -31,10 +31,6 @@ const CartContextProvider = ({ children }) => {
         dispatch({ type: 'CLEAR' })
     }
 
-    const refreshCart = () => {
-        dispatch({ type: 'REFRESH' })
-    }
-
     const handleCheckout = () => {
         console.log('CHECKOUT', state);
         dispatch({ type: 'CHECKOUT' })
@@ -46,7 +42,6 @@ const CartContextProvider = ({ children }) => {
         increase,
         decrease,
         clearCart,
-        refreshCart,
         handleCheckout,
         ...state
     }
