@@ -5,7 +5,7 @@ require("dotenv").config();
 module.exports = {
   siteMetadata: {
     title: "emprezzo",
-    description: "🧐 Discover the best direct-to-consumer brands 🛒 Shop direct & support independent businesses",
+    description: "Discover emerging brands & uncommon stores. Shop direct to support independent business everywhere.",
     ...config,
   },
   plugins: [
