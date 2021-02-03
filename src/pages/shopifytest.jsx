@@ -5,6 +5,7 @@ import { Layout, Container } from 'layouts';
 import useGlobal from "../components/Cart/CartState";
 import fetch from 'node-fetch';
 import styled from 'styled-components';
+import ShopifyAuthentication from "../components/Cart/ShopifyAuthentication"
 
 const Grid = styled.div`
 `;
@@ -18,7 +19,7 @@ const Col = styled.div`
 const ShopifyTest = () => {
 
   const [globalState, globalActions] = useGlobal();
-  
+
   const [createEmail, setCreateEmail] = React.useState("");
   const [createPassword, setCreatePassword] = React.useState("");
   const [createMessage, setCreateMessage] = React.useState("");
@@ -66,7 +67,7 @@ const ShopifyTest = () => {
       .then(response => {
         console.log("=============== Response from Create Customer Call ===============");
         console.log(JSON.stringify(response, null, 4))
-        if(response.data && response.data.customerCreate){
+        if (response.data && response.data.customerCreate) {
           response.data.customerCreate.customer ? setCreateMessage("Created successfully.....") : setCreateMessage(response.data.customerCreate.customerUserErrors[0].message);
         }
         else setCreateMessage("API calls Limit exceeded.")
@@ -125,57 +126,66 @@ const ShopifyTest = () => {
       },
       body: JSON.stringify(params)
     };
-    
+
     fetch(shopUrl + `/api/graphql`, optionsQuery)
       .then(res => res.json())
       .then(response => {
         console.log("=============== Response from Find Customer Call ===============");
         console.log(JSON.stringify(response, null, 4))
-        if(response.data){
+        if (response.data) {
           response.data.customerAccessTokenCreate.customerAccessToken ? setFindMessage("Customer found.....") : setFindMessage("Customer NOT found.....");
         }
       });
   }
-  
+  console.log("***** authenticated ", globalState.authenticated)
+  const testuser = {
+    "email": "user@example.com",
+    "password": "HiZqFuDvDdQ7",
+  }
+
   return (
     <Layout>
       <Helmet title={'Shopify Test'} />
       <Header title="Shopify Test Page"></Header>
       <Container>
+        <ShopifyAuthentication/>
+        {/* Authenticated = {globalState.authMessage}
+        <input type="button" value="Login" onClick={()=>globalActions.signinUser(testuser)} />
+        <input type="button" value="Logout" onClick={globalActions.signoutUser} />
         <Grid>
           <Row>
             <Col size={2}>
-              <Row><Col><h2>Create Customer</h2></Col></Row>              
+              <Row><Col><h2>Create Customer</h2></Col></Row>
               <Row>
-                <Col>Email:<br/><input type="text" value={createEmail} onChange={e => setCreateEmail(e.target.value)}/></Col>
-              </Row>              
-              <Row>
-                <Col>Password:<br/><input type="password" value={createPassword} onChange={e => setCreatePassword(e.target.value)}/></Col>
+                <Col>Email:<br /><input type="text" value={createEmail} onChange={e => setCreateEmail(e.target.value)} /></Col>
               </Row>
               <Row>
-                <Col><input className="button" type="button" value="REGISTER" onClick={createCustomer}/></Col>
-              </Row>  
+                <Col>Password:<br /><input type="password" value={createPassword} onChange={e => setCreatePassword(e.target.value)} /></Col>
+              </Row>
+              <Row>
+                <Col><input className="button" type="button" value="REGISTER" onClick={createCustomer} /></Col>
+              </Row>
               <Row>
                 <Col>{createMessage}</Col>
-              </Row>             
+              </Row>
             </Col>
             <Col size={2}>
-              <Row><Col><h2>Login Customer</h2></Col></Row>              
+              <Row><Col><h2>Login Customer</h2></Col></Row>
               <Row>
-                <Col>Email:<br/><input type="text" value={findEmail} onChange={e => setFindEmail(e.target.value)}/></Col>
-              </Row>              
-              <Row>
-                <Col>Password:<br/><input type="password" value={findPassword} onChange={e => setFindPassword(e.target.value)}/></Col>
+                <Col>Email:<br /><input type="text" value={findEmail} onChange={e => setFindEmail(e.target.value)} /></Col>
               </Row>
               <Row>
-                <Col><input className="button" type="button" value="LOGIN" onClick={findCustomer}/></Col>
-              </Row>             
+                <Col>Password:<br /><input type="password" value={findPassword} onChange={e => setFindPassword(e.target.value)} /></Col>
+              </Row>
+              <Row>
+                <Col><input className="button" type="button" value="LOGIN" onClick={findCustomer} /></Col>
+              </Row>
               <Row>
                 <Col>{findMessage}</Col>
-              </Row>              
+              </Row>
             </Col>
           </Row>
-        </Grid>
+        </Grid> */}
       </Container>
     </Layout>
   )

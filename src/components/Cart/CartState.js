@@ -3,6 +3,7 @@ import useGlobalHook from "use-global-hook";
 import Client from 'shopify-buy';
 import _ from 'lodash';
 import { isBrowser } from './utils'
+import fetch from 'node-fetch';
 
 const initialState = {
     isCartOpen: false,
@@ -14,7 +15,12 @@ const initialState = {
     pledgelingProduct: {},
     pledgelingAdded: false,
     shop: {},
-    visibility: false
+    shopUrl: "https://emprezzo.myshopify.com",
+    accessToken: "0c291ce7693710e4baf0db2cf74576ca",
+    visibility: false,
+    user: {},
+    authenticated: false,
+    authMessage: ""
 };
 
 const setLocalStorage = (value) => {
@@ -25,6 +31,16 @@ const setLocalStorage = (value) => {
 
 const getLocalStorage = () => {
     return ((isBrowser() && window.localStorage.getItem('shopifycart')) ? JSON.parse(window.localStorage.getItem('shopifycart')) : []);
+}
+
+const setUserToLocalStorage = (value) => {
+    if (isBrowser()) {
+        window.localStorage.setItem('shopifyuser', JSON.stringify(value));
+    }
+}
+
+const getUserFromLocalStorage = () => {
+    return ((isBrowser() && window.localStorage.getItem('shopifyuser')) ? JSON.parse(window.localStorage.getItem('shopifyuser')) : null);
 }
 
 const removeItemFromLocalStorage = (cart) => {
@@ -41,6 +57,32 @@ const removeItemFromLocalStorage = (cart) => {
     }
 }
 
+const createCustomerQuery = `mutation customerCreate($input: CustomerCreateInput!) {
+    customerCreate(input: $input) {
+      customer {
+        id
+      }
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }`;
+const findCustomerQuery = `mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
+    customerAccessTokenCreate(input: $input) {
+      customerAccessToken {
+        accessToken
+        expiresAt
+      }
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }`;
+
 const actions = {
     addToCounter: (store, amount) => {
         const newCounterValue = store.state.counter + amount;
@@ -52,8 +94,8 @@ const actions = {
     initializeStoreClient: (store) => {
         if (store.state.client == null) {
             const localClient = Client.buildClient({
-                storefrontAccessToken: '0c291ce7693710e4baf0db2cf74576ca',
-                domain: 'emprezzo.myshopify.com'
+                storefrontAccessToken: store.accessToken,
+                domain: store.shopUrl
             });
             store.setState({ client: localClient });
         }
@@ -173,6 +215,102 @@ const actions = {
     },
     handleCartClose: (store) => {
         store.setState({ isCartOpen: false });
+    },
+    registerUser: (store, user) => {
+        store.setState({ authMessage: "" });
+        const params = {
+            query: createCustomerQuery,
+            variables: {
+                input: {
+                    "email": user.email,
+                    "password": user.password
+                }
+            }
+        }
+        const optionsQuery = {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "X-Shopify-Storefront-Access-Token": store.state.accessToken
+            },
+            body: JSON.stringify(params)
+        };
+
+        fetch(store.state.shopUrl + `/api/graphql`, optionsQuery)
+            .then(res => res.json())
+            .then(response => {
+                console.log("=============== Response from Create Customer Call ===============", response);
+                console.log(JSON.stringify(response, null, 4))
+                if (response.data && response.data.customerCreate) {
+                    if (response.data.customerCreate.customer) {
+                        const localUser = {
+                            email: user.email
+                        }
+                        setUserToLocalStorage(localUser)
+                        console.log("***** getuser", getUserFromLocalStorage())
+                        store.setState({ authMessage: "User registered and Logged in Successfully", user: localUser, authenticated: (getUserFromLocalStorage() !== null) });
+                    }
+                    if (!!response.data.customerCreate.customerUserErrors.length) {
+                        setUserToLocalStorage(null)
+                        store.setState({ authMessage: response.data.customerCreate.customerUserErrors[0].message, authenticated: false });
+                    }
+                }
+                if (response.errors) {
+                    setUserToLocalStorage(null)
+                    store.setState({ authMessage: response.errors[0].message, authenticated: false });
+                }
+            });
+    },
+    signinUser: (store, user) => {
+        store.setState({ authMessage: "" });
+        const params = {
+            query: findCustomerQuery,
+            variables: {
+                input: {
+                    "email": user.email,
+                    "password": user.password
+                }
+            }
+        }
+        const optionsQuery = {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "X-Shopify-Storefront-Access-Token": store.state.accessToken
+            },
+            body: JSON.stringify(params)
+        };
+
+        fetch(store.state.shopUrl + `/api/graphql`, optionsQuery)
+            .then(res => res.json())
+            .then(response => {
+                console.log("=============== Response from Find Customer Call ===============", response);
+                // console.log(JSON.stringify(response, null, 4))
+                if (response.data && response.data.customerAccessTokenCreate) {
+                    if (response.data.customerAccessTokenCreate.customerAccessToken) {
+                        const localUser = {
+                            email: user.email
+                        }
+                        setUserToLocalStorage(localUser)
+                        console.log("***** getuser", getUserFromLocalStorage())
+                        store.setState({ authMessage: "Login Successful", user: localUser, authenticated: (getUserFromLocalStorage() !== null) });
+                    }
+                    if (!!response.data.customerAccessTokenCreate.customerUserErrors.length) {
+                        setUserToLocalStorage(null)
+                        store.setState({ authMessage: response.data.customerAccessTokenCreate.customerUserErrors[0].message, authenticated: false });
+                    }
+                }
+                if (response.errors) {
+                    setUserToLocalStorage(null)
+                    store.setState({ authMessage: response.errors[0].message, authenticated: false });
+                }
+            });
+    },
+    signoutUser: (store) => {
+        setUserToLocalStorage(null)
+        store.setState({ authMessage: "Logged Out Successfully", user: {}, authenticated: false });
     }
 };
 

@@ -1,8 +1,18 @@
 import React, { useContext } from 'react';
 import { CartContext } from './CartContext'
+import useGlobal from "./CartState";
+import { Dialog } from "@reach/dialog";
+import ShopifyAuthentication from "./ShopifyAuthentication"
 
 const AddShopToCartButton = ({ details }) => {
     const { addProduct, cartItems } = useContext(CartContext);
+    const [globalState, globalActions] = useGlobal();
+    const [showDialog, setShowDialog] = React.useState(false);
+    const openDialog = () => {
+        setShowDialog(true);
+    }
+    const closeDialog = () => setShowDialog(false);
+
     const isInCart = shop => {
         return !!cartItems.find(item => item.id === shop.id);
     }
@@ -23,7 +33,15 @@ const AddShopToCartButton = ({ details }) => {
     }
 
     return (
-        <button className="button" onClick={addShopToCartWrapper}>Save Shop</button>
+        <>
+            <button className="button" onClick={globalState.authenticated?addShopToCartWrapper:openDialog}>Save Shop</button>
+            <Dialog isOpen={showDialog} onDismiss={closeDialog}>
+                <button className="close-button" onClick={closeDialog} style={{ float: "right", cursor: "pointer" }}>
+                    <span aria-hidden>X</span>
+                </button>
+                <ShopifyAuthentication/>
+            </Dialog>
+        </>
     );
 }
 
