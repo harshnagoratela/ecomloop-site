@@ -1,6 +1,7 @@
 import React from 'react';
 import useGlobal from "./CartState";
 import styled from 'styled-components';
+import { Dialog } from "@reach/dialog";
 
 const Grid = styled.div`
 `;
@@ -59,7 +60,10 @@ const ShopifyAuthentication = () => {
     }
 
     return (
-        <div>
+        <Dialog isOpen={globalState.isAuthDialogOpen} onDismiss={globalActions.closeAuthDialog}>
+            <button className="close-button" onClick={globalActions.closeAuthDialog} style={{ float: "right", cursor: "pointer" }}>
+                <span aria-hidden>X</span>
+            </button>
             <Grid>
                 <Row>
                     <Col><i>{globalState.authMessage}</i><br /></Col>
@@ -113,7 +117,7 @@ const ShopifyAuthentication = () => {
                     </>
                 }
             </Grid>
-        </div>
+        </Dialog>
     )
 };
 
