@@ -166,7 +166,7 @@ module.exports = {
         apiKey: process.env.ALGOLIA_ADMIN_KEY,
         queries,
         chunkSize: 500, // default: 1000
-        enablePartialUpdates: false,
+        enablePartialUpdates: true,
                 matchFields: ['random','price','shopImage','randomShopKey'],
 
       },
