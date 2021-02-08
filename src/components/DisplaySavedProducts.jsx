@@ -1,9 +1,9 @@
 import React, { useCallback, useContext } from 'react';
 import styled from '@emotion/styled';
-import CartItemShop from './Cart/CartItemShop';
+import CartItem from './Cart/CartItem';
 import _ from 'lodash';
-import useGlobal from "../components/Cart/CartState";
-import ShopifyAuthentication from "../components/Cart/ShopifyAuthentication"
+import useGlobal from "./Cart/CartState";
+import ShopifyAuthentication from "./Cart/ShopifyAuthentication"
 
 const Title = styled.h2`
   margin: 1rem;
@@ -31,11 +31,11 @@ const CartItems = styled.div`
   padding-top: 1rem;
   width: 100%;
 `;
-const CartItem = styled.div`
+const CartItemWrapper = styled.div`
     border-top: 1px solid rgba(0,0,0,.125);
 `;
 
-const DisplaySavedStores = () => {
+const DisplaySavedProducts = () => {
 
     const [globalState, globalActions] = useGlobal();
 
@@ -44,11 +44,11 @@ const DisplaySavedStores = () => {
     React.useEffect(() => {
         if (globalState.authenticated && !loaded) {
             setLoaded(true);
-            globalActions.getSavedStores();
+            globalActions.getSavedProducts();
         }
     }, [loaded, globalState.authenticated]);
-    const allStores = globalState.cfSavedStoresList['stores'];
-
+    const allProducts = globalState.cfSavedProductsList['products'];
+    
     return (
         <Wrapper>
             {!globalState.authenticated &&
@@ -60,23 +60,19 @@ const DisplaySavedStores = () => {
             <CartWrapper>
                 <CartSection>
                     <CartItems>
-                        <h3>Saved Shops</h3>
-                        {globalState.authenticated && !allStores &&
+                        <h3>Saved Products</h3>
+                        {globalState.authenticated && !allProducts &&
                             <div>Loading...</div>
                         }
-                        {globalState.authenticated && allStores && allStores.length <= 0 &&
+                        {globalState.authenticated && allProducts && allProducts.length <= 0 &&
                             <CartItemWrapper>Your list is empty</CartItemWrapper>
                         }
-                        {globalState.authenticated && allStores && allStores.length > 0 &&
-                            allStores.map((shop, index) => {
-                                const storeDetail = {
-                                    ...shop,
-                                    name: shop.shopName
-                                }
+                        {globalState.authenticated && allProducts && allProducts.length > 0 &&
+                            allProducts.map((product, index) => {
                                 return (
-                                    <CartItem key={index}>
-                                        <CartItemShop shop={storeDetail} />
-                                    </CartItem>
+                                    <CartItemWrapper key={index}>
+                                        <CartItem product={product} />
+                                    </CartItemWrapper>
                                 );
                             })
                         }
@@ -87,4 +83,4 @@ const DisplaySavedStores = () => {
     );
 }
 
-export default DisplaySavedStores;
+export default DisplaySavedProducts;
