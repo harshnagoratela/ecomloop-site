@@ -830,16 +830,18 @@ const SingleItem = ({ data, pageContext, location }) => {
           {/*firstRowDataView && renderProfilePicURL(firstRowDataView.node, name)*/}
           <div style={{ paddingLeft: '5px' }}>
 
-            <Title>{name}</Title>
-            <AddShopToCartButton
-              details={{
-                storeName: name,
-                storeURL: AlexaURL,
-                storeProfileImage: clearbitLogoURL || ProfileImage || (firstRowDataView && firstRowDataView.node.ProfilePicURL),
-                emprezzoID: emprezzoID,
-                description: about,
-              }}
-            />
+            <Title>
+              <AddShopToCartButton
+                details={{
+                  storeName: name,
+                  storeURL: AlexaURL,
+                  storeProfileImage: clearbitLogoURL || ProfileImage || (firstRowDataView && firstRowDataView.node.ProfilePicURL),
+                  emprezzoID: emprezzoID,
+                  description: about,
+                }}
+              />
+              {name}
+            </Title>
             <Subtitle><b>{category}</b> {tags}<br /></Subtitle>
             <Stat>{rowShopifyProductSummary.PriceMin &&
               rowShopifyProductSummary.PriceMax && (
@@ -848,17 +850,17 @@ const SingleItem = ({ data, pageContext, location }) => {
               )}
               &nbsp;
               {PaypalShopID && PaypalShopID != '#' &&
-                  <span style={{ paddingRight: "0.25rem" }}><FaPaypal size="16" color="#666" /></span>
-                }
-                {AmazonPay == '1' &&
-                  <span style={{ paddingRight: "0.25rem" }}><FaAmazon size="16" color="#666" /></span>
-                }
-                {ShopifyPay && ShopifyPay == '1' &&
-                  <span style={{ paddingRight: "0.25rem" }}><FaShopify size="16" color="#666" /></span>
-                }
-                {ApplePay && ApplePay == '1' &&
-                  <span style={{ paddingRight: "0.25rem" }}><FaApple size="16" color="#666" /></span>
-                }
+                <span style={{ paddingRight: "0.25rem" }}><FaPaypal size="16" color="#666" /></span>
+              }
+              {AmazonPay == '1' &&
+                <span style={{ paddingRight: "0.25rem" }}><FaAmazon size="16" color="#666" /></span>
+              }
+              {ShopifyPay && ShopifyPay == '1' &&
+                <span style={{ paddingRight: "0.25rem" }}><FaShopify size="16" color="#666" /></span>
+              }
+              {ApplePay && ApplePay == '1' &&
+                <span style={{ paddingRight: "0.25rem" }}><FaApple size="16" color="#666" /></span>
+              }
             </Stat>
 
 
@@ -939,7 +941,7 @@ const SingleItem = ({ data, pageContext, location }) => {
               facetsToShow={'onsale,giftcard'}
               showSearchBox={true}
               showClearFilter={false}
-              hideCTAButton={true}f
+              hideCTAButton={true} f
               enableCart={true}
               currentShop={{ name: name, link: AlexaURL }}
               location={location}
