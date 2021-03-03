@@ -203,9 +203,6 @@ const AlgoliaProductItem = (props) => {
   const [showDialog, setShowDialog] = React.useState(false);
   const openDialog = () => setShowDialog(true);
   const closeDialog = () => setShowDialog(false);
-  const [showMessageDialog, setShowMessageDialog] = React.useState(false);
-  const openMessageDialog = () => setShowMessageDialog(true);
-  const closeMessageDialog = () => setShowMessageDialog(false);
 
   //console.log("**** props=AlgoliaProductItem=", props)
   const addToCartWrapper = hit => {
@@ -220,7 +217,7 @@ const AlgoliaProductItem = (props) => {
       description: hit.description,
     }
     globalActions.addToSavedProducts(hitToProduct);
-    openMessageDialog();
+    globalActions.handleCartOpen();
   }
 
   const [currentPrice, setCurrentPrice] = React.useState(props.hit.price)
@@ -326,16 +323,6 @@ const AlgoliaProductItem = (props) => {
             </div>
 
           </StyledDialog>
-          <Dialog isOpen={showMessageDialog} onDismiss={closeMessageDialog}>
-                <button className="close-button" onClick={closeMessageDialog} style={{ float: "right", cursor: "pointer" }}>
-                    <span aria-hidden>X</span>
-                </button>
-                <div>Product saved Successfully. <br /><a href="/savedstores">Click Here</a> to see the saved product list</div>
-                <br />
-                <div>
-                    <button className="button" onClick={() => { closeMessageDialog(); }}>Close</button>
-                </div>
-            </Dialog>
         </>
       }
     </Wrapper>

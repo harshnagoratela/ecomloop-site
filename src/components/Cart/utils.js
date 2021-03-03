@@ -3,3 +3,13 @@ export const formatNumber = number => {
 }
 
 export const isBrowser = () => typeof window !== "undefined"
+
+export const setGenericLocalStorage = (key, value) => {
+    if (isBrowser()) {
+        window.localStorage.setItem(key, JSON.stringify(value));
+    }
+}
+
+export const getGenericLocalStorage = (key) => {
+    return ((isBrowser() && window.localStorage.getItem(key)) ? JSON.parse(window.localStorage.getItem(key)) : []);
+}

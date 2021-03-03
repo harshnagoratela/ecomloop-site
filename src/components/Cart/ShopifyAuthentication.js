@@ -81,7 +81,7 @@ const ShopifyAuthentication = () => {
                 {globalState.authenticated &&
                     <Row style={{ justifyContent: "flex-end" }}>
                         <Col>
-                            <span>Logged in as '{globalState.user.email}' &nsbp;&nsbp;</span>
+                            <span>Logged in as '{globalState.user.email}' &nbsp;&nbsp;</span>
                             <input type="button" value="Logout" className="button" onClick={signoutUser} />
                         </Col>
                     </Row>
@@ -127,7 +127,7 @@ const ShopifyAuthentication = () => {
                 {globalState.authenticated &&
                     <Row style={{ justifyContent: "flex-end" }}>
                         <Col>
-                            <span>Logged in as '{globalState.user.email}' &nsbp;&nsbp;</span>
+                            <span>Logged in as '{globalState.user.email}' &nbsp;&nbsp;</span>
                             <input type="button" value="Logout" className="button" onClick={signoutUser} />
                         </Col>
                     </Row>

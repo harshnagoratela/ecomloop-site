@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import LineItem from './LineItem';
+import { getGenericLocalStorage, setGenericLocalStorage } from '../utils'
 import useGlobal from "../CartState"
 import BuyPledgeling from "../BuyPledgeling"
 import Helmet from "react-helmet"
 import "./Cart.css"
 import styled from '@emotion/styled';
+import ShopifyAuthentication from "../ShopifyAuthentication"
 
 const StickyIcon = styled.div`
   position: fixed;
@@ -14,6 +16,14 @@ const StickyIcon = styled.div`
     left: calc(100vw - 46px);
   }
 `
+const AuthWrapper = styled.div`
+  display: flex;
+  padding: 0rem 1.5rem;
+  @media (max-width: 600px) {
+    padding-top: 1rem;
+    display: block;
+  }
+`;
 
 const Cart = (props) => {
   const [globalState, globalActions] = useGlobal();
@@ -24,31 +34,81 @@ const Cart = (props) => {
 
   React.useEffect(() => {
     const allProducts = globalState.cfSavedProductsList['products'];
-    if (globalState.authenticated && !allProducts) {
+    if (!allProducts) {
       globalActions.getSavedProducts();
     }
-  }, [globalState.cfSavedProductsList['products'], globalState.authenticated]);
-
-  let product_line_items = globalState.cfSavedProductsList['products'] && globalState.cfSavedProductsList['products'].map((product) => {
-    const line_item = {
-      id: product.id,
-      title: product.name,
-      quantity: 1,
-      variant: {
-        price: product.price
-      },
-      customAttributes: [{
-        key: "imageURL",
-        value: product.photo
-      }]
+    const allShops = globalState.cfSavedStoresList['stores'];
+    if (!allShops) {
+      globalActions.getSavedStores();
     }
+  }, [globalState.cfSavedProductsList['products'], globalState.cfSavedStoresList['stores'], globalState.authenticated]);
+
+  const unsavedProducts = globalState.authenticated ? getGenericLocalStorage("products") : [];
+  const unsavedShops = globalState.authenticated ? getGenericLocalStorage("shops") : [];
+
+  const getProductLineItems = (products) => {
     return (
-      <LineItem
-        key={line_item.id.toString()}
-        line_item={line_item}
-      />
+      <>
+        {products && products.map((product) => {
+          const line_item = {
+            id: product.id,
+            title: product.name,
+            quantity: 1,
+            variant: {
+              price: product.price
+            },
+            customAttributes: [{
+              key: "imageURL",
+              value: product.photo
+            }]
+          }
+          return (
+            <LineItem
+              key={line_item.id.toString()}
+              line_item={line_item}
+            />
+          );
+        })}
+      </>
     );
-  });
+  }
+
+  const getShopLineItems = (shops) => {
+    return (
+      <>
+        {shops && shops.map((shop,index) => {
+          const line_item = {
+            id: shop.emprezzoID+"-"+index,
+            title: shop.shopName,
+            customAttributes: [{
+              key: "imageURL",
+              value: shop.photo
+            }]
+          }
+          return (
+            <LineItem
+              key={line_item.id.toString()}
+              line_item={line_item}
+            />
+          );
+        })}
+      </>
+    );
+  }
+
+  const addUnsavedProducts = (products) => {
+    products && products.map((product)=>{
+      globalActions.addToSavedProducts(product);
+    });
+    setGenericLocalStorage("products",[]);
+  }
+
+  const addUnsavedShops = (shops) => {
+    shops && shops.map((shop)=>{
+      globalActions.addToSavedStores(shop);
+    });
+    setGenericLocalStorage("shops",[]);
+  }
 
   let line_items = globalState.checkout.lineItems.map((line_item) => {
     return (
@@ -61,11 +121,15 @@ const Cart = (props) => {
     );
   });
 
-  const cartItemTotal = globalState.checkout.lineItems.length + ((globalState.cfSavedProductsList['products'] && globalState.cfSavedProductsList['products'].length)||0)
+  const cartItemTotal = globalState.checkout.lineItems.length
+    + ((globalState.cfSavedProductsList['products'] && globalState.cfSavedProductsList['products'].length) || 0)
+    + (unsavedProducts && unsavedProducts.length)
+    + ((globalState.cfSavedStoresList['stores'] && globalState.cfSavedStoresList['stores'].length) || 0)
+    + (unsavedShops && unsavedShops.length)
 
   return (
     <>
-      <div className={`Cart ${globalState.isCartOpen ? 'Cart--open' : ''}`}>
+      <div className={`Cart ${globalState.isCartOpen ? 'Cart--open' : ''}`} style={{ overflow: "auto" }}>
         <header className="Cart__header">
           <h3>Saved items</h3>
           <button
@@ -74,14 +138,39 @@ const Cart = (props) => {
             ×
           </button>
         </header>
+        {globalState.authenticated &&
+          <AuthWrapper>
+            <button className="button" onClick={globalActions.signoutUser}>LogOut</button>
+          </AuthWrapper>
+        }
+        {!globalState.authenticated &&
+          <AuthWrapper>
+            <button className="button" onClick={globalActions.openRegisterDialog}>Signup</button>
+            <button className="button" onClick={globalActions.openAuthDialog}>Login</button>
+            <ShopifyAuthentication />
+          </AuthWrapper>
+        }
         <h4>Products</h4>
         <ul className="Cart__line-items">
-          {product_line_items}
+          {getProductLineItems(globalState.cfSavedProductsList['products'])}
+          {unsavedProducts && unsavedProducts.length > 0 &&
+            <>
+              <button className="button buttonalt" onClick={()=>addUnsavedProducts(unsavedProducts)}>Save Unsaved Products</button>
+              {getProductLineItems(unsavedProducts)}
+            </>
+          }
         </ul>
 
         <h4>Shops</h4>
         <ul className="Cart__line-items">
           {line_items}
+          {getShopLineItems(globalState.cfSavedStoresList['stores'])}          
+          {unsavedShops && unsavedShops.length > 0 &&
+            <>
+              <button className="button buttonalt" onClick={()=>addUnsavedShops(unsavedShops)}>Save Unsaved Shops</button>
+              {getShopLineItems(unsavedShops)}
+            </>
+          }
         </ul>
         {/**
         <ul>

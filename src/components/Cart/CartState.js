@@ -2,10 +2,11 @@ import React from "react";
 import useGlobalHook from "use-global-hook";
 import Client from 'shopify-buy';
 import _ from 'lodash';
-import { isBrowser } from './utils'
+import { isBrowser, getGenericLocalStorage, setGenericLocalStorage } from './utils'
 import fetch from 'node-fetch';
 import regeneratorRuntime from "regenerator-runtime";
 import * as contentful from 'contentful-management';
+import { keyframes } from "styled-components";
 
 const setLocalStorage = (value) => {
     if (isBrowser()) {
@@ -79,7 +80,7 @@ const initialState = {
     shop: {},
     shopUrl: "emprezzo.myshopify.com",
     accessToken: "0c291ce7693710e4baf0db2cf74576ca",
-    cfAccessToken: 'CF'+'PAT'+'-UjglQTu0UcIGgRtK9i44'+'_Lvh481GA7DAeGwNY32MKMA',
+    cfAccessToken: 'CF' + 'PAT' + '-UjglQTu0UcIGgRtK9i44' + '_Lvh481GA7DAeGwNY32MKMA',
     cfSpaceID: 'lz0damvofaeg',
     cfClient: null,
     cfSavedStoresList: [],
@@ -244,7 +245,7 @@ const actions = {
     },
     closeAuthDialog: (store) => {
         store.setState({ isAuthDialogOpen: false });
-    },    
+    },
     registerUser: (store, user) => {
         store.setState({ authMessage: "" });
         const params = {
@@ -325,6 +326,8 @@ const actions = {
                         setUserToLocalStorage(localUser)
                         console.log("***** getuser", getUserFromLocalStorage())
                         store.setState({ authMessage: "Login Successful", user: localUser, authenticated: (getUserFromLocalStorage() !== null) });
+                        actions.getSavedProducts(store);
+                        actions.getSavedStores(store);
                     }
                     if (!!response.data.customerAccessTokenCreate.customerUserErrors.length) {
                         setUserToLocalStorage(null)
@@ -340,9 +343,15 @@ const actions = {
     signoutUser: (store) => {
         setUserToLocalStorage(null)
         store.setState({ authMessage: "Logged Out Successfully", user: {}, authenticated: false });
+        actions.getSavedProducts(store);
+        actions.getSavedStores(store);
     },
     getSavedStores: (store) => {
-        console.log("*** About to GET SavedStores", store.state.user)
+        //console.log("*** About to GET SavedStores", store.state.user)
+        //if not logged get from temp local storage
+        if (!store.state.user.email) {
+            store.setState({ cfSavedStoresList: { 'stores': getGenericLocalStorage("shops") } });
+        }
         if (store.state.user.email) {
             actions.initializeContentfulClient(store);
             store.state.cfClient.getSpace(store.state.cfSpaceID).then((space) => {
@@ -358,14 +367,17 @@ const actions = {
         }
     },
     findInSavedStores: (store, shop) => {
-        console.log("*** About to FIND in SavedStores", store.state.user, store.state.cfSavedStoresList)
-        if (store.state.user.email) {
-            const filteredStores = store.state.cfSavedStoresList && store.state.cfSavedStoresList.stores && _.filter(store.state.cfSavedStoresList.stores, item => item.emprezzoID == shop.emprezzoID)
-            return filteredStores && filteredStores.length > 0;
-        }
+        //console.log("*** About to FIND in SavedStores", store.state.user, store.state.cfSavedStoresList)
+        const filteredStores = store.state.cfSavedStoresList && store.state.cfSavedStoresList.stores && _.filter(store.state.cfSavedStoresList.stores, item => item.emprezzoID == shop.emprezzoID)
+        return filteredStores && filteredStores.length > 0;
     },
     addToSavedStores: (store, shop) => {
-        console.log("*** About to add SavedStores", store.state.user)
+        //console.log("*** About to add SavedStores", store.state.user)
+        //if not logged in store in temp storage locally
+        if (!store.state.user.email) {
+            setGenericLocalStorage("shops", _.concat(getGenericLocalStorage("shops"), shop)); //add item to localstorage
+            store.setState({ cfSavedStoresList: { 'stores': getGenericLocalStorage("shops") } });
+        }
         if (store.state.user.email) {
             actions.initializeContentfulClient(store);
             store.state.cfClient.getSpace(store.state.cfSpaceID).then((space) => {
@@ -386,7 +398,7 @@ const actions = {
                                     customerEmail: { 'en-US': store.state.user.email },
                                     savedStores: { 'en-US': { title: "Default", stores: [shop] } }
                                 }
-                            }).then((entry) => {console.log("New entry created successfully",entry); getSavedStores(store)})
+                            }).then((entry) => { console.log("New entry created successfully", entry); getSavedStores(store) })
                                 .catch(console.error)
                         }
                     })
@@ -395,7 +407,11 @@ const actions = {
         }
     },
     getSavedProducts: (store) => {
-        console.log("*** About to GET SavedProducts", store.state.user)
+        //console.log("*** About to GET SavedProducts", store.state.user, !store.state.user.email)
+        //if not logged in get from temp local storage
+        if (!store.state.user.email) {
+            store.setState({ cfSavedProductsList: { 'products': getGenericLocalStorage("products") } });
+        }
         if (store.state.user.email) {
             actions.initializeContentfulClient(store);
             store.state.cfClient.getSpace(store.state.cfSpaceID).then((space) => {
@@ -411,7 +427,12 @@ const actions = {
         }
     },
     addToSavedProducts: (store, product) => {
-        console.log("*** About to add SavedProducts", store.state.user)
+        //console.log("*** About to add SavedProducts", store.state.user)
+        //if not logged in store in temp storage locally
+        if (!store.state.user.email) {
+            setGenericLocalStorage("products", _.concat(getGenericLocalStorage("products"), product)); //add item to localstorage
+            store.setState({ cfSavedProductsList: { 'products': getGenericLocalStorage("products") } });
+        }
         if (store.state.user.email) {
             actions.initializeContentfulClient(store);
             store.state.cfClient.getSpace(store.state.cfSpaceID).then((space) => {
@@ -432,7 +453,7 @@ const actions = {
                                     customerEmail: { 'en-US': store.state.user.email },
                                     savedProducts: { 'en-US': { title: "Default", products: [product] } }
                                 }
-                            }).then((entry) => console.log("New entry created successfully",entry))
+                            }).then((entry) => console.log("New entry created successfully", entry))
                                 .catch(console.error)
                         }
                     })

@@ -41,12 +41,11 @@ const DisplaySavedProducts = () => {
     const [loaded, setLoaded] = React.useState(false)
 
     React.useEffect(() => {
-        if (globalState.authenticated && !loaded) {
-            setLoaded(true);
-            globalActions.getSavedProducts();
-        }
-    }, [loaded, globalState.authenticated]);
-    const allProducts = globalState.cfSavedProductsList['products'];
+        const allProducts = globalState.cfSavedProductsList['products'];
+        if (!allProducts) {
+          globalActions.getSavedProducts();
+        }        
+      }, [globalState.cfSavedProductsList['products'], globalState.authenticated]);
     
     return (
         <Wrapper>
@@ -54,14 +53,14 @@ const DisplaySavedProducts = () => {
                 <CartSection>
                     <CartItems>
                         <h3>Saved Products</h3>
-                        {globalState.authenticated && !allProducts &&
+                        {!globalState.cfSavedProductsList['products'] &&
                             <div>Loading...</div>
                         }
-                        {globalState.authenticated && allProducts && allProducts.length <= 0 &&
+                        {globalState.cfSavedProductsList['products'] && globalState.cfSavedProductsList['products'].length <= 0 &&
                             <CartItemWrapper>Your list is empty</CartItemWrapper>
                         }
-                        {globalState.authenticated && allProducts && allProducts.length > 0 &&
-                            allProducts.map((product, index) => {
+                        {globalState.cfSavedProductsList['products'] && globalState.cfSavedProductsList['products'].length > 0 &&
+                            globalState.cfSavedProductsList['products'].map((product, index) => {
                                 return (
                                     <CartItemWrapper key={index}>
                                         <CartItem product={product} />

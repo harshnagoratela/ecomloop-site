@@ -34,12 +34,12 @@ const AddShopToCartButton = ({ details }) => {
             description: details.description,
         }
         globalActions.addToSavedStores(shopToSave);
-        openDialog();
+        globalActions.handleCartOpen();
     }
 
     return (
         <div style={{display: "inline", fontSize: "x-large"}}>
-            <button onClick={globalState.authenticated ? saveShop : globalActions.openAuthDialog} style={{cursor: "pointer", backgroundColor: "white", color:"#C04CFD", border: "white", outline: "none"}}>
+            <button onClick={saveShop} style={{cursor: "pointer", backgroundColor: "white", color:"#C04CFD", border: "white", outline: "none"}}>
                 {globalActions.findInSavedStores(details) && <FaStar />}
                 {!globalActions.findInSavedStores(details) && <FaRegStar />}
             </button>
