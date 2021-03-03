@@ -75,7 +75,7 @@ font-family: 'Jost','Segoe UI','Roboto','Candal',-apple-system,'BlinkMacSystemFo
 `;
 
 const Stat = styled.p`
-  font-size: 1rem;
+  font-size: 0.8rem;
   @media (max-width: ${props => props.theme.breakpoints.s}) {
     font-size: 0.7rem;
   }
@@ -939,7 +939,7 @@ const SingleItem = ({ data, pageContext, location }) => {
               defaultFilter={`emprezzoID:"${emprezzoID}"`}
               hideLeftPanel={true}
               facetsToShow={'onsale,giftcard'}
-              showSearchBox={true}
+              showSearchBox={false}
               showClearFilter={false}
               hideCTAButton={true} f
               enableCart={true}
@@ -1052,7 +1052,7 @@ const SingleItem = ({ data, pageContext, location }) => {
 
         <br />
 
-
+      
         <h3>About {name}</h3>
         <b>{name}</b> produces and sells {category} products {tags} and more. The company sells direct-to-consumer on its website.
 
@@ -1103,7 +1103,7 @@ const SingleItem = ({ data, pageContext, location }) => {
                   <span key={index}>
                     <PostSectionImage>
                       <Link key={index} to={`/shops/${shop.emprezzoID}/`}>
-                        <img src={getClearbitLogoURL(shop.AlexaURL) || shop.ProfileImage || shop.ProfilePicURL || shop.profile_image_url || "/logo/logo.png"} title={shop.name} alt={shop.name} onError={defaultImageOnError} style={{ height: 'inherit', 'textAlign': 'center', 'borderRadius': '100%' }} />
+                        <img src={getClearbitLogoURL(shop.AlexaURL) || shop.ProfileImage || shop.ProfilePicURL || shop.profile_image_url || "/logo/logo.png"} title={shop.name} alt={shop.name} onError={defaultImageOnError} style={{ height: 'inherit', 'textAlign': 'center', 'borderRadius': '5%' }} />
                       </Link>
                     </PostSectionImage>
                     <PostSectionContent>
